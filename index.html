@@ -26,8 +26,6 @@
         .loader { width: 30px; height: 30px; border: 3px solid #FFF; border-bottom-color: transparent; border-radius: 50%; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .beach-item { transition: transform 0.2s ease; }
-
-        /* Menu Lateral */
         #sidebar { position: fixed; top: 0; right: -100%; width: 85%; height: 100%; background: white; z-index: 10000; transition: 0.4s ease; box-shadow: -5px 0 15px rgba(0,0,0,0.1); overflow-y: auto; }
         #sidebar.open { right: 0; }
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: none; }
@@ -55,11 +53,11 @@
                 <div class="grid grid-cols-2 gap-2 mb-4">
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                         <p class="text-[9px] font-bold text-slate-400 uppercase">Blue</p>
-                        <p id="val-blue" class="text-lg font-black text-slate-700">--</p>
+                        <p id="val-blue" class="text-lg font-black text-slate-700">$---</p>
                     </div>
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                         <p class="text-[9px] font-bold text-slate-400 uppercase">MEP</p>
-                        <p id="val-mep" class="text-lg font-black text-slate-700">--</p>
+                        <p id="val-mep" class="text-lg font-black text-slate-700">$---</p>
                     </div>
                 </div>
                 <div id="listado-pix" class="space-y-2">
@@ -180,7 +178,7 @@
     <script>
         const i18n = {
             es: { menuTitle: "Menú", adsTitle: "¿Anunciar aquí?", adsSub: "Llegá a miles de turistas", adsMsg: "Hola Damian! Me interesa anunciar en PraiaIdeal", agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!" },
-            pt: { menuTitle: "Menu", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoy? Ajude a manter o app online com um cafezinho.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!" },
+            pt: { menuTitle: "Menu", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baja.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoy? Ajude a manter o app online com um cafezinho.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!" },
             en: { menuTitle: "Menu", adsTitle: "Advertise here?", adsSub: "Reach thousands of tourists", adsMsg: "Hello Damian! I am interested in advertising on PraiaIdeal", agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!" }
         };
 
@@ -230,37 +228,57 @@
             } catch (e) { console.error(e); }
         }
 
- async function cargarFinanzas() {
+async function cargarFinanzas() {
             try {
-                // 1. Dólar (Este suele funcionar directo)
+                // 1. Cargar Dólares con manejo de errores robusto
                 const resDolar = await fetch('https://dolarapi.com/v1/dolares');
-                const dolares = await resDolar.json();
-                document.getElementById('val-blue').innerText = `$${Math.round(dolares.find(d => d.casa === 'blue').venta)}`;
-                document.getElementById('val-mep').innerText = `$${Math.round(dolares.find(d => d.casa === 'mep').venta)}`;
+                if (resDolar.ok) {
+                    const dolares = await resDolar.json();
+                    let blueVal, mepVal;
+                    
+                    if (Array.isArray(dolares)) {
+                        blueVal = dolares.find(d => d.casa === 'blue')?.venta;
+                        mepVal = dolares.find(d => d.casa === 'mep')?.venta;
+                    } else {
+                        blueVal = dolares.blue?.venta;
+                        mepVal = dolares.mep?.venta;
+                    }
+                    
+                    if (blueVal) document.getElementById('val-blue').innerText = `$${Math.round(blueVal)}`;
+                    if (mepVal) document.getElementById('val-mep').innerText = `$${Math.round(mepVal)}`;
+                }
 
-                // 2. PIX con "Proxy" para evitar el error de bloqueo (CORS)
-                // Usamos un servidor intermedio gratuito para que CriptoYa nos deje pasar
+                // 2. Cargar PIX con Proxy y validación de JSON
                 const proxy = "https://corsproxy.io/?"; 
-                const urlPix = encodeURIComponent('https://criptoya.com/api/brl/ars/0.1');
+                const targetUrl = 'https://criptoya.com/api/brl/ars/0.1';
                 
-                const resPix = await fetch(proxy + urlPix);
-                const dataPix = await resPix.json();
+                const resPix = await fetch(proxy + encodeURIComponent(targetUrl));
+                const textBody = await resPix.text(); // Leemos como texto primero por seguridad
                 
-                let exchanges = Object.entries(dataPix)
-                    .map(([name, vals]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), price: vals.totalAsk }))
-                    .filter(ex => ex.price > 0).sort((a, b) => a.price - b.price).slice(0, 5);
+                try {
+                    const dataPix = JSON.parse(textBody); // Intentamos convertir a JSON
+                    let exchanges = Object.entries(dataPix)
+                        .map(([name, vals]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), price: vals.totalAsk }))
+                        .filter(ex => ex.price > 0)
+                        .sort((a, b) => a.price - b.price)
+                        .slice(0, 5);
 
-                const listado = document.getElementById('listado-pix');
-                listado.innerHTML = "";
-                exchanges.forEach((ex, i) => {
-                    const row = document.createElement('div');
-                    row.className = `flex justify-between p-2 rounded-xl text-xs ${i === 0 ? 'bg-sky-50 font-black border border-sky-200' : 'bg-slate-50 font-bold text-slate-500'}`;
-                    row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
-                    listado.appendChild(row);
-                });
+                    const listado = document.getElementById('listado-pix');
+                    if (exchanges.length > 0) {
+                        listado.innerHTML = "";
+                        exchanges.forEach((ex, i) => {
+                            const row = document.createElement('div');
+                            row.className = `flex justify-between p-2 rounded-xl text-xs ${i === 0 ? 'bg-sky-50 font-black border border-sky-200' : 'bg-slate-50 font-bold text-slate-500'}`;
+                            row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
+                            listado.appendChild(row);
+                        });
+                    }
+                } catch (jsonErr) {
+                    console.warn("El proxy devolvió un formato inválido, reintentando en breve...");
+                }
+
             } catch (e) { 
-                console.error("Error en finanzas:", e);
-                document.getElementById('listado-pix').innerHTML = "<p class='text-[10px] text-slate-400'>Actualizando cotizaciones...</p>";
+                console.error("Error general en finanzas:", e);
             }
         }
 
@@ -311,15 +329,12 @@
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${lang}`).classList.add('active');
             
-            // Actualizar textos estáticos
             document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
             
-            // Actualizar link de WhatsApp con el idioma
             const adsBtn = document.getElementById('btn-ads');
             const encodedMsg = encodeURIComponent(i18n[lang].adsMsg);
             adsBtn.href = `https://wa.me/5522997601592?text=${encodedMsg}`;
             
-            // Actualizar otros bloques
             document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
             document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
             document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
@@ -340,9 +355,7 @@
             playas.filter(p => p.nombre.toLowerCase().includes(filtro)).forEach(p => {
                 const mareaMala = p.critica && valMarea > 0.9;
                 const vientoMalo = datosGlobales.vel >= 12 && !(datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1]);
-                
                 let borderColor = (mareaMala || vientoMalo) ? "border-orange-400" : "border-emerald-400";
-
                 const div = document.createElement('div');
                 div.className = `beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 ${borderColor} cursor-pointer`;
                 div.onclick = () => { seleccionarPlaya(p); window.scrollTo({top:0, behavior:'smooth'}); };
