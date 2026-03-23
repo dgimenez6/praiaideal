@@ -8,16 +8,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .bg-gradient-ok { background: linear-gradient(180deg, #10b981 0%, #059669 100%); transition: all 0.5s ease; }
+        .bg-gradient-ok { background: linear-gradient(180deg, #0ea5e9 0%, #0369a1 100%); transition: all 0.5s ease; }
         .bg-gradient-warning { background: linear-gradient(180deg, #f97316 0%, #ea580c 100%); transition: all 0.5s ease; }
         
         .flag-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; width: 28px; height: 20px; object-fit: cover; border-radius: 3px; }
-        .flag-btn.active { opacity: 1; transform: scale(1.2); border: 2px solid #10b981; }
+        .flag-btn.active { opacity: 1; transform: scale(1.2); border: 2px solid #0ea5e9; }
         .surf-badge { background: #f59e0b; color: white; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; margin-left: 8px; vertical-align: middle; }
         
         #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #10b981; z-index: 9999; display: flex;
+            background: #0ea5e9; z-index: 9999; display: flex;
             flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.5s ease;
         }
@@ -35,13 +35,13 @@
     <div id="splash">
         <img src="icono.png" alt="Logo" class="splash-logo">
         <div class="loader mb-4"></div>
-        <p class="text-emerald-50 text-xs animate-pulse tracking-widest uppercase">Escaneando Península...</p>
+        <p class="text-sky-50 text-xs animate-pulse tracking-widest uppercase">Escaneando Península...</p>
     </div>
 
     <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center text-slate-900">
         <div class="flex items-center gap-2">
             <img src="icono.png" alt="Logo" class="w-8 h-8 rounded-md">
-            <h1 class="text-xl font-bold text-emerald-700 italic tracking-tighter uppercase">PraiaIdeal</h1>
+            <h1 class="text-xl font-bold text-sky-700 italic tracking-tighter uppercase">PraiaIdeal</h1>
         </div>
         <div class="flex space-x-3">
             <img src="https://flagcdn.com/w40/es.png" class="flag-btn active" id="btn-es" onclick="cambiarIdioma('es')">
@@ -85,9 +85,9 @@
                 <p id="msg-arena" class="text-xs font-bold leading-tight"></p>
             </div>
 
-            <p id="view-mensaje" class="mt-4 text-emerald-700 text-sm leading-tight italic min-h-[40px] bg-white/90 p-3 rounded-2xl shadow-inner"></p>
+            <p id="view-mensaje" class="mt-4 text-sky-800 text-sm leading-tight italic min-h-[40px] bg-white/90 p-3 rounded-2xl shadow-inner"></p>
 
-            <div class="mt-6 grid grid-cols-2 gap-y-4 gap-x-2 border-t border-white/20 pt-4 text-white text-center">
+            <div id="data-grid" class="mt-6 grid grid-cols-2 gap-y-4 gap-x-2 border-t border-white/20 pt-4 text-white text-center">
                 <div class="border-r border-white/10">
                     <p id="view-temp-agua" class="font-bold text-lg">--°</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="agua">AGUA</p>
@@ -97,18 +97,18 @@
                     <p id="view-marea-desc" class="text-[8px] font-black uppercase tracking-tighter">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="marea">MAREA</p>
                 </div>
-                <div class="border-t border-white/10 border-r border-white/10 pt-2">
+                <div id="container-viento" class="border-t border-white/10 pt-2 border-r border-white/10">
                     <p id="view-viento" class="font-bold text-lg">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p>
                 </div>
-                <div class="border-t border-white/10 pt-2">
+                <div id="container-olas" class="border-t border-white/10 pt-2">
                     <p id="view-olas" class="font-bold text-lg">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p>
                 </div>
             </div>
 
             <div class="mt-6">
-                <a id="btn-maps" target="_blank" href="#" class="w-full bg-white text-emerald-700 py-4 rounded-full font-black text-sm shadow-lg flex items-center justify-center active:scale-95 transition-transform">
+                <a id="btn-maps" target="_blank" href="#" class="w-full bg-white text-sky-700 py-4 rounded-full font-black text-sm shadow-lg flex items-center justify-center active:scale-95 transition-transform">
                     <i class="fa-solid fa-location-dot mr-2"></i> <span data-key="ir">CÓMO LLEGAR</span>
                 </a>
             </div>
@@ -116,7 +116,7 @@
 
         <div class="relative text-slate-900">
             <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
-            <input type="text" id="buscador" onkeyup="filtrarPlayas()" placeholder="Buscar playa..." class="w-full p-4 pl-12 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-emerald-500 bg-white">
+            <input type="text" id="buscador" onkeyup="filtrarPlayas()" placeholder="Buscar playa..." class="w-full p-4 pl-12 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-sky-500 bg-white">
         </div>
 
         <section id="lista-playas" class="grid grid-cols-1 gap-3"></section>
@@ -190,6 +190,19 @@
                 document.getElementById('view-temp-agua').innerText = `${dM.hourly.sea_surface_temperature[h]}°`;
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
                 document.getElementById('view-olas').innerText = `${dM.hourly.wave_height[h]} m`;
+
+                // --- AJUSTE DE DISEÑO DINÁMICO ---
+                const playasDeSurf = ["Tucuns", "Geribá", "Caravelas", "José Gonçalves"];
+                const contViento = document.getElementById('container-viento');
+                const contOlas = document.getElementById('container-olas');
+                
+                if (playasDeSurf.includes(playa.nombre)) {
+                    contViento.className = "border-t border-white/10 pt-2 border-r border-white/10 col-span-1";
+                    contOlas.classList.remove('hidden');
+                } else {
+                    contViento.className = "border-t border-white/10 pt-2 col-span-2"; // Ocupa todo el ancho
+                    contOlas.classList.add('hidden');
+                }
 
                 const card = document.getElementById('main-card');
                 const alerta = document.getElementById('alerta-arena');
