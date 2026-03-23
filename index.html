@@ -230,15 +230,22 @@
             } catch (e) { console.error(e); }
         }
 
-        async function cargarFinanzas() {
+ async function cargarFinanzas() {
             try {
+                // 1. Dólar (Este suele funcionar directo)
                 const resDolar = await fetch('https://dolarapi.com/v1/dolares');
                 const dolares = await resDolar.json();
                 document.getElementById('val-blue').innerText = `$${Math.round(dolares.find(d => d.casa === 'blue').venta)}`;
                 document.getElementById('val-mep').innerText = `$${Math.round(dolares.find(d => d.casa === 'mep').venta)}`;
 
-                const resPix = await fetch('https://criptoya.com/api/brl/ars/0.1');
+                // 2. PIX con "Proxy" para evitar el error de bloqueo (CORS)
+                // Usamos un servidor intermedio gratuito para que CriptoYa nos deje pasar
+                const proxy = "https://corsproxy.io/?"; 
+                const urlPix = encodeURIComponent('https://criptoya.com/api/brl/ars/0.1');
+                
+                const resPix = await fetch(proxy + urlPix);
                 const dataPix = await resPix.json();
+                
                 let exchanges = Object.entries(dataPix)
                     .map(([name, vals]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), price: vals.totalAsk }))
                     .filter(ex => ex.price > 0).sort((a, b) => a.price - b.price).slice(0, 5);
@@ -251,7 +258,10 @@
                     row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
                     listado.appendChild(row);
                 });
-            } catch (e) { console.warn("Finanzas: Funcionará en el dominio final."); }
+            } catch (e) { 
+                console.error("Error en finanzas:", e);
+                document.getElementById('listado-pix').innerHTML = "<p class='text-[10px] text-slate-400'>Actualizando cotizaciones...</p>";
+            }
         }
 
         async function seleccionarPlaya(playa) {
