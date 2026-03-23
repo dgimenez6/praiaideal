@@ -229,45 +229,47 @@
         }
 
 async function cargarFinanzas() {
-            const listado = document.getElementById('listado-pix');
-            try {
-                // 1. Dólares (DolarApi suele funcionar directo sin proxy)
-                const resDolar = await fetch('https://dolarapi.com/v1/dolares');
-                const dolares = await resDolar.json();
-                const blue = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'blue') : dolares.blue)?.venta;
-                const mep = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'mep') : dolares.mep)?.venta;
-                if (blue) document.getElementById('val-blue').innerText = `$${Math.round(blue)}`;
-                if (mep) document.getElementById('val-mep').innerText = `$${Math.round(mep)}`;
+    const listado = document.getElementById('listado-pix');
+    try {
+        // 1. Dólares (DolarApi es muy estable)
+        const resDolar = await fetch('https://dolarapi.com/v1/dolares');
+        const dolares = await resDolar.json();
+        const blue = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'blue') : dolares.blue)?.venta;
+        const mep = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'mep') : dolares.mep)?.venta;
+        if (blue) document.getElementById('val-blue').innerText = `$${Math.round(blue)}`;
+        if (mep) document.getElementById('val-mep').innerText = `$${Math.round(mep)}`;
 
-                // 2. PIX con Proxy AllOrigins (más estable que corsproxy)
-                const targetUrl = 'https://criptoya.com/api/brl/ars/0.1';
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-                
-                const resPix = await fetch(proxyUrl);
-                const dataJSON = await resPix.json();
-                // AllOrigins devuelve el JSON dentro de una propiedad "contents" como string
-                const dataPix = JSON.parse(dataJSON.contents);
-                
-                let exchanges = Object.entries(dataPix)
-                    .map(([name, vals]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), price: vals.totalAsk }))
-                    .filter(ex => ex.price > 0)
-                    .sort((a, b) => a.price - b.price)
-                    .slice(0, 5);
+        // 2. PIX usando un Proxy de Google (Feed invertido) para evitar bloqueos
+        const targetUrl = 'https://criptoya.com/api/brl/ars/0.1';
+        // Este es un truco para usar los servidores de Google como puente
+        const proxyUrl = `https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=600&url=${encodeURIComponent(targetUrl)}`;
+        
+        const resPix = await fetch(proxyUrl);
+        const dataPix = await resPix.json();
+        
+        let exchanges = Object.entries(dataPix)
+            .map(([name, vals]) => ({ 
+                name: name.charAt(0).toUpperCase() + name.slice(1), 
+                price: vals.totalAsk 
+            }))
+            .filter(ex => ex.price > 0)
+            .sort((a, b) => a.price - b.price)
+            .slice(0, 5);
 
-                if (exchanges.length > 0) {
-                    listado.innerHTML = "";
-                    exchanges.forEach((ex, i) => {
-                        const row = document.createElement('div');
-                        row.className = `flex justify-between p-2 rounded-xl text-xs ${i === 0 ? 'bg-sky-50 font-black border border-sky-200' : 'bg-slate-50 font-bold text-slate-500'}`;
-                        row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
-                        listado.appendChild(row);
-                    });
-                }
-            } catch (e) { 
-                console.warn("Finanzas: Reintentando conexión con el servidor de precios...");
-                listado.innerHTML = "<p class='text-[10px] text-slate-400 p-2'>Actualizando cotizaciones...</p>";
-            }
+        if (exchanges.length > 0) {
+            listado.innerHTML = "";
+            exchanges.forEach((ex, i) => {
+                const row = document.createElement('div');
+                row.className = `flex justify-between p-2 rounded-xl text-xs ${i === 0 ? 'bg-sky-50 font-black border border-sky-200' : 'bg-slate-50 font-bold text-slate-500'}`;
+                row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
+                listado.appendChild(row);
+            });
         }
+    } catch (e) { 
+        console.warn("Reintentando finanzas...");
+        listado.innerHTML = "<p class='text-[10px] text-slate-400 p-2 italic text-center'>Actualizando precios...</p>";
+    }
+}
 
         async function seleccionarPlaya(playa) {
             playaActual = playa;
