@@ -29,6 +29,7 @@
         #sidebar { position: fixed; top: 0; right: -100%; width: 85%; height: 100%; background: white; z-index: 10000; transition: 0.4s ease; box-shadow: -5px 0 15px rgba(0,0,0,0.1); overflow-y: auto; }
         #sidebar.open { right: 0; }
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: none; }
+        #modal-trilhas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 11000; display: none; overflow-y: auto; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen pb-10 font-sans text-slate-900">
@@ -47,24 +48,14 @@
             <button onclick="toggleMenu()" class="text-slate-400 text-3xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-        <div class="space-y-8">
-            <div>
-                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 text-slate-400">Monitor de Cambio (ARS)</h3>
-                <div class="grid grid-cols-2 gap-2 mb-4">
-                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase">Blue</p>
-                        <p id="val-blue" class="text-lg font-black text-slate-700">$---</p>
-                    </div>
-                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase">MEP</p>
-                        <p id="val-mep" class="text-lg font-black text-slate-700">$---</p>
-                    </div>
+        <div class="space-y-6">
+            <button onclick="abrirTrilhas()" class="w-full flex items-center justify-between bg-sky-50 p-4 rounded-2xl border border-sky-100 text-sky-700 active:scale-95 transition-all">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-mountain-sun text-xl"></i>
+                    <span class="font-black text-sm uppercase" data-key="btnTrilhas">Trilhas & Aventuras</span>
                 </div>
-                <div id="listado-pix" class="space-y-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase ml-1">Mejores Pix (x 1 R$)</p>
-                    <div class="animate-pulse bg-slate-100 h-20 rounded-xl"></div>
-                </div>
-            </div>
+                <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+            </button>
 
             <hr class="border-slate-100">
 
@@ -75,6 +66,24 @@
             </a>
         </div>
     </aside>
+
+    <div id="modal-trilhas">
+        <header class="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10 shadow-sm">
+            <h2 class="font-black text-sky-700 uppercase tracking-tight italic" data-key="btnTrilhas">Trilhas & Aventuras</h2>
+            <button onclick="cerrarTrilhas()" class="text-slate-400 text-3xl px-2"><i class="fa-solid fa-xmark"></i></button>
+        </header>
+        
+        <div class="bg-sky-700 p-6 text-white">
+            <h3 class="text-xl font-black uppercase italic mb-2" data-key="trilhaWelcome">Búzios Salvaje</h3>
+            <p class="text-xs opacity-90 leading-relaxed" data-key="trilhaDesc">Descubrí paisajes que pocos turistas conocen. Caminatas por acantilados, bosques y playas vírgenes. ¡No olvides el agua y protector solar!</p>
+        </div>
+
+        <div id="lista-trilhas-content" class="p-4 space-y-6"></div>
+
+        <div class="p-8 text-center bg-slate-50 border-t border-slate-100">
+            <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Respetá la naturaleza • No dejes basura</p>
+        </div>
+    </div>
 
     <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center text-slate-900">
         <div class="flex items-center gap-2">
@@ -92,7 +101,6 @@
     </header>
 
     <main class="max-w-md mx-auto p-4 space-y-4">
-        
         <section id="main-card" class="bg-gradient-ok rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]">
             <div class="flex justify-between items-start">
                 <div>
@@ -177,10 +185,19 @@
 
     <script>
         const i18n = {
-            es: { menuTitle: "Menú", adsTitle: "¿Anunciar aquí?", adsSub: "Llegá a miles de turistas", adsMsg: "Hola Damian! Me interesa anunciar en PraiaIdeal", agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!" },
-            pt: { menuTitle: "Menu", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baja.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoy? Ajude a manter o app online com um cafezinho.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!" },
-            en: { menuTitle: "Menu", adsTitle: "Advertise here?", adsSub: "Reach thousands of tourists", adsMsg: "Hello Damian! I am interested in advertising on PraiaIdeal", agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!" }
+            es: { menuTitle: "Menú", btnTrilhas: "Trilhas & Aventuras", adsTitle: "¿Anunciar aquí?", adsSub: "Llegá a miles de turistas", adsMsg: "Hola Damian! Me interesa anunciar en PraiaIdeal", agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!", dif: "Dificultad", trilhaWelcome: "Búzios Salvaje", trilhaDesc: "Descubrí paisajes que pocos turistas conocen. Caminatas por acantilados, bosques y playas vírgenes. ¡No olvides el agua y protector solar!" },
+            pt: { menuTitle: "Menu", btnTrilhas: "Trilhas & Aventuras", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baja.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoy? Ajude a manter o app online com um cafezinho.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!", dif: "Dificuldade", trilhaWelcome: "Búzios Selvagem", trilhaDesc: "Descubra paisagens que poucos turistas conhecem. Caminhadas por falésias, matas e praias virgens. Não esqueça a água e o protetor!" },
+            en: { menuTitle: "Menu", btnTrilhas: "Trails & Adventures", adsTitle: "Advertise here?", adsSub: "Reach thousands of tourists", adsMsg: "Hello Damian! I am interested in advertising on PraiaIdeal", agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!", dif: "Difficulty", trilhaWelcome: "Wild Buzios", trilhaDesc: "Discover landscapes that few tourists know. Walks through cliffs, forests and virgin beaches. Don't forget water and sunscreen!" }
         };
+
+        const trilhasData = [
+            { nombre: "Ponta do Pai Vitório", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha1.jpg", es: "Un mirador natural con una vista icónica. El sendero es corto y lleva a una de las postales más famosas de Búzios, con vista a la Playa de Tucuns.", pt: "Um mirante natural com uma vista icônica. A trilha é curta e leva a um dos cartões-postais mais famosos de Búzios, com vista para a Praia de Tucuns.", en: "A natural viewpoint with an iconic view. The trail is short and leads to one of Búzios' most famous postcards, overlooking Tucuns Beach." },
+            { nombre: "Serra das Emerências", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha2.jpg", es: "El punto más alto de la ciudad. Ofrece una vista de 360 grados de toda la península. Es el lugar preferido para los amantes del ala delta y los atardeceres.", pt: "O ponto mais elevado da cidade. Oferece uma vista de 360 graus de toda a península. É o local preferido para praticantes de voo livre e pôr do sol.", en: "The highest point in town. It offers a 360-degree view of the entire peninsula. It's the favorite spot for hang gliders and sunset lovers." },
+            { nombre: "Mangue de Pedras", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha3.jpg", es: "Ubicado en la Playa de Gorda, es uno de los pocos manglares de piedra del mundo. Un sendero ligero rodeado de naturaleza exótica y aguas tranquilas.", pt: "Localizado na Praia da Gorda, é um dos poucos manguezais de pedra do mundo. Uma trilha leve cercada por natureza exótica e águas calmas.", en: "Located at Gorda Beach, it's one of the few stone mangroves in the world. A light trail surrounded by exotic nature and calm waters." },
+            { nombre: "Ferradurinha a Caravelas", dif: {es: "Alta", pt: "Alta", en: "Hard"}, img: "trilha4.jpg", es: "Un recorrido desafiante que bordea los acantilados. Pasarás por playas desiertas y paisajes vírgenes antes de llegar a la aislada Playa de Caravelas.", pt: "Um percurso desafiador que contorna as falésias. Você passará por praias desertas e paisagens virgens antes de chegar à isolada Praia de Caravelas.", en: "A challenging route along the cliffs. You'll pass through deserted beaches and virgin landscapes before reaching the isolated Caravelas Beach." },
+            { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Conocida como el 'Himalaya brasileño' por sus formaciones rocosas milenarias. El sendero es corto y permite disfrutar de piscinas naturales entre las rocas.", pt: "Conhecida como o 'Himalaia brasileiro' devido às suas formações rochosas milenares. A trilha é curta e permite desfrutar de piscinas naturais entre as rochas.", en: "Known as the 'Brazilian Himalayas' due to its ancient rock formations. The trail is short and allows you to enjoy natural pools among the rocks." },
+            { nombre: "Trilha da Brava", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Conecta la Playa Brava con la Playa de Forno. Ofrece vistas panorámicas de los acantilados y el mar abierto, ideal para los amantes de la fotografía.", pt: "Conecta a Praia Brava à Praia do Forno. Oferece vistas panorâmicas das falésias e do mar aberto, ideal para amantes da fotografia.", en: "Connects Brava Beach to Forno Beach. It offers panoramic views of the cliffs and the open sea, ideal for photography enthusiasts." }
+        ];
 
         const playas = [
             { id: 0, nombre: "Geribá", lat: -22.7753, lon: -41.9056, prot: [250, 320], surf: true, es: "La meca del surf. Ambiente joven.", pt: "A meca do surf. Clima jovem.", en: "The surf mecca." },
@@ -212,8 +229,37 @@
             overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
         }
 
+        function abrirTrilhas() {
+            document.getElementById('modal-trilhas').style.display = 'block';
+            toggleMenu();
+            renderizarTrilhas();
+        }
+
+        function cerrarTrilhas() {
+            document.getElementById('modal-trilhas').style.display = 'none';
+        }
+
+        function renderizarTrilhas() {
+            const container = document.getElementById('lista-trilhas-content');
+            container.innerHTML = "";
+            trilhasData.forEach(t => {
+                const div = document.createElement('div');
+                div.className = "bg-white rounded-3xl overflow-hidden shadow-md border border-slate-100";
+                div.innerHTML = `
+                    <img src="${t.img}" class="w-full h-40 object-cover" alt="${t.nombre}">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-black text-slate-800 uppercase italic">${t.nombre}</h3>
+                            <span class="text-[9px] bg-sky-100 text-sky-700 px-2 py-1 rounded-full font-bold uppercase tracking-widest">${i18n[datosGlobales.lang].dif}: ${t.dif[datosGlobales.lang]}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">${t[datosGlobales.lang]}</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
         async function cargarApp() {
-            cargarFinanzas();
             try {
                 const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-22.76&longitude=-41.88&daily=sunrise,sunset&hourly=windspeed_10m,winddirection_10m&timezone=auto`);
                 const data = await res.json();
@@ -227,55 +273,6 @@
                 setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 800);
             } catch (e) { console.error(e); }
         }
-
-async function cargarFinanzas() {
-    const listado = document.getElementById('listado-pix');
-    try {
-        // 1. Dólares (DolarApi es muy noble, suele ir directo)
-        const resDolar = await fetch('https://dolarapi.com/v1/dolares');
-        if (resDolar.ok) {
-            const dolares = await resDolar.json();
-            const blue = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'blue') : dolares.blue)?.venta;
-            const mep = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'mep') : dolares.mep)?.venta;
-            if (blue) document.getElementById('val-blue').innerText = `$${Math.round(blue)}`;
-            if (mep) document.getElementById('val-mep').innerText = `$${Math.round(mep)}`;
-        }
-
-        // 2. PIX usando un Proxy alternativo muy liviano
-        const targetUrl = 'https://criptoya.com/api/brl/ars/0.1';
-        // Usamos este proxy que es específico para evitar bloqueos de CORS
-        const proxyUrl = `https://cors-anywhere.herokuapp.com/${targetUrl}`;
-        
-        // Intentamos primero con un proxy directo y si no, con una alternativa de respaldo
-        const resPix = await fetch(`https://api.codetabs.com/v1/proxy?quest=${targetUrl}`);
-        const dataPix = await resPix.json();
-        
-        let exchanges = Object.entries(dataPix)
-            .map(([name, vals]) => ({ 
-                name: name.charAt(0).toUpperCase() + name.slice(1), 
-                price: vals.totalAsk 
-            }))
-            .filter(ex => ex.price > 0)
-            .sort((a, b) => a.price - b.price)
-            .slice(0, 5);
-
-        if (exchanges.length > 0) {
-            listado.innerHTML = "";
-            exchanges.forEach((ex, i) => {
-                const row = document.createElement('div');
-                row.className = `flex justify-between p-2 rounded-xl text-xs ${i === 0 ? 'bg-sky-50 font-black border border-sky-200' : 'bg-slate-50 font-bold text-slate-500'}`;
-                row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
-                listado.appendChild(row);
-            });
-        }
-    } catch (e) { 
-        console.log("Servidor de cotizaciones en mantenimiento...");
-        // Si todo falla, al menos mostramos el Dólar Blue que ya cargó arriba
-        if (listado.innerHTML.includes('animate-pulse')) {
-            listado.innerHTML = "<p class='text-[10px] text-slate-400 p-2 italic text-center'>Actualizando precios de billeteras...</p>";
-        }
-    }
-}
 
         async function seleccionarPlaya(playa) {
             playaActual = playa;
@@ -323,16 +320,21 @@ async function cargarFinanzas() {
             datosGlobales.lang = lang;
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${lang}`).classList.add('active');
+            
             document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
+            
             const adsBtn = document.getElementById('btn-ads');
             const encodedMsg = encodeURIComponent(i18n[lang].adsMsg);
             adsBtn.href = `https://wa.me/5522997601592?text=${encodedMsg}`;
+            
             document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
             document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
             document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
             document.getElementById('buscador').placeholder = i18n[lang].buscar;
+            
             if(playaActual) seleccionarPlaya(playaActual);
             renderizarLista();
+            if(document.getElementById('modal-trilhas').style.display === 'block') renderizarTrilhas();
         }
 
         function filtrarPlayas() { renderizarLista(); }
