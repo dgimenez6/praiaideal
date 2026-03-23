@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <title>PraiaIdeal - Búzios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .bg-gradient-main { background: linear-gradient(180deg, #0ea5e9 0%, #0369a1 100%); transition: all 0.5s ease; }
+        .flag-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; width: 28px; height: 20px; object-fit: cover; border-radius: 3px; }
+        .flag-btn.active { opacity: 1; transform: scale(1.2); border: 2px solid #0ea5e9; }
+        .surf-badge { background: #f59e0b; color: white; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; }
+        
+        /* Pantalla de Carga */
+        #splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0ea5e9; z-index: 9999; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader {
+            width: 48px; height: 48px; border: 5px solid #FFF;
+            border-bottom-color: transparent; border-radius: 50%;
+            display: inline-block; box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-10 font-sans text-slate-900">
+
+    <div id="splash">
+        <div class="loader mb-4"></div>
+        <h1 class="text-white font-black text-2xl italic tracking-tighter uppercase">PraiaIdeal</h1>
+        <p class="text-sky-100 text-xs animate-pulse">Analizando microclima...</p>
+    </div>
+
+    <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center text-slate-900">
+        <h1 class="text-xl font-bold text-sky-700 italic tracking-tighter">PraiaIdeal <span class="text-[10px] font-normal not-italic text-slate-400">BÚZIOS</span></h1>
+        <div class="flex space-x-3">
+            <img src="https://flagcdn.com/w40/es.png" class="flag-btn active" id="btn-es" onclick="cambiarIdioma('es')">
+            <img src="https://flagcdn.com/w40/br.png" class="flag-btn" id="btn-pt" onclick="cambiarIdioma('pt')">
+            <img src="https://flagcdn.com/w40/us.png" class="flag-btn" id="btn-en" onclick="cambiarIdioma('en')">
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto p-4 space-y-4">
+        
+        <section id="main-card" class="bg-gradient-main rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[300px]">
+            <div class="flex justify-between items-start text-white">
+                <div>
+                    <span id="label-estado" class="text-[10px] bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest font-bold" data-key="rec">RECOMENDADA HOY</span>
+                    <h2 id="view-nombre" class="text-3xl font-black mt-2 uppercase italic leading-none">---</h2>
+                </div>
+                <div id="view-clima-icon" class="text-4xl">
+                    <i class="fa-solid fa-sun"></i>
+                </div>
+            </div>
+
+            <div class="mt-4 flex items-baseline gap-2 text-white">
+                <span id="view-temp-aire" class="text-5xl font-black">--°</span>
+                <div class="flex flex-col">
+                    <span class="text-[10px] opacity-70 uppercase font-bold" data-key="st">SENSACIÓN</span>
+                    <span id="view-st" class="font-bold text-sm">--°</span>
+                </div>
+            </div>
+
+            <p id="view-mensaje" class="mt-4 text-sky-100 text-sm leading-tight italic min-h-[40px]"></p>
+
+            <div class="mt-6 grid grid-cols-3 gap-2 border-t border-white/20 pt-4 text-white">
+                <div class="text-center">
+                    <p id="view-temp-agua" class="font-bold text-lg">--°</p>
+                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="agua">AGUA</p>
+                </div>
+                <div class="text-center border-l border-white/10">
+                    <p id="view-viento" class="font-bold text-lg">-- km/h</p>
+                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p>
+                </div>
+                <div id="surf-info" class="text-center border-l border-white/10 hidden">
+                    <p id="view-olas" class="font-bold text-lg">-- m</p>
+                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <a id="btn-maps" target="_blank" href="#" class="w-full bg-white text-sky-700 py-3 rounded-full font-bold text-sm shadow-lg flex items-center justify-center active:scale-95 transition-transform">
+                    <i class="fa-solid fa-location-dot mr-2 text-sky-700"></i> <span data-key="ir" class="text-sky-700 uppercase">CÓMO LLEGAR</span>
+                </a>
+            </div>
+        </section>
+
+        <div class="relative text-slate-900">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
+            <input type="text" id="buscador" onkeyup="filtrarPlayas()" placeholder="Buscar playa..." class="w-full p-3 pl-12 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-sky-500 bg-white text-slate-900">
+        </div>
+
+        <section id="lista-playas" class="grid grid-cols-1 gap-3"></section>
+    </main>
+
+    <script>
+        const i18n = {
+            es: { agua: "AGUA", viento: "VIENTO", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", info: "INFORMACIÓN LOCAL", todas: "TODAS LAS PLAYAS", vientoOk: "✨ RECOMENDADA AHORA", vientoNo: "VIENTO NO IDEAL", calma: "✨ MAR CALMA", olas: "OLAS", st: "SENSACIÓN" },
+            pt: { agua: "ÁGUA", viento: "VENTO", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", info: "INFORMAÇÃO LOCAL", todas: "TODAS AS PRAIAS", vientoOk: "✨ RECOMENDADA AGORA", vientoNo: "VENTO NÃO IDEAL", calma: "✨ MAR CALMO", olas: "ONDAS", st: "SENSACAO" },
+            en: { agua: "WATER", viento: "WIND", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", info: "LOCAL INFO", todas: "ALL BEACHES", vientoOk: "✨ RECOMMENDED NOW", vientoNo: "NOT IDEAL WIND", calma: "✨ CALM SEA", olas: "WAVES", st: "FEELS LIKE" }
+        };
+
+        const playas = [
+            { id: 0, nombre: "Geribá", lat: -22.7753, lon: -41.9056, prot: [250, 320], surf: true, face: 'S', es: "La meca del surf. Ambiente joven y olas constantes.", pt: "A meca do surf. Clima jovem e ondas constantes.", en: "The surf mecca. Young vibes and constant waves." },
+            { id: 1, nombre: "João Fernandes", lat: -22.7422, lon: -41.8764, prot: [110, 250], surf: false, face: 'N', es: "Ideal con viento Sur. Aguas cristalinas para snorkel.", pt: "Ideal com vento Sul. Águas cristalinas para snorkel.", en: "Perfect with South wind. Crystal water for snorkeling." },
+            { id: 2, nombre: "Ferradura", lat: -22.7678, lon: -41.8881, prot: [0, 110], surf: false, face: 'S', es: "Piscina natural. Ideal con viento Norte para familias.", pt: "Piscina natural. Ideal com vento Norte para famílias.", en: "Natural pool. Best with North wind for families." },
+            { id: 3, nombre: "Tartaruga", lat: -22.7561, lon: -41.8972, prot: [110, 250], surf: false, face: 'N', es: "Agua cálida, mar calmo y atardeceres únicos.", pt: "Água quente e pôr do sol único.", en: "Warm water and unique sunsets." },
+            { id: 4, nombre: "Brava", lat: -22.7610, lon: -41.8720, prot: [220, 310], surf: true, face: 'S', es: "Salvaje y potente. Ideal para surfistas avanzados.", pt: "Selvagem e potente. Ideal para surfistas avançados.", en: "Wild and powerful. Great for advanced surfers." },
+            { id: 5, nombre: "Azeda & Azedinha", lat: -22.7461, lon: -41.8805, prot: [130, 260], surf: false, face: 'N', es: "Pequeñas y paradisíacas. Muy tranquilas.", pt: "Pequenas e paradisíacas. Muito tranquilas.", en: "Small and paradisiacal. Very calm." },
+            { id: 6, nombre: "Tucuns", lat: -22.7950, lon: -41.9330, prot: [180, 270], surf: true, face: 'S', es: "Extensa y virgen. Muy buena para surf.", pt: "Extensa e virgem. Muito boa para o surf.", en: "Extensive and virgin. Very good for surfing." },
+            { id: 7, nombre: "Forno", lat: -22.7570, lon: -41.8740, prot: [0, 90], surf: false, face: 'N', es: "Arena roja y agua muy mansa.", pt: "Areia vermelha e água muito mansa.", en: "Red sand and very calm water." },
+            { id: 8, nombre: "Manguinhos", lat: -22.7650, lon: -41.9180, prot: [0, 120], surf: false, face: 'N', es: "Ideal para caminar y ver el atardecer.", pt: "Ideal para caminhar e ver o pôr do sol.", en: "Great for walking and sunsets." },
+            { id: 9, nombre: "Ferradurinha", lat: -22.7777, lon: -41.8988, prot: [0, 110], surf: false, face: 'S', es: "Escondida y mansa. Ideal para kayak y SUP.", pt: "Escondida e mansa. Ideal para caiaque e SUP.", en: "Hidden and calm. Great for kayak and SUP." },
+            { id: 10, nombre: "João Fernandinho", lat: -22.7410, lon: -41.8750, prot: [110, 250], surf: false, face: 'N', es: "Más pequeña y exclusiva. Pegada a João Fernandes.", pt: "Menor e mais exclusiva. Ao lado de João Fernandes.", en: "Smaller and exclusive. Next to João Fernandes." },
+            { id: 11, nombre: "Rasa", lat: -22.7400, lon: -41.9400, prot: [130, 250], surf: false, face: 'N', es: "Viento constante. Ideal para deportes de vela.", pt: "Vento constante. Ideal para esportes de vela.", en: "Steady wind. Ideal for sailing sports." },
+            { id: 12, nombre: "Foca", lat: -22.7655, lon: -41.8705, prot: [220, 310], surf: false, face: 'S', es: "Joyita escondida entre rocas. Muy salvaje.", pt: "Joia escondida entre rochas. Muito selvagem.", en: "Hidden gem among rocks. Very wild." }
+        ];
+
+        let datosGlobales = { dir: 0, vel: 0, lang: 'es' };
+
+        function getClimaIcon(code) {
+            if (code <= 1) return '<i class="fa-solid fa-sun text-yellow-400"></i>';
+            if (code <= 3) return '<i class="fa-solid fa-cloud-sun text-slate-200"></i>';
+            if (code <= 48) return '<i class="fa-solid fa-cloud text-slate-400"></i>';
+            if (code <= 67) return '<i class="fa-solid fa-cloud-showers-heavy text-blue-300"></i>';
+            return '<i class="fa-solid fa-bolt-lightning text-yellow-300"></i>';
+        }
+
+        async function cargarApp() {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-22.76&longitude=-41.88&hourly=windspeed_10m,winddirection_10m&forecast_days=1`);
+                const data = await res.json();
+                const h = new Date().getHours();
+                datosGlobales.dir = data.hourly.winddirection_10m[h];
+                datosGlobales.vel = data.hourly.windspeed_10m[h];
+                
+                const rec = playas.find(p => datosGlobales.vel < 8 || (datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1])) || playas[0];
+                await seleccionarPlaya(rec); 
+                cambiarIdioma('es');
+
+                // Ocultar Splash Screen
+                setTimeout(() => {
+                    document.getElementById('splash').style.opacity = '0';
+                    setTimeout(() => document.getElementById('splash').style.display = 'none', 500);
+                }, 1000);
+
+            } catch (e) { console.error(e); }
+        }
+
+        async function seleccionarPlaya(playa, manual = false) {
+            playaSeleccionadaActual = playa;
+            document.getElementById('view-nombre').innerText = playa.nombre;
+            const surfInfo = document.getElementById('surf-info');
+            if (playa.surf) surfInfo.classList.remove('hidden'); else surfInfo.classList.add('hidden');
+
+            try {
+                const marineParams = playa.surf ? "&hourly=sea_surface_temperature,wave_height" : "&hourly=sea_surface_temperature";
+                const weatherParams = "&hourly=temperature_2m,apparent_temperature,weather_code,windspeed_10m,winddirection_10m";
+                const [rA, rV] = await Promise.all([
+                    fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${playa.lat}&longitude=${playa.lon}${marineParams}`),
+                    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${playa.lat}&longitude=${playa.lon}${weatherParams}&forecast_days=1`)
+                ]);
+                const dA = await rA.json(); const dV = await rV.json();
+                const h = new Date().getHours();
+
+                let tempAgua = dA.hourly.sea_surface_temperature[h];
+                let viento = dV.hourly.windspeed_10m[h];
+                let dir = dV.hourly.winddirection_10m[h];
+
+                // Simulación Microclima
+                if ((dir > 20 && dir < 100) && playa.face === 'S' && viento > 15) tempAgua -= 2.5;
+                if (dir >= playa.prot[0] && dir <= playa.prot[1]) viento = viento * 0.7;
+
+                document.getElementById('view-temp-aire').innerText = `${Math.round(dV.hourly.temperature_2m[h])}°`;
+                document.getElementById('view-st').innerText = `${Math.round(dV.hourly.apparent_temperature[h])}°`;
+                document.getElementById('view-clima-icon').innerHTML = getClimaIcon(dV.hourly.weather_code[h]);
+                document.getElementById('view-temp-agua').innerText = `${tempAgua.toFixed(1)}°`;
+                document.getElementById('view-viento').innerText = `${viento.toFixed(1)} km/h`;
+                if (playa.surf) document.getElementById('view-olas').innerText = `${dA.hourly.wave_height[h]} m`;
+
+                const esIdeal = viento < 8 || (dir >= playa.prot[0] && dir <= playa.prot[1]);
+                document.getElementById('label-estado').innerText = esIdeal ? i18n[datosGlobales.lang].rec : i18n[datosGlobales.lang].info;
+                document.getElementById('btn-maps').href = `http://googleusercontent.com/maps.google.com/local/0${playa.lat},${playa.lon}`;
+
+                if(manual) window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) { console.error(e); }
+        }
+
+        function cambiarIdioma(lang) {
+            datosGlobales.lang = lang;
+            document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${lang}`).classList.add('active');
+            document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
+            document.getElementById('buscador').placeholder = i18n[lang].buscar;
+            if (playaSeleccionadaActual) document.getElementById('view-mensaje').innerText = playaSeleccionadaActual[lang];
+            renderizarLista(document.getElementById('buscador').value.toLowerCase());
+        }
+
+        function filtrarPlayas() { renderizarLista(document.getElementById('buscador').value.toLowerCase()); }
+
+        function renderizarLista(filtro = "") {
+            const container = document.getElementById('lista-playas');
+            container.innerHTML = "";
+            const lista = playas.filter(p => p.nombre.toLowerCase().includes(filtro));
+            lista.sort((a, b) => {
+                const okA = datosGlobales.vel < 8 || (datosGlobales.dir >= a.prot[0] && datosGlobales.dir <= a.prot[1]);
+                const okB = datosGlobales.vel < 8 || (datosGlobales.dir >= b.prot[0] && datosGlobales.dir <= b.prot[1]);
+                return okB - okA;
+            });
+            lista.forEach(p => {
+                const ok = datosGlobales.vel < 8 || (datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1]);
+                const div = document.createElement('div');
+                div.className = `beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 ${ok ? 'border-emerald-400' : 'border-slate-200'} cursor-pointer`;
+                div.onclick = () => seleccionarPlaya(p, true);
+                let sub = ok ? (datosGlobales.vel < 8 ? i18n[datosGlobales.lang].calma : i18n[datosGlobales.lang].vientoOk) : i18n[datosGlobales.lang].vientoNo;
+                div.innerHTML = `<div class="flex flex-col"><div class="flex items-center gap-2 font-bold text-slate-700">${p.nombre}${p.surf ? ' <span class="surf-badge">SURF</span>' : ''}</div><p class="text-[10px] font-bold ${ok ? 'text-emerald-500' : 'text-slate-400'} uppercase">${sub}</p></div><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>`;
+                container.appendChild(div);
+            });
+        }
+        cargarApp();
+    </script>
+</body>
+</html>
