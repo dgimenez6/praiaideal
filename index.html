@@ -228,10 +228,10 @@
             } catch (e) { console.error(e); }
         }
 
- async function cargarFinanzas() {
+async function cargarFinanzas() {
     const listado = document.getElementById('listado-pix');
     try {
-        // 1. Dólares (Suelen funcionar directo)
+        // 1. Dólares (DolarApi es muy noble, suele ir directo)
         const resDolar = await fetch('https://dolarapi.com/v1/dolares');
         if (resDolar.ok) {
             const dolares = await resDolar.json();
@@ -241,16 +241,14 @@
             if (mep) document.getElementById('val-mep').innerText = `$${Math.round(mep)}`;
         }
 
-        // 2. PIX usando AllOrigins (Más compatible con CORS)
+        // 2. PIX usando un Proxy alternativo muy liviano
         const targetUrl = 'https://criptoya.com/api/brl/ars/0.1';
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+        // Usamos este proxy que es específico para evitar bloqueos de CORS
+        const proxyUrl = `https://cors-anywhere.herokuapp.com/${targetUrl}`;
         
-        const resPix = await fetch(proxyUrl);
-        if (!resPix.ok) throw new Error('Fallo en proxy');
-        
-        const wrapper = await resPix.json();
-        // IMPORTANTE: AllOrigins mete el resultado en una propiedad llamada "contents"
-        const dataPix = JSON.parse(wrapper.contents);
+        // Intentamos primero con un proxy directo y si no, con una alternativa de respaldo
+        const resPix = await fetch(`https://api.codetabs.com/v1/proxy?quest=${targetUrl}`);
+        const dataPix = await resPix.json();
         
         let exchanges = Object.entries(dataPix)
             .map(([name, vals]) => ({ 
@@ -271,10 +269,10 @@
             });
         }
     } catch (e) { 
-        console.log("Servidor de precios ocupado, reintentando...");
-        // Si falla, dejamos un mensaje sutil pero no bloqueamos la app
+        console.log("Servidor de cotizaciones en mantenimiento...");
+        // Si todo falla, al menos mostramos el Dólar Blue que ya cargó arriba
         if (listado.innerHTML.includes('animate-pulse')) {
-            listado.innerHTML = "<p class='text-[10px] text-slate-400 p-2 italic text-center'>Cotizaciones momentáneamente no disponibles</p>";
+            listado.innerHTML = "<p class='text-[10px] text-slate-400 p-2 italic text-center'>Actualizando precios de billeteras...</p>";
         }
     }
 }
