@@ -13,7 +13,6 @@
         .flag-btn.active { opacity: 1; transform: scale(1.2); border: 2px solid #0ea5e9; }
         .surf-badge { background: #f59e0b; color: white; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; }
         
-        /* Pantalla de Carga */
         #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0ea5e9; z-index: 9999; display: flex;
@@ -119,7 +118,9 @@
             { id: 9, nombre: "Ferradurinha", lat: -22.7777, lon: -41.8988, prot: [0, 110], surf: false, face: 'S', es: "Escondida y mansa. Ideal para kayak y SUP.", pt: "Escondida e mansa. Ideal para caiaque e SUP.", en: "Hidden and calm. Great for kayak and SUP." },
             { id: 10, nombre: "João Fernandinho", lat: -22.7410, lon: -41.8750, prot: [110, 250], surf: false, face: 'N', es: "Más pequeña y exclusiva. Pegada a João Fernandes.", pt: "Menor e mais exclusiva. Ao lado de João Fernandes.", en: "Smaller and exclusive. Next to João Fernandes." },
             { id: 11, nombre: "Rasa", lat: -22.7400, lon: -41.9400, prot: [130, 250], surf: false, face: 'N', es: "Viento constante. Ideal para deportes de vela.", pt: "Vento constante. Ideal para esportes de vela.", en: "Steady wind. Ideal for sailing sports." },
-            { id: 12, nombre: "Foca", lat: -22.7655, lon: -41.8705, prot: [220, 310], surf: false, face: 'S', es: "Joyita escondida entre rocas. Muy salvaje.", pt: "Joia escondida entre rochas. Muito selvagem.", en: "Hidden gem among rocks. Very wild." }
+            { id: 12, nombre: "Foca", lat: -22.7655, lon: -41.8705, prot: [220, 310], surf: false, face: 'S', es: "Joyita escondida entre rocas. Muy salvaje.", pt: "Joia escondida entre rochas. Muito selvagem.", en: "Hidden gem among rocks. Very wild." },
+            { id: 13, nombre: "Caravelas", lat: -22.8130, lon: -41.9460, prot: [180, 270], surf: true, face: 'S', es: "Playa de mar abierto, excelente para surf y naturaleza.", pt: "Praia de mar aberto, excelente para surf e natureza.", en: "Open sea beach, excellent for surfing and nature." },
+            { id: 14, nombre: "José Gonçalves", lat: -22.7880, lon: -41.9420, prot: [180, 270], surf: true, face: 'S', es: "Rodeada de reserva natural. Muy buscada por surfistas.", pt: "Cercada por reserva natural. Muito procurada por surfistas.", en: "Surrounded by a nature reserve. Very popular with surfers." }
         ];
 
         let datosGlobales = { dir: 0, vel: 0, lang: 'es' };
@@ -139,17 +140,13 @@
                 const h = new Date().getHours();
                 datosGlobales.dir = data.hourly.winddirection_10m[h];
                 datosGlobales.vel = data.hourly.windspeed_10m[h];
-                
                 const rec = playas.find(p => datosGlobales.vel < 8 || (datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1])) || playas[0];
                 await seleccionarPlaya(rec); 
                 cambiarIdioma('es');
-
-                // Ocultar Splash Screen
                 setTimeout(() => {
                     document.getElementById('splash').style.opacity = '0';
                     setTimeout(() => document.getElementById('splash').style.display = 'none', 500);
                 }, 1000);
-
             } catch (e) { console.error(e); }
         }
 
@@ -173,7 +170,6 @@
                 let viento = dV.hourly.windspeed_10m[h];
                 let dir = dV.hourly.winddirection_10m[h];
 
-                // Simulación Microclima
                 if ((dir > 20 && dir < 100) && playa.face === 'S' && viento > 15) tempAgua -= 2.5;
                 if (dir >= playa.prot[0] && dir <= playa.prot[1]) viento = viento * 0.7;
 
@@ -186,7 +182,7 @@
 
                 const esIdeal = viento < 8 || (dir >= playa.prot[0] && dir <= playa.prot[1]);
                 document.getElementById('label-estado').innerText = esIdeal ? i18n[datosGlobales.lang].rec : i18n[datosGlobales.lang].info;
-                document.getElementById('btn-maps').href = `http://googleusercontent.com/maps.google.com/local/0${playa.lat},${playa.lon}`;
+                document.getElementById('btn-maps').href = `https://www.google.com/maps?q=${playa.lat},${playa.lon}`;
 
                 if(manual) window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (e) { console.error(e); }
