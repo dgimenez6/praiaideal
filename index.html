@@ -28,6 +28,7 @@
             animation: rotation 1s linear infinite;
         }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .beach-item { transition: transform 0.2s ease; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen pb-10 font-sans text-slate-900">
@@ -120,13 +121,28 @@
         </div>
 
         <section id="lista-playas" class="grid grid-cols-1 gap-3"></section>
+
+        <div class="mt-10 p-8 bg-white rounded-[2.5rem] shadow-sm text-center border border-slate-100">
+            <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-coffee text-xl"></i>
+            </div>
+            <p id="colab-txt-main" class="text-sm font-bold text-slate-800 px-4 leading-tight"></p>
+            <p id="colab-txt-sub" class="text-[11px] text-slate-400 mt-2 mb-6"></p>
+            
+            <button onclick="copiarPix()" id="btn-pix" class="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-3">
+                <i class="fa-solid fa-copy"></i> <span id="btn-pix-text">COPIAR CHAVE PIX</span>
+            </button>
+            
+            <p class="text-[9px] text-slate-300 mt-4 uppercase tracking-widest font-bold">Titular: Damian Leonardo Gimenez</p>
+        </div>
+
     </main>
 
     <script>
         const i18n = {
-            es: { agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", info: "INFORMACIÓN LOCAL", todas: "TODAS LAS PLAYAS", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta." },
-            pt: { agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", info: "INFORMAÇÃO LOCAL", todas: "TODAS AS PRAIAS", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta." },
-            en: { agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", info: "LOCAL INFO", todas: "ALL BEACHES", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area." }
+            es: { agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", info: "INFORMACIÓN LOCAL", todas: "TODAS LAS PLAYAS", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!" },
+            pt: { agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", info: "INFORMAÇÃO LOCAL", todas: "TODAS AS PRAIAS", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoje? Ajude a manter o app online com um cafezinho.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!" },
+            en: { agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", info: "LOCAL INFO", todas: "ALL BEACHES", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!" }
         };
 
         const playas = [
@@ -150,6 +166,7 @@
 
         let datosGlobales = { dir: 0, vel: 0, lang: 'es' };
         let playaActual = null;
+        const CHAVE_PIX = "19431fa4-da2e-4709-97fd-ffdcf09cf664";
 
         async function cargarApp() {
             try {
@@ -160,8 +177,7 @@
                 datosGlobales.vel = data.hourly.windspeed_10m[h];
                 document.getElementById('view-sunrise').innerText = data.daily.sunrise[0].split('T')[1];
                 document.getElementById('view-sunset').innerText = data.daily.sunset[0].split('T')[1];
-                const g = playas.find(p => p.nombre === "Geribá") || playas[0];
-                seleccionarPlaya(g); 
+                seleccionarPlaya(playas.find(p => p.nombre === "Geribá") || playas[0]); 
                 cambiarIdioma('es');
                 setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 1000);
             } catch (e) { console.error(e); }
@@ -191,17 +207,13 @@
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
                 document.getElementById('view-olas').innerText = `${dM.hourly.wave_height[h]} m`;
 
-                // --- AJUSTE DE DISEÑO DINÁMICO ---
-                const playasDeSurf = ["Tucuns", "Geribá", "Caravelas", "José Gonçalves"];
-                const contViento = document.getElementById('container-viento');
-                const contOlas = document.getElementById('container-olas');
-                
-                if (playasDeSurf.includes(playa.nombre)) {
-                    contViento.className = "border-t border-white/10 pt-2 border-r border-white/10 col-span-1";
-                    contOlas.classList.remove('hidden');
+                const playsSurf = ["Tucuns", "Geribá", "Caravelas", "José Gonçalves"];
+                if (playsSurf.includes(playa.nombre)) {
+                    document.getElementById('container-viento').className = "border-t border-white/10 pt-2 border-r border-white/10 col-span-1";
+                    document.getElementById('container-olas').classList.remove('hidden');
                 } else {
-                    contViento.className = "border-t border-white/10 pt-2 col-span-2"; // Ocupa todo el ancho
-                    contOlas.classList.add('hidden');
+                    document.getElementById('container-viento').className = "border-t border-white/10 pt-2 col-span-2";
+                    document.getElementById('container-olas').classList.add('hidden');
                 }
 
                 const card = document.getElementById('main-card');
@@ -224,7 +236,6 @@
                         document.getElementById('icon-arena').className = "fa-solid fa-umbrella-beach";
                     } else { alerta.classList.add('hidden'); }
                 }
-
                 document.getElementById('btn-maps').href = `https://www.google.com/maps/search/?api=1&query=Praia+de+${playa.nombre}+Buzios`;
             } catch (e) { console.error(e); }
         }
@@ -234,8 +245,26 @@
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${lang}`).classList.add('active');
             document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
+            
+            // Textos colab
+            document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
+            document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
+            document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
+
             if(playaActual) document.getElementById('view-mensaje').innerText = playaActual[lang] || '';
             renderizarLista();
+        }
+
+        function copiarPix() {
+            navigator.clipboard.writeText(CHAVE_PIX);
+            const btnText = document.getElementById('btn-pix-text');
+            const originalText = btnText.innerText;
+            btnText.innerText = i18n[datosGlobales.lang].copiado;
+            document.getElementById('btn-pix').classList.replace('bg-emerald-500', 'bg-emerald-700');
+            setTimeout(() => {
+                btnText.innerText = originalText;
+                document.getElementById('btn-pix').classList.replace('bg-emerald-700', 'bg-emerald-500');
+            }, 2000);
         }
 
         function filtrarPlayas() { renderizarLista(); }
