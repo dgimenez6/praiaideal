@@ -12,7 +12,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
-    <title>PraiaIdeal - Búzios</title>
+    <title>PraiaIdeal | Estado de Playas y Temperatura del Agua en Búzios</title>
+    <meta name="description" content="Descubrí la playa ideal en Búzios según el viento y la marea. Consultá la temperatura del agua, clima en tiempo real y las mejores trilhas de la península.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -146,11 +147,11 @@
                     <p id="view-marea-desc" class="text-[8px] font-black uppercase tracking-tighter">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="marea">MAREA</p>
                 </div>
-                <div id="container-viento" class="border-t border-white/10 pt-2 border-r border-white/10">
+                <div id="container-viento" class="border-t border-white/10 pt-2 border-r border-white/10 col-span-1">
                     <p id="view-viento" class="font-bold text-lg">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p>
                 </div>
-                <div id="container-olas" class="border-t border-white/10 pt-2">
+                <div id="container-olas" class="border-t border-white/10 pt-2 col-span-1">
                     <p id="view-olas" class="font-bold text-lg">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p>
                 </div>
@@ -195,8 +196,8 @@
             { nombre: "Serra das Emerências", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha2.jpg", es: "El punto más elevado de la ciudad. Ofrece una vista de 360 grados de toda la península, ideal para ver el atardecer.", pt: "O ponto mais elevado da cidade. Oferece uma vista de 360 graus de toda a península, ideal para o pôr do sol.", en: "The highest point in town. Offers a 360-degree view of the entire peninsula, perfect for sunset lovers." },
             { nombre: "Mangue de Pedras", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha3.jpg", es: "Ubicado en la Playa de Gorda, es uno de los pocos manglares de piedra del mundo. Un sendero ligero rodeado de naturaleza exótica.", pt: "Localizado na Praia da Gorda, é um dos poucos manguezais de pedra do mundo. Uma trilha leve cercada por natureza exótica.", en: "Located at Gorda Beach, one of the few stone mangroves in the world. A light trail surrounded by exotic nature." },
             { nombre: "Caravelas x Pontal do Peró", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha4.jpg", es: "Recorrido plano y sombreado de 6 km que une el sur de Búzios con Cabo Frio. Pasa por matas y playas salvajes como Amendoeira.", pt: "Percurso plano e sombreado de 6 km que liga o sul de Búzios ao Pontal do Peró. Passa por matas e praias selvagens como Amendoeira.", en: "Flat and shaded 6 km route connecting south Búzios to Pontal do Peró. Passes through forests and wild beaches like Amendoeira." },
-            { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Conocida como el 'Himalaya brasileño'. Sendero corto hacia formaciones rocosas milenarias con piscinas naturales.", pt: "Conhecida como o 'Himalaia brasileiro'. Trilha curta para formações rochosas milenares com piscinas naturais.", en: "Known as the 'Brazilian Himalayas'. Short trail to ancient rock formations with natural pools." },
-            { nombre: "Tartaruga x Praia do Canto", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Sendero costero de 2 a 4 km que conecta playas paradisíacas como Virgens y Amores. Involucra caminata sobre piedras y mata nativa.", pt: "Trilha costeira de 2 a 4 km conectando praias paradisíacas como Virgens e Amores. Envolve caminhada sobre pedras e mata nativa.", en: "Coastal trail (2-4 km) connecting paradisiacal beaches like Virgens and Amores. Includes walking over rocks and native forest." },
+            { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Conocida como el 'Himalaya brasileño'. Sendero corto hacia formaciones rocosas milenarias con piscinas naturales espectaculares.", pt: "Conhecida como o 'Himalaia brasileiro'. Trilha curta para formações rochosas milenares com piscinas naturais espetaculares.", en: "Known as the 'Brazilian Himalayas'. Short trail to ancient rock formations with natural pools." },
+            { nombre: "Tartaruga x Praia do Canto", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Sendero costero que conecta playas paradisíacas como Virgens y Amores. Involucra caminata sobre piedras y mata nativa.", pt: "Trilha costeira conectando praias paradisíacas como as das Virgens e dos Amores. Envolve caminhada sobre pedras e mata nativa.", en: "Coastal trail connecting paradisiacal beaches like Virgens and Amores. Includes walking over rocks and native forest." },
             { nombre: "Praia Olho de Boi", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha7.jpg", es: "Comienza en el canto derecho de Playa Brava. Caminata de 20-30 min por acantilados que lleva a una playa naturista con vistas increíbles.", pt: "Começa no canto direito da Praia Brava. Caminhada de 20-30 min por falésias que leva a uma praia naturista com vistas incríveis.", en: "Starts at the right corner of Brava Beach. A 20-30 min hike over cliffs leading to a nudist beach with incredible views." }
         ];
 
@@ -296,7 +297,21 @@
                 document.getElementById('view-st').innerText = `${Math.round(dW.hourly.apparent_temperature[h])}°`;
                 document.getElementById('view-temp-agua').innerText = `${dM.hourly.sea_surface_temperature[h]}°`;
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
-                document.getElementById('view-olas').innerText = `${dM.hourly.wave_height[h]} m`;
+                
+                // LÓGICA DE SURF VS MANSA
+                const olasCont = document.getElementById('container-olas');
+                const vientoCont = document.getElementById('container-viento');
+                
+                if (playa.surf) {
+                    olasCont.classList.remove('hidden');
+                    document.getElementById('view-olas').innerText = `${dM.hourly.wave_height[h]} m`;
+                    vientoCont.classList.replace('col-span-2', 'col-span-1');
+                    vientoCont.classList.add('border-r');
+                } else {
+                    olasCont.classList.add('hidden');
+                    vientoCont.classList.replace('col-span-1', 'col-span-2');
+                    vientoCont.classList.remove('border-r');
+                }
 
                 const mareaMala = playa.critica && valMarea > 0.9;
                 const vientoMalo = dW.hourly.windspeed_10m[h] >= 12 && !(datosGlobales.dir >= playa.prot[0] && datosGlobales.dir <= playa.prot[1]);
