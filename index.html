@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8TYQXC8RS"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KP1SRD3YJ2"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-R8TYQXC8RS');
+      gtag('config', 'G-KP1SRD3YJ2');
     </script>
 
     <meta charset="UTF-8">
@@ -16,6 +16,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Color Azul Institucional sugerido para combinar con el logo */
         .bg-gradient-ok { background: linear-gradient(180deg, #0ea5e9 0%, #0369a1 100%); transition: all 0.5s ease; }
         .bg-gradient-warning { background: linear-gradient(180deg, #f97316 0%, #ea580c 100%); transition: all 0.5s ease; }
         
@@ -146,7 +147,7 @@
     <script>
         const i18n = {
             es: { agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", info: "INFORMACIÓN LOCAL", todas: "TODAS LAS PLAYAS", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!" },
-            pt: { agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", info: "INFORMAÇÃO LOCAL", todas: "TODAS AS PRAIAS", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoje? Ajude a manter o app online com um cafezinho.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!" },
+            pt: { agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", info: "INFORMAÇÃO LOCAL", todas: "TODAS AS PRAIAS", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoy? Ajude a manter o app online com um cafezinho.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!" },
             en: { agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", info: "LOCAL INFO", todas: "ALL BEACHES", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!" }
         };
 
@@ -201,9 +202,11 @@
                 ]);
                 const dM = await rM.json(); const dW = await rW.json();
                 const h = new Date().getHours();
+                
                 const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
                 document.getElementById('view-marea').innerText = valMarea;
                 document.getElementById('view-marea-desc').innerText = valMarea > 0.9 ? "ALTA" : "BAJA";
+                
                 document.getElementById('view-temp-aire').innerText = `${Math.round(dW.hourly.temperature_2m[h])}°`;
                 document.getElementById('view-st').innerText = `${Math.round(dW.hourly.apparent_temperature[h])}°`;
                 document.getElementById('view-temp-agua').innerText = `${dM.hourly.sea_surface_temperature[h]}°`;
@@ -222,11 +225,9 @@
                 const card = document.getElementById('main-card');
                 const alerta = document.getElementById('alerta-arena');
                 const mareaMala = playa.critica && valMarea > 0.9;
-                
-                // Lógica de recomendación: El viento es OK si es suave (<12km/h) o si la playa lo protege
-                const esVientoOk = dW.hourly.windspeed_10m[h] < 12 || (dW.hourly.winddirection_10m[h] >= playa.prot[0] && dW.hourly.winddirection_10m[h] <= playa.prot[1]);
+                const vientoMalo = dW.hourly.windspeed_10m[h] >= 12 && !(dW.hourly.winddirection_10m[h] >= playa.prot[0] && dW.hourly.winddirection_10m[h] <= playa.prot[1]);
 
-                if (mareaMala || !esVientoOk) {
+                if (mareaMala || vientoMalo) {
                     card.className = "bg-gradient-warning rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]";
                     if (mareaMala) {
                         alerta.classList.remove('hidden');
@@ -277,7 +278,6 @@
             const filtro = document.getElementById('buscador').value.toLowerCase();
             const lista = playas.filter(p => p.nombre.toLowerCase().includes(filtro));
             lista.forEach(p => {
-                // Calibración de la recomendación en la lista: permisividad hasta 12km/h
                 const ok = datosGlobales.vel < 12 || (datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1]);
                 const div = document.createElement('div');
                 div.className = `beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center cursor-pointer mb-2 border-l-4 ${ok ? 'border-emerald-400' : 'border-slate-200'}`;
