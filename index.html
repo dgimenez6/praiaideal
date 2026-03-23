@@ -10,7 +10,7 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <title>PraiaIdeal | Estado de Playas y Temperatura del Agua en Búzios</title>
     <meta name="description" content="Descubrí la playa ideal en Búzios según el viento y la marea. Consultá la temperatura del agua, clima en tiempo real y las mejores trilhas de la península.">
@@ -31,14 +31,19 @@
         #sidebar.open { right: 0; }
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: none; }
         #modal-trilhas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 11000; display: none; overflow-y: auto; }
+        #ptr-indicator { position: fixed; top: -50px; left: 0; width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; z-index: 60; color: #0ea5e9; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen pb-10 font-sans text-slate-900">
+<body class="bg-slate-50 min-h-screen pb-10 font-sans text-slate-900 overflow-x-hidden">
+
+    <div id="ptr-indicator">
+        <i class="fa-solid fa-arrows-rotate fa-spin text-xl"></i>
+    </div>
 
     <div id="splash">
         <img src="icono.png" alt="Logo" class="splash-logo">
         <div class="loader mb-4"></div>
-        <p class="text-sky-50 text-xs animate-pulse tracking-widest uppercase text-center px-4">Escaneando Península de Búzios...</p>
+        <p class="text-sky-50 text-xs animate-pulse tracking-widest uppercase text-center px-4">Calculando Playa Ideal...</p>
     </div>
 
     <div id="overlay" onclick="toggleMenu()"></div>
@@ -48,7 +53,6 @@
             <h2 class="font-black text-slate-700 uppercase tracking-tighter text-xl italic" data-key="menuTitle">Menú</h2>
             <button onclick="toggleMenu()" class="text-slate-400 text-3xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
         <div class="space-y-6">
             <button onclick="abrirTrilhas()" class="w-full flex items-center justify-between bg-sky-50 p-4 rounded-2xl border border-sky-100 text-sky-700 active:scale-95 transition-all">
                 <div class="flex items-center gap-3">
@@ -57,9 +61,7 @@
                 </div>
                 <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
             </button>
-
             <hr class="border-slate-100">
-
             <a id="btn-ads" href="#" target="_blank" class="block bg-gradient-to-r from-emerald-500 to-teal-600 p-5 rounded-2xl text-white shadow-md active:scale-95 transition-all text-center">
                 <i class="fa-solid fa-rectangle-ad mb-2 text-2xl"></i>
                 <p class="font-black text-sm uppercase" data-key="adsTitle">¿Anunciar aquí?</p>
@@ -73,14 +75,11 @@
             <h2 class="font-black text-sky-700 uppercase tracking-tight italic" data-key="btnTrilhas">Trilhas & Aventuras</h2>
             <button onclick="cerrarTrilhas()" class="text-slate-400 text-3xl px-2"><i class="fa-solid fa-xmark"></i></button>
         </header>
-        
         <div class="bg-sky-700 p-6 text-white">
             <h3 class="text-xl font-black uppercase italic mb-2" data-key="trilhaWelcome">Búzios Salvaje</h3>
             <p class="text-xs opacity-90 leading-relaxed" data-key="trilhaDesc">Descubrí paisajes que pocos turistas conocen. Caminatas por acantilados, bosques y playas vírgenes. ¡No olvides el agua y protector solar!</p>
         </div>
-
         <div id="lista-trilhas-content" class="p-4 space-y-6"></div>
-
         <div class="p-8 text-center bg-slate-50 border-t border-slate-100">
             <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Respetá la naturaleza • No dejes basura</p>
         </div>
@@ -88,7 +87,7 @@
 
     <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center text-slate-900">
         <div class="flex items-center gap-2">
-            <img src="icono.png" alt="Logo" class="w-8 h-8 rounded-md">
+            <img src="icono.png" alt="Logo" class="w-8 h-8 rounded-md" onclick="window.scrollTo({top:0, behavior:'smooth'})">
             <h1 class="text-xl font-bold text-sky-700 italic tracking-tighter uppercase leading-none">PraiaIdeal</h1>
         </div>
         <div class="flex items-center gap-3">
@@ -105,7 +104,7 @@
         <section id="main-card" class="bg-gradient-ok rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]">
             <div class="flex justify-between items-start">
                 <div>
-                    <span id="label-estado" class="text-[10px] bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest font-bold" data-key="rec">RECOMENDADA HOY</span>
+                    <span id="label-estado" class="text-[10px] bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest font-bold hidden" data-key="rec">RECOMENDADA HOY</span>
                     <h2 class="text-3xl font-black mt-2 uppercase italic leading-none">
                         <span id="view-nombre">---</span>
                         <span id="surf-tag" class="surf-badge hidden">SURF</span>
@@ -147,11 +146,11 @@
                     <p id="view-marea-desc" class="text-[8px] font-black uppercase tracking-tighter">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="marea">MAREA</p>
                 </div>
-                <div id="container-viento" class="border-t border-white/10 pt-2 border-r border-white/10 col-span-1">
+                <div id="container-viento" class="border-t border-white/10 pt-2 col-span-1">
                     <p id="view-viento" class="font-bold text-lg">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p>
                 </div>
-                <div id="container-olas" class="border-t border-white/10 pt-2 col-span-1">
+                <div id="container-olas" class="border-t border-white/10 pt-2 col-span-1 border-l border-white/10">
                     <p id="view-olas" class="font-bold text-lg">--</p>
                     <p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p>
                 </div>
@@ -196,8 +195,8 @@
             { nombre: "Serra das Emerências", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha2.jpg", es: "El punto más elevado de la ciudad. Ofrece una vista de 360 grados de toda la península, ideal para ver el atardecer.", pt: "O ponto mais elevado da cidade. Oferece uma vista de 360 graus de toda a península, ideal para o pôr do sol.", en: "The highest point in town. Offers a 360-degree view of the entire peninsula, perfect for sunset lovers." },
             { nombre: "Mangue de Pedras", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha3.jpg", es: "Ubicado en la Playa de Gorda, es uno de los pocos manglares de piedra del mundo. Un sendero ligero rodeado de naturaleza exótica.", pt: "Localizado na Praia da Gorda, é um dos poucos manguezais de pedra do mundo. Uma trilha leve cercada por natureza exótica.", en: "Located at Gorda Beach, one of the few stone mangroves in the world. A light trail surrounded by exotic nature." },
             { nombre: "Caravelas x Pontal do Peró", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha4.jpg", es: "Recorrido plano y sombreado de 6 km que une el sur de Búzios con Cabo Frio. Pasa por matas y playas salvajes como Amendoeira.", pt: "Percurso plano e sombreado de 6 km que liga o sul de Búzios ao Pontal do Peró. Passa por matas e praias selvagens como Amendoeira.", en: "Flat and shaded 6 km route connecting south Búzios to Pontal do Peró. Passes through forests and wild beaches like Amendoeira." },
-            { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Conocida como el 'Himalaya brasileño'. Sendero corto hacia formaciones rocosas milenarias con piscinas naturales espectaculares.", pt: "Conhecida como o 'Himalaia brasileiro'. Trilha curta para formações rochosas milenares com piscinas naturais espetaculares.", en: "Known as the 'Brazilian Himalayas'. Short trail to ancient rock formations with natural pools." },
-            { nombre: "Tartaruga x Praia do Canto", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Sendero costero que conecta playas paradisíacas como Virgens y Amores. Involucra caminata sobre piedras y mata nativa.", pt: "Trilha costeira conectando praias paradisíacas como as das Virgens e dos Amores. Envolve caminhada sobre pedras e mata nativa.", en: "Coastal trail connecting paradisiacal beaches like Virgens and Amores. Includes walking over rocks and native forest." },
+            { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Conocida como el 'Himalaya brasileño'. Sendero corto hacia formaciones rocosas milenarias con piscinas naturales.", pt: "Conhecida como o 'Himalaia brasileiro'. Trilha curta para formações rochosas milenares com piscinas naturais.", en: "Known as the 'Brazilian Himalayas'. Short trail to ancient rock formations with natural pools." },
+            { nombre: "Tartaruga x Praia do Canto", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Sendero costero de 2 a 4 km que conecta playas paradisíacas como Virgens y Amores. Involucra caminata sobre piedras y mata nativa.", pt: "Trilha costeira de 2 a 4 km conectando praias paradisíacas como Virgens e Amores. Envolve caminhada sobre pedras e mata nativa.", en: "Coastal trail (2-4 km) connecting paradisiacal beaches like Virgens and Amores. Includes walking over rocks and native forest." },
             { nombre: "Praia Olho de Boi", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha7.jpg", es: "Comienza en el canto derecho de Playa Brava. Caminata de 20-30 min por acantilados que lleva a una playa naturista con vistas increíbles.", pt: "Começa no canto direito da Praia Brava. Caminhada de 20-30 min por falésias que leva a uma praia naturista com vistas incríveis.", en: "Starts at the right corner of Brava Beach. A 20-30 min hike over cliffs leading to a nudist beach with incredible views." }
         ];
 
@@ -222,7 +221,24 @@
 
         let datosGlobales = { dir: 0, vel: 0, lang: 'es' };
         let playaActual = null;
+        let playaGanadora = null;
         const CHAVE_PIX = "19431fa4-da2e-4709-97fd-ffdcf09cf664";
+
+        // Lógica Refrescar deslizando
+        let startY = 0;
+        document.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, {passive: true});
+        document.addEventListener('touchmove', e => {
+            const y = e.touches[0].pageY;
+            const dist = y - startY;
+            if (window.scrollY === 0 && dist > 0) {
+                document.getElementById('ptr-indicator').style.transform = `translateY(${Math.min(dist, 100)}px)`;
+            }
+        }, {passive: true});
+        document.addEventListener('touchend', () => {
+            const ind = document.getElementById('ptr-indicator');
+            if (ind.getBoundingClientRect().top > 0) location.reload();
+            ind.style.transform = 'translateY(0)';
+        });
 
         function toggleMenu() {
             const sidebar = document.getElementById('sidebar');
@@ -237,9 +253,7 @@
             renderizarTrilhas();
         }
 
-        function cerrarTrilhas() {
-            document.getElementById('modal-trilhas').style.display = 'none';
-        }
+        function cerrarTrilhas() { document.getElementById('modal-trilhas').style.display = 'none'; }
 
         function renderizarTrilhas() {
             const container = document.getElementById('lista-trilhas-content');
@@ -247,30 +261,39 @@
             trilhasData.forEach(t => {
                 const div = document.createElement('div');
                 div.className = "bg-white rounded-3xl overflow-hidden shadow-md border border-slate-100";
-                div.innerHTML = `
-                    <img src="${t.img}" class="w-full h-40 object-cover" alt="${t.nombre}">
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-black text-slate-800 uppercase italic leading-tight">${t.nombre}</h3>
-                            <span class="text-[9px] bg-sky-100 text-sky-700 px-2 py-1 rounded-full font-bold uppercase tracking-widest ml-2 whitespace-nowrap">${i18n[datosGlobales.lang].dif}: ${t.dif[datosGlobales.lang]}</span>
-                        </div>
-                        <p class="text-xs text-slate-500 leading-relaxed">${t[datosGlobales.lang]}</p>
-                    </div>
-                `;
+                div.innerHTML = `<img src="${t.img}" class="w-full h-40 object-cover" alt="${t.nombre}"><div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-black text-slate-800 uppercase italic leading-tight">${t.nombre}</h3><span class="text-[9px] bg-sky-100 text-sky-700 px-2 py-1 rounded-full font-bold uppercase tracking-widest ml-2 whitespace-nowrap">${i18n[datosGlobales.lang].dif}: ${t.dif[datosGlobales.lang]}</span></div><p class="text-xs text-slate-500 leading-relaxed">${t[datosGlobales.lang]}</p></div>`;
                 container.appendChild(div);
             });
         }
 
         async function cargarApp() {
             try {
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-22.76&longitude=-41.88&daily=sunrise,sunset&hourly=windspeed_10m,winddirection_10m&timezone=auto`);
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-22.76&longitude=-41.88&daily=sunrise,sunset&hourly=windspeed_10m,winddirection_10m,weathercode&timezone=auto`);
                 const data = await res.json();
                 const h = new Date().getHours();
                 datosGlobales.dir = data.hourly.winddirection_10m[h];
                 datosGlobales.vel = data.hourly.windspeed_10m[h];
                 document.getElementById('view-sunrise').innerText = data.daily.sunrise[0].split('T')[1];
                 document.getElementById('view-sunset').innerText = data.daily.sunset[0].split('T')[1];
-                seleccionarPlaya(playas[0]);
+                
+                // ALGORITMO RECOMENDADA
+                const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
+                let maxPuntaje = -100;
+
+                for (let p of playas) {
+                    let score = 0;
+                    const vientoProtegido = datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1];
+                    score += vientoProtegido ? 50 : -30;
+                    if (p.critica && valMarea > 0.9) score -= 40;
+                    if (!p.surf && datosGlobales.vel > 15) score -= 20;
+
+                    if (score > maxPuntaje) {
+                        maxPuntaje = score;
+                        playaGanadora = p;
+                    }
+                }
+
+                seleccionarPlaya(playaGanadora);
                 cambiarIdioma('es');
                 setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 800);
             } catch (e) { console.error(e); }
@@ -278,6 +301,15 @@
 
         async function seleccionarPlaya(playa) {
             playaActual = playa;
+            
+            // Mostrar/Ocultar cartel recomendado dinámicamente
+            const labelRec = document.getElementById('label-estado');
+            if (playaGanadora && playa.id === playaGanadora.id) {
+                labelRec.classList.remove('hidden');
+            } else {
+                labelRec.classList.add('hidden');
+            }
+
             document.getElementById('view-nombre').innerText = playa.nombre;
             document.getElementById('surf-tag').className = playa.surf ? "surf-badge" : "hidden";
             document.getElementById('view-mensaje').innerText = playa[datosGlobales.lang];
@@ -285,23 +317,36 @@
             try {
                 const [rM, rW] = await Promise.all([
                     fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${playa.lat}&longitude=${playa.lon}&hourly=sea_surface_temperature,wave_height`),
-                    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${playa.lat}&longitude=${playa.lon}&hourly=temperature_2m,apparent_temperature,windspeed_10m&forecast_days=1`)
+                    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${playa.lat}&longitude=${playa.lon}&hourly=temperature_2m,apparent_temperature,windspeed_10m,weathercode&forecast_days=1&timezone=auto`)
                 ]);
                 const dM = await rM.json(); const dW = await rW.json();
-                const h = new Date().getHours();
-                const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
+                const ahora = new Date();
+                const h = ahora.getHours();
                 
-                document.getElementById('view-marea').innerText = valMarea;
-                document.getElementById('view-marea-desc').innerText = valMarea > 0.9 ? "ALTA" : "BAJA";
                 document.getElementById('view-temp-aire').innerText = `${Math.round(dW.hourly.temperature_2m[h])}°`;
                 document.getElementById('view-st').innerText = `${Math.round(dW.hourly.apparent_temperature[h])}°`;
                 document.getElementById('view-temp-agua').innerText = `${dM.hourly.sea_surface_temperature[h]}°`;
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
-                
-                // LÓGICA DE SURF VS MANSA
+
+                // Icono Sol/Luna
+                const sunriseStr = document.getElementById('view-sunrise').innerText;
+                const sunsetStr = document.getElementById('view-sunset').innerText;
+                const hActualMins = h * 60 + ahora.getMinutes();
+                const [hRise, mRise] = sunriseStr.split(':').map(Number);
+                const [hSet, mSet] = sunsetStr.split(':').map(Number);
+                const esDeDia = hActualMins > (hRise * 60 + mRise) && hActualMins < (hSet * 60 + mSet);
+
+                const iconCont = document.getElementById('view-clima-icon');
+                if (!esDeDia) { iconCont.innerHTML = '<i class="fa-solid fa-moon text-sky-200"></i>'; } 
+                else {
+                    const code = dW.hourly.weathercode[h];
+                    if (code <= 1) iconCont.innerHTML = '<i class="fa-solid fa-sun text-yellow-300"></i>';
+                    else if (code <= 3) iconCont.innerHTML = '<i class="fa-solid fa-cloud-sun text-slate-200"></i>';
+                    else iconCont.innerHTML = '<i class="fa-solid fa-cloud text-slate-300"></i>';
+                }
+
                 const olasCont = document.getElementById('container-olas');
                 const vientoCont = document.getElementById('container-viento');
-                
                 if (playa.surf) {
                     olasCont.classList.remove('hidden');
                     document.getElementById('view-olas').innerText = `${dM.hourly.wave_height[h]} m`;
@@ -312,6 +357,10 @@
                     vientoCont.classList.replace('col-span-1', 'col-span-2');
                     vientoCont.classList.remove('border-r');
                 }
+
+                const valMarea = (Math.sin((ahora.getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
+                document.getElementById('view-marea').innerText = valMarea;
+                document.getElementById('view-marea-desc').innerText = valMarea > 0.9 ? "ALTA" : "BAJA";
 
                 const mareaMala = playa.critica && valMarea > 0.9;
                 const vientoMalo = dW.hourly.windspeed_10m[h] >= 12 && !(datosGlobales.dir >= playa.prot[0] && datosGlobales.dir <= playa.prot[1]);
@@ -337,9 +386,7 @@
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${lang}`).classList.add('active');
             document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
-            const adsBtn = document.getElementById('btn-ads');
-            const encodedMsg = encodeURIComponent(i18n[lang].adsMsg);
-            adsBtn.href = `https://wa.me/5522997601592?text=${encodedMsg}`;
+            document.getElementById('btn-ads').href = `https://wa.me/5522997601592?text=${encodeURIComponent(i18n[lang].adsMsg)}`;
             document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
             document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
             document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
