@@ -49,7 +49,7 @@
 
         <div class="space-y-8">
             <div>
-                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Monitor de Cambio (ARS)</h3>
+                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 text-slate-400">Monitor de Cambio (ARS)</h3>
                 <div class="grid grid-cols-2 gap-2 mb-4">
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                         <p class="text-[9px] font-bold text-slate-400 uppercase">Blue</p>
@@ -228,48 +228,50 @@
             } catch (e) { console.error(e); }
         }
 
-async function cargarFinanzas() {
-    const listado = document.getElementById('listado-pix');
-    try {
-        // 1. Dólares (DolarApi es muy estable)
-        const resDolar = await fetch('https://dolarapi.com/v1/dolares');
-        const dolares = await resDolar.json();
-        const blue = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'blue') : dolares.blue)?.venta;
-        const mep = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'mep') : dolares.mep)?.venta;
-        if (blue) document.getElementById('val-blue').innerText = `$${Math.round(blue)}`;
-        if (mep) document.getElementById('val-mep').innerText = `$${Math.round(mep)}`;
+        async function cargarFinanzas() {
+            const listado = document.getElementById('listado-pix');
+            try {
+                // 1. Dólares (DolarApi directo)
+                const resDolar = await fetch('https://dolarapi.com/v1/dolares');
+                if (resDolar.ok) {
+                    const dolares = await resDolar.json();
+                    const blue = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'blue') : dolares.blue)?.venta;
+                    const mep = (Array.isArray(dolares) ? dolares.find(d => d.casa === 'mep') : dolares.mep)?.venta;
+                    if (blue) document.getElementById('val-blue').innerText = `$${Math.round(blue)}`;
+                    if (mep) document.getElementById('val-mep').innerText = `$${Math.round(mep)}`;
+                }
 
-        // 2. PIX usando un Proxy de Google (Feed invertido) para evitar bloqueos
-        const targetUrl = 'https://criptoya.com/api/brl/ars/0.1';
-        // Este es un truco para usar los servidores de Google como puente
-        const proxyUrl = `https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=600&url=${encodeURIComponent(targetUrl)}`;
-        
-        const resPix = await fetch(proxyUrl);
-        const dataPix = await resPix.json();
-        
-        let exchanges = Object.entries(dataPix)
-            .map(([name, vals]) => ({ 
-                name: name.charAt(0).toUpperCase() + name.slice(1), 
-                price: vals.totalAsk 
-            }))
-            .filter(ex => ex.price > 0)
-            .sort((a, b) => a.price - b.price)
-            .slice(0, 5);
+                // 2. PIX usando AllOrigins (Más estable que Google para GitHub Pages)
+                const targetUrl = 'https://criptoya.com/api/brl/ars/0.1';
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${new Date().getTime()}`;
+                
+                const resPix = await fetch(proxyUrl);
+                const dataJSON = await resPix.json();
+                const dataPix = JSON.parse(dataJSON.contents);
+                
+                let exchanges = Object.entries(dataPix)
+                    .map(([name, vals]) => ({ 
+                        name: name.charAt(0).toUpperCase() + name.slice(1), 
+                        price: vals.totalAsk 
+                    }))
+                    .filter(ex => ex.price > 0)
+                    .sort((a, b) => a.price - b.price)
+                    .slice(0, 5);
 
-        if (exchanges.length > 0) {
-            listado.innerHTML = "";
-            exchanges.forEach((ex, i) => {
-                const row = document.createElement('div');
-                row.className = `flex justify-between p-2 rounded-xl text-xs ${i === 0 ? 'bg-sky-50 font-black border border-sky-200' : 'bg-slate-50 font-bold text-slate-500'}`;
-                row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
-                listado.appendChild(row);
-            });
+                if (exchanges.length > 0) {
+                    listado.innerHTML = "";
+                    exchanges.forEach((ex, i) => {
+                        const row = document.createElement('div');
+                        row.className = `flex justify-between p-2 rounded-xl text-xs ${i === 0 ? 'bg-sky-50 font-black border border-sky-200' : 'bg-slate-50 font-bold text-slate-500'}`;
+                        row.innerHTML = `<span>${i === 0 ? '🏆 ' : ''}${ex.name}</span><span>$${ex.price.toFixed(2)}</span>`;
+                        listado.appendChild(row);
+                    });
+                }
+            } catch (e) { 
+                console.log("Servidor ocupado, reintentando...");
+                listado.innerHTML = "<p class='text-[10px] text-slate-400 p-2 italic text-center'>Actualizando precios...</p>";
+            }
         }
-    } catch (e) { 
-        console.warn("Reintentando finanzas...");
-        listado.innerHTML = "<p class='text-[10px] text-slate-400 p-2 italic text-center'>Actualizando precios...</p>";
-    }
-}
 
         async function seleccionarPlaya(playa) {
             playaActual = playa;
@@ -317,18 +319,14 @@ async function cargarFinanzas() {
             datosGlobales.lang = lang;
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${lang}`).classList.add('active');
-            
             document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
-            
             const adsBtn = document.getElementById('btn-ads');
             const encodedMsg = encodeURIComponent(i18n[lang].adsMsg);
             adsBtn.href = `https://wa.me/5522997601592?text=${encodedMsg}`;
-            
             document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
             document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
             document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
             document.getElementById('buscador').placeholder = i18n[lang].buscar;
-            
             if(playaActual) seleccionarPlaya(playaActual);
             renderizarLista();
         }
