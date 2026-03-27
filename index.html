@@ -224,7 +224,6 @@
         let playaGanadora = null;
         const CHAVE_PIX = "19431fa4-da2e-4709-97fd-ffdcf09cf664";
 
-        // Lógica Refrescar deslizando
         let startY = 0;
         document.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, {passive: true});
         document.addEventListener('touchmove', e => {
@@ -276,22 +275,22 @@
                 document.getElementById('view-sunrise').innerText = data.daily.sunrise[0].split('T')[1];
                 document.getElementById('view-sunset').innerText = data.daily.sunset[0].split('T')[1];
                 
-                // ALGORITMO RECOMENDADA
+                // ALGORITMO RECOMENDADA - VARIEDAD (Top 3 Aleatorio)
                 const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
-                let maxPuntaje = -100;
-
-                for (let p of playas) {
+                
+                let ranking = playas.map(p => {
                     let score = 0;
                     const vientoProtegido = datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1];
                     score += vientoProtegido ? 50 : -30;
                     if (p.critica && valMarea > 0.9) score -= 40;
                     if (!p.surf && datosGlobales.vel > 15) score -= 20;
+                    return { ...p, score: score };
+                });
 
-                    if (score > maxPuntaje) {
-                        maxPuntaje = score;
-                        playaGanadora = p;
-                    }
-                }
+                // Ordenar por score y elegir una de las 3 mejores al azar
+                ranking.sort((a, b) => b.score - a.score);
+                const mejoresTres = ranking.slice(0, 3);
+                playaGanadora = mejoresTres[Math.floor(Math.random() * mejoresTres.length)];
 
                 seleccionarPlaya(playaGanadora);
                 cambiarIdioma('es');
@@ -302,7 +301,6 @@
         async function seleccionarPlaya(playa) {
             playaActual = playa;
             
-            // Mostrar/Ocultar cartel recomendado dinámicamente
             const labelRec = document.getElementById('label-estado');
             if (playaGanadora && playa.id === playaGanadora.id) {
                 labelRec.classList.remove('hidden');
@@ -328,7 +326,6 @@
                 document.getElementById('view-temp-agua').innerText = `${dM.hourly.sea_surface_temperature[h]}°`;
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
 
-                // Icono Sol/Luna
                 const sunriseStr = document.getElementById('view-sunrise').innerText;
                 const sunsetStr = document.getElementById('view-sunset').innerText;
                 const hActualMins = h * 60 + ahora.getMinutes();
