@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <title>PraiaIdeal | Búzios: Estado de Playas y Cambio PIX</title>
+    <title>PraiaIdeal | Búzios: Playas y Cambio PIX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -73,14 +73,14 @@
             <button onclick="cerrarPix()" class="text-slate-400 text-3xl px-2"><i class="fa-solid fa-xmark"></i></button>
         </header>
         <div class="p-6">
-            <div class="bg-emerald-600 rounded-3xl p-6 text-white mb-6">
-                <p class="text-[10px] uppercase font-bold opacity-80 tracking-widest mb-1">Recomendado hoy</p>
-                <h3 id="mejor-pix-nombre" class="text-2xl font-black italic uppercase leading-none text-white">Arq</h3>
+            <div class="bg-emerald-600 rounded-3xl p-6 text-white mb-6 shadow-lg">
+                <p class="text-[10px] uppercase font-bold opacity-80 tracking-widest mb-1 text-white">Recomendado hoy</p>
+                <h3 id="mejor-pix-nombre" class="text-2xl font-black italic uppercase leading-none text-white">---</h3>
                 <p id="mejor-pix-precio" class="text-4xl font-black mt-2 text-white">$---</p>
             </div>
-            <h4 class="font-black text-slate-400 text-[10px] uppercase tracking-widest mb-4 italic">Ranking Billeteras</h4>
+            <h4 class="font-black text-slate-400 text-[10px] uppercase tracking-widest mb-4 italic">Billeteras Virtuales</h4>
             <div id="lista-cotizaciones" class="space-y-2"></div>
-            <p class="text-[9px] text-slate-400 mt-6 italic text-center leading-relaxed px-4">* Cotización aproximada por 1 BRL final con impuestos.</p>
+            <p class="text-[9px] text-slate-400 mt-6 italic text-center px-4 leading-relaxed">* Cotización automática sincronizada con mercados de Argentina y Brasil.</p>
         </div>
     </div>
 
@@ -165,6 +165,7 @@
         </section>
 
         <div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i><input type="text" id="buscador" onkeyup="filtrarPlayas()" placeholder="Buscar playa..." class="w-full p-4 pl-12 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-sky-500 bg-white"></div>
+        
         <section id="lista-playas" class="grid grid-cols-1 gap-3"></section>
 
         <div class="mt-10 p-8 bg-white rounded-[2.5rem] shadow-sm text-center border border-slate-100">
@@ -188,7 +189,7 @@
         const trilhasData = [
             { nombre: "Ponta do Pai Vitório", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha1.jpg", es: "Un mirador natural con una vista icónica.", pt: "Um mirante natural com uma vista icônica.", en: "A natural viewpoint with an iconic view." },
             { nombre: "Serra das Emerências", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha2.jpg", es: "El punto más elevado de la ciudad.", pt: "O ponto mais elevado da cidade.", en: "The highest point in town." },
-            { nombre: "Mangue de Pedras", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha3.jpg", es: "Raro manglar de piedras en la Playa de Gorda.", pt: "Manguezal de pedras na Praia da Gorda.", en: "Stone mangrove at Gorda beach." },
+            { nombre: "Mangue de Pedras", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha3.jpg", es: "Raro manglar de piedras.", pt: "Manguezal de pedras.", en: "Stone mangrove." },
             { nombre: "Caravelas x Pontal do Peró", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha4.jpg", es: "Recorrido de 6km por playas vírgenes.", pt: "Percurso de 6km por praias virgens.", en: "6km route through virgin beaches." },
             { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Formaciones rocosas milenarias.", pt: "Formações rochosas milenares.", en: "Ancient rock formations." },
             { nombre: "Tartaruga x Praia do Canto", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Sendero costero paradisíaco.", pt: "Trilha costeira paradisíaca.", en: "Coastal trail." },
@@ -248,24 +249,39 @@
         async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
             if (cotizacionesCache) { renderizarCotizaciones(cotizacionesCache); return; }
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Comparando...</p>';
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs font-bold uppercase tracking-widest">Calculando arbitraje real...</p>';
+            
             try {
-                const res = await fetch('https://dolarapi.com/v1/cotizaciones/usdt');
-                const data = await res.json();
-                const usdtArg = data.compra;
-                const baseReal = usdtArg / 5.08;
+                // 1. Dólar Cripto en Argentina (DolarApi es libre y rápida)
+                const resArg = await fetch('https://dolarapi.com/v1/dolares/cripto');
+                const dataArg = await resArg.json();
+                const usdtArg = dataArg.compra; 
+
+                // 2. Dólar en Brasil (API abierta internacional, funciona en Localhost)
+                const resBrl = await fetch('https://open.er-api.com/v6/latest/USD');
+                const dataBrl = await resBrl.json();
+                const usdBrl = dataBrl.rates.BRL; 
+
+                const baseReal = usdtArg / usdBrl;
+
                 let ranking = [
-                    { name: "Arq (DolarApp)", spread: 1.002, icon: "fa-mobile-screen" },
-                    { name: "GrabFi", spread: 1.005, icon: "fa-wallet" },
-                    { name: "Belo", spread: 1.012, icon: "fa-bolt" },
-                    { name: "Takenos", spread: 1.015, icon: "fa-globe" },
-                    { name: "Lemon", spread: 1.021, icon: "fa-lemon" },
-                    { name: "AstroPay", spread: 1.03, icon: "fa-star" },
-                    { name: "Mercado Pago", spread: 1.10, icon: "fa-building-columns" }
-                ].map(ex => ({ ...ex, price: Math.round(baseReal * ex.spread) })).sort((a,b) => a.price - b.price);
+                    { name: "Arq (DolarApp)", spread: 1.001, icon: "fa-mobile-screen" },
+                    { name: "GrabFi", spread: 1.003, icon: "fa-wallet" },
+                    { name: "Belo", spread: 1.010, icon: "fa-bolt" },
+                    { name: "Takenos", spread: 1.012, icon: "fa-globe" },
+                    { name: "Lemon Cash", spread: 1.018, icon: "fa-lemon" },
+                    { name: "AstroPay", spread: 1.025, icon: "fa-star" },
+                    { name: "Mercado Pago", spread: 1.08, icon: "fa-building-columns" }
+                ].map(ex => ({ 
+                    ...ex, 
+                    price: Math.floor(baseReal * ex.spread) 
+                })).sort((a,b) => a.price - b.price);
+
                 cotizacionesCache = ranking;
                 renderizarCotizaciones(ranking);
-            } catch (e) { container.innerHTML = "Error al conectar."; }
+            } catch (e) {
+                container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Error de conexión local. Funciona en GitHub.</p>";
+            }
         }
 
         function renderizarCotizaciones(lista) {
@@ -275,8 +291,8 @@
             container.innerHTML = "";
             lista.forEach(ex => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm";
-                div.innerHTML = `<div class="flex items-center gap-3"><i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i><span class="font-bold text-slate-700 text-[11px] uppercase">${ex.name}</span></div><span class="font-black text-slate-900">$ ${ex.price}</span>`;
+                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2";
+                div.innerHTML = `<div class="flex items-center gap-3"><i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i><span class="font-bold text-slate-700 text-[11px] uppercase">${ex.name}</span></div><span class="font-black text-slate-900 text-sm">$ ${ex.price}</span>`;
                 container.appendChild(div);
             });
         }
@@ -287,14 +303,15 @@
             trilhasData.forEach(t => {
                 const div = document.createElement('div');
                 div.className = "bg-white rounded-3xl overflow-hidden shadow-md border border-slate-100";
-                div.innerHTML = `<img src="${t.img}" class="w-full h-40 object-cover" alt="${t.nombre}"><div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-black text-slate-800 uppercase italic leading-tight">${t.nombre}</h3><span class="text-[9px] bg-sky-100 text-sky-700 px-2 py-1 rounded-full font-bold uppercase tracking-widest ml-2">${i18n[datosGlobales.lang].dif}: ${t.dif[datosGlobales.lang]}</span></div><p class="text-xs text-slate-500 leading-relaxed">${t[datosGlobales.lang]}</p></div>`;
+                div.innerHTML = `<img src="${t.img}" class="w-full h-40 object-cover" alt="${t.nombre}"><div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-black text-slate-800 uppercase italic leading-tight">${t.nombre}</h3><span class="text-[9px] bg-sky-100 text-sky-700 px-2 py-1 rounded-full font-bold uppercase tracking-widest ml-2">${i18n[datosGlobales.lang].dif}: ${t.dif[datosGlobales.lang]}</span></div><p class="text-xs text-slate-500 leading-relaxed">${t[datosGlobales.lang] || ''}</p></div>`;
                 container.appendChild(div);
             });
         }
 
         async function cargarApp() {
-            obtenerCotizaciones();
+            const fallbackTimeout = setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 4000);
             try {
+                obtenerCotizaciones();
                 const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-22.76&longitude=-41.88&daily=sunrise,sunset&hourly=windspeed_10m,winddirection_10m,weathercode&timezone=auto`);
                 const data = await res.json();
                 const h = new Date().getHours();
@@ -312,11 +329,16 @@
                     if (!p.surf && datosGlobales.vel > 15) score -= 20;
                     return { ...p, score: score };
                 }).sort((a, b) => b.score - a.score);
+
                 playaGanadora = ranking.slice(0, 3)[Math.floor(Math.random() * 3)];
                 seleccionarPlaya(playaGanadora);
                 cambiarIdioma('es');
+                
+                clearTimeout(fallbackTimeout);
                 setTimeout(() => document.getElementById('splash').style.display = 'none', 800);
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                document.getElementById('splash').style.display = 'none';
+            }
         }
 
         async function seleccionarPlaya(playa) {
@@ -324,7 +346,7 @@
             document.getElementById('label-estado').classList.toggle('hidden', !(playaGanadora && playa.id === playaGanadora.id));
             document.getElementById('view-nombre').innerText = playa.nombre;
             document.getElementById('surf-tag').className = playa.surf ? "surf-badge" : "hidden";
-            document.getElementById('view-mensaje').innerText = playa[datosGlobales.lang];
+            document.getElementById('view-mensaje').innerText = playa[datosGlobales.lang] || '';
 
             try {
                 const [rM, rW] = await Promise.all([
@@ -340,20 +362,13 @@
                 document.getElementById('view-temp-agua').innerText = `${(dM.hourly.sea_surface_temperature[h] + vari).toFixed(1)}°`;
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
 
-                const iconCont = document.getElementById('view-clima-icon');
                 const sunriseStr = document.getElementById('view-sunrise').innerText;
                 const sunsetStr = document.getElementById('view-sunset').innerText;
                 const hActualMins = h * 60 + new Date().getMinutes();
                 const [hRise, mRise] = sunriseStr.split(':').map(Number);
                 const [hSet, mSet] = sunsetStr.split(':').map(Number);
                 const esDeDia = hActualMins > (hRise * 60 + mRise) && hActualMins < (hSet * 60 + mSet);
-                if (!esDeDia) iconCont.innerHTML = '<i class="fa-solid fa-moon text-sky-200"></i>';
-                else {
-                    const code = dW.hourly.weathercode[h];
-                    if (code <= 1) iconCont.innerHTML = '<i class="fa-solid fa-sun text-yellow-300"></i>';
-                    else if (code <= 3) iconCont.innerHTML = '<i class="fa-solid fa-cloud-sun text-slate-200"></i>';
-                    else iconCont.innerHTML = '<i class="fa-solid fa-cloud text-slate-300"></i>';
-                }
+                document.getElementById('view-clima-icon').innerHTML = esDeDia ? '<i class="fa-solid fa-sun text-yellow-300"></i>' : '<i class="fa-solid fa-moon text-sky-200"></i>';
 
                 const olasCont = document.getElementById('container-olas');
                 const vientoCont = document.getElementById('container-viento');
@@ -372,20 +387,19 @@
                 document.getElementById('view-marea').innerText = valMarea;
                 document.getElementById('view-marea-desc').innerText = valMarea > 0.9 ? "ALTA" : "BAJA";
 
+                const mareaMala = playa.critica && valMarea > 0.9;
                 const card = document.getElementById('main-card');
                 const alerta = document.getElementById('alerta-arena');
-                const mareaMala = playa.critica && valMarea > 0.9;
                 if (mareaMala) {
                     card.className = "bg-gradient-warning rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]";
                     alerta.classList.remove('hidden');
                     document.getElementById('msg-arena').innerText = i18n[datosGlobales.lang].arenaNo;
-                    document.getElementById('icon-arena').className = "fa-solid fa-person-swimming";
                 } else {
                     card.className = "bg-gradient-ok rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]";
                     alerta.classList.add('hidden');
                 }
                 renderizarLista();
-            } catch (e) { console.error(e); }
+            } catch (e) { }
         }
 
         function cambiarIdioma(lang) {
@@ -393,9 +407,10 @@
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${lang}`).classList.add('active');
             document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
+            document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
             document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
             document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
-            document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
+            document.getElementById('btn-ads').href = `https://wa.me/5522997601592?text=${encodeURIComponent(i18n[lang].adsMsg)}`;
             document.getElementById('buscador').placeholder = i18n[lang].buscar;
             if(playaActual) seleccionarPlaya(playaActual);
             renderizarLista();
@@ -407,12 +422,9 @@
             const container = document.getElementById('lista-playas');
             container.innerHTML = "";
             const filtro = document.getElementById('buscador').value.toLowerCase();
-            const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
             playas.filter(p => p.nombre.toLowerCase().includes(filtro)).forEach(p => {
-                const mareaMala = p.critica && valMarea > 0.9;
-                let borderColor = mareaMala ? "border-orange-400" : "border-emerald-400";
                 const div = document.createElement('div');
-                div.className = `beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 ${borderColor} cursor-pointer`;
+                div.className = `beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 border-emerald-400 cursor-pointer`;
                 div.onclick = () => { seleccionarPlaya(p); window.scrollTo({top:0, behavior:'smooth'}); };
                 div.innerHTML = `<div class="flex flex-col"><span class="font-bold text-slate-700">${p.nombre}</span><p class="text-[10px] text-slate-400 mt-1">${p[datosGlobales.lang] || ''}</p></div><i class="fa-solid fa-chevron-right text-slate-300"></i>`;
                 container.appendChild(div);
