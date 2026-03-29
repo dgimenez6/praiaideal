@@ -235,53 +235,63 @@
         function abrirPix() { document.getElementById('modal-pix').style.display = 'block'; toggleMenu(); obtenerCotizaciones(); }
         function cerrarPix() { document.getElementById('modal-pix').style.display = 'none'; }
 
-        async function obtenerCotizaciones() {
+async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Actualizando precios...</p>';
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Comparando billeteras...</p>';
             try {
-                // Usamos DolarApi que es directa, rápida y sin errores de "Mercado saturado"
+                // Obtenemos la base del Real Paralelo en tiempo real
                 const res = await fetch('https://dolarapi.com/v1/cotizaciones/brl');
                 const data = await res.json();
-                const realBlue = data.compra; // Este es el valor real de mercado (Blue)
+                const baseReal = data.compra; 
 
-                // Ranking completo de todas las formas de pagar con PIX
-                // Los porcentajes son los promedios reales que cobran las apps hoy
+                // Listado actualizado: Arq (ex DolarApp), AstroPay y las clásicas
                 let exchanges = [
-                    { name: "Belo / Lemon (PIX)", price: realBlue * 1.02, icon: "fa-bolt" },
-                    { name: "Western Union", price: realBlue * 0.96, icon: "fa-earth-americas" },
-                    { name: "Mercado Pago (PIX)", price: realBlue * 1.08, icon: "fa-wallet" },
-                    { name: "Bitso / Buenbit", price: realBlue * 1.03, icon: "fa-coins" },
-                    { name: "Fiwind / Let's Bit", price: realBlue * 1.01, icon: "fa-wind" },
-                    { name: "Tarjeta de Crédito", price: realBlue * 1.55, icon: "fa-credit-card" }
+                    { name: "Arq (DolarApp)", spread: 1.005, icon: "fa-mobile-screen" }, 
+                    { name: "AstroPay", spread: 1.02, icon: "fa-star" },
+                    { name: "Belo (PIX)", spread: 1.015, icon: "fa-bolt" },
+                    { name: "Lemon Cash", spread: 1.025, icon: "fa-lemon" },
+                    { name: "Takenos", spread: 1.012, icon: "fa-globe" },
+                    { name: "GrabFi", spread: 1.01, icon: "fa-wallet" },
+                    { name: "Mercado Pago", spread: 1.075, icon: "fa-building-columns" }
                 ];
 
-                // Ordenamos del más barato al más caro
+                // Calculamos el precio final en el momento
+                exchanges = exchanges.map(ex => ({
+                    ...ex,
+                    price: Math.round(baseReal * ex.spread)
+                }));
+
+                // Ordenamos: La más barata siempre primero
                 exchanges.sort((a,b) => a.price - b.price);
 
-                // Mostramos el ganador en el cuadro destacado
+                // Actualizamos el ganador en el cuadro destacado
                 document.getElementById('mejor-pix-nombre').innerText = exchanges[0].name;
-                document.getElementById('mejor-pix-precio').innerText = `$ ${Math.round(exchanges[0].price)}`;
+                document.getElementById('mejor-pix-precio').innerText = `$ ${exchanges[0].price}`;
 
-                // Llenamos la lista completa
+                // Renderizamos la lista compacta
                 container.innerHTML = "";
                 exchanges.forEach(ex => {
                     const div = document.createElement('div');
-                    div.className = "flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100";
+                    div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2";
                     div.innerHTML = `
                         <div class="flex items-center gap-3">
-                            <i class="fa-solid ${ex.icon} text-slate-400"></i>
-                            <span class="font-bold text-slate-700 text-xs">${ex.name}</span>
+                            <div class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center">
+                                <i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i>
+                            </div>
+                            <span class="font-bold text-slate-700 text-[11px] uppercase">${ex.name}</span>
                         </div>
-                        <span class="font-black text-slate-900">$ ${Math.round(ex.price)}</span>
+                        <div class="text-right">
+                            <span class="font-black text-slate-900 text-sm">$ ${ex.price}</span>
+                            <p class="text-[8px] text-slate-400 -mt-1 uppercase font-bold tracking-tighter">pesos x 1 brl</p>
+                        </div>
                     `;
                     container.appendChild(div);
                 });
             } catch (e) { 
                 console.error(e);
-                container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10'>Error al conectar con el servidor de precios. Intentá refrescar la página.</p>"; 
+                container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10 font-bold'>Error al obtener precios en tiempo real.</p>"; 
             }
         }
-
         function renderizarTrilhas() {
             const container = document.getElementById('lista-trilhas-content');
             container.innerHTML = "";
