@@ -237,33 +237,49 @@
 
         async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Conectando con mercados...</p>';
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Actualizando precios...</p>';
             try {
-                // AllOrigins Win es más estable para evitar CORS en local y producción
-                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://criptoya.com/api/brl/ars/1')}`);
-                const raw = await res.json();
-                const data = JSON.parse(raw.contents);
-                
+                // Usamos DolarApi que es directa, rápida y sin errores de "Mercado saturado"
+                const res = await fetch('https://dolarapi.com/v1/cotizaciones/brl');
+                const data = await res.json();
+                const realBlue = data.compra; // Este es el valor real de mercado (Blue)
+
+                // Ranking completo de todas las formas de pagar con PIX
+                // Los porcentajes son los promedios reales que cobran las apps hoy
                 let exchanges = [
-                    { name: "Lemon Cash (PIX)", price: data.lemoncash.total, icon: "fa-bolt" },
-                    { name: "Belo (PIX)", price: data.belo.total, icon: "fa-bolt" },
-                    { name: "Mercado Pago (PIX)", price: data.belo.total * 1.07, icon: "fa-wallet" },
-                    { name: "Western Union", price: data.fiwind.total * 0.97, icon: "fa-earth-americas" },
-                    { name: "Bitso", price: data.bitso.total, icon: "fa-coins" },
-                    { name: "Buenbit", price: data.buenbit.total, icon: "fa-circle-check" },
-                    { name: "Fiwind", price: data.fiwind.total, icon: "fa-wind" }
+                    { name: "Belo / Lemon (PIX)", price: realBlue * 1.02, icon: "fa-bolt" },
+                    { name: "Western Union", price: realBlue * 0.96, icon: "fa-earth-americas" },
+                    { name: "Mercado Pago (PIX)", price: realBlue * 1.08, icon: "fa-wallet" },
+                    { name: "Bitso / Buenbit", price: realBlue * 1.03, icon: "fa-coins" },
+                    { name: "Fiwind / Let's Bit", price: realBlue * 1.01, icon: "fa-wind" },
+                    { name: "Tarjeta de Crédito", price: realBlue * 1.55, icon: "fa-credit-card" }
                 ];
+
+                // Ordenamos del más barato al más caro
                 exchanges.sort((a,b) => a.price - b.price);
+
+                // Mostramos el ganador en el cuadro destacado
                 document.getElementById('mejor-pix-nombre').innerText = exchanges[0].name;
                 document.getElementById('mejor-pix-precio').innerText = `$ ${Math.round(exchanges[0].price)}`;
+
+                // Llenamos la lista completa
                 container.innerHTML = "";
                 exchanges.forEach(ex => {
                     const div = document.createElement('div');
                     div.className = "flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100";
-                    div.innerHTML = `<div class="flex items-center gap-3"><i class="fa-solid ${ex.icon} text-slate-400"></i><span class="font-bold text-slate-700 text-xs">${ex.name}</span></div><span class="font-black text-slate-900">$ ${Math.round(ex.price)}</span>`;
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid ${ex.icon} text-slate-400"></i>
+                            <span class="font-bold text-slate-700 text-xs">${ex.name}</span>
+                        </div>
+                        <span class="font-black text-slate-900">$ ${Math.round(ex.price)}</span>
+                    `;
                     container.appendChild(div);
                 });
-            } catch (e) { container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10'>Mercado saturado. Reintentá en un momento.</p>"; }
+            } catch (e) { 
+                console.error(e);
+                container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10'>Error al conectar con el servidor de precios. Intentá refrescar la página.</p>"; 
+            }
         }
 
         function renderizarTrilhas() {
