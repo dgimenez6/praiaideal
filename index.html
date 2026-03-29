@@ -235,64 +235,85 @@
         function abrirPix() { document.getElementById('modal-pix').style.display = 'block'; toggleMenu(); obtenerCotizaciones(); }
         function cerrarPix() { document.getElementById('modal-pix').style.display = 'none'; }
 
-async function obtenerCotizaciones() {
+// 1. Agregamos esta variable al principio de tus scripts para guardar los precios
+let cotizacionesCache = null;
+
+        async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Comparando billeteras...</p>';
+            
+            if (cotizacionesCache) {
+                renderizarListaCotizaciones(cotizacionesCache);
+            } else {
+                container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs uppercase font-bold tracking-widest">Sincronizando mercados...</p>';
+            }
+
             try {
-                // Obtenemos la base del Real Paralelo en tiempo real
-                const res = await fetch('https://dolarapi.com/v1/cotizaciones/brl');
-                const data = await res.json();
-                const baseReal = data.compra; 
+                // LLAMADO DIRECTO A LAS FUENTES
+                const [resArg, resBrl] = await Promise.all([
+                    fetch(`https://criptoya.com/api/usdt/ars/1`),
+                    fetch(`https://economia.awesomeapi.com.br/last/USD-BRL`)
+                ]);
 
-                // Listado actualizado: Arq (ex DolarApp), AstroPay y las clásicas
-                let exchanges = [
-                    { name: "Arq (DolarApp)", spread: 1.005, icon: "fa-mobile-screen" }, 
-                    { name: "AstroPay", spread: 1.02, icon: "fa-star" },
-                    { name: "Belo (PIX)", spread: 1.015, icon: "fa-bolt" },
-                    { name: "Lemon Cash", spread: 1.025, icon: "fa-lemon" },
-                    { name: "Takenos", spread: 1.012, icon: "fa-globe" },
-                    { name: "GrabFi", spread: 1.01, icon: "fa-wallet" },
-                    { name: "Mercado Pago", spread: 1.075, icon: "fa-building-columns" }
-                ];
+                const dataArg = await resArg.json();
+                const dataBrl = await resBrl.json();
 
-                // Calculamos el precio final en el momento
-                exchanges = exchanges.map(ex => ({
+                // Referencia USDT en Argentina y Dólar en Brasil
+                const usdtArs = dataArg.belo ? dataArg.belo.total : (dataArg.lemoncash ? dataArg.lemoncash.total : 0);
+                const usdBrl = dataBrl.USDBRL ? parseFloat(dataBrl.USDBRL.bid) : 0;
+
+                if (usdtArs === 0 || usdBrl === 0) throw new Error("Datos incompletos");
+
+                const baseReal = usdtArs / usdBrl;
+
+                const exchanges = [
+                    { name: "Arq (DolarApp)", spread: 1.002, icon: "fa-mobile-screen" }, 
+                    { name: "GrabFi", spread: 1.004, icon: "fa-wallet" },
+                    { name: "Belo (PIX)", spread: 1.012, icon: "fa-bolt" },
+                    { name: "Takenos", spread: 1.015, icon: "fa-globe" },
+                    { name: "Lemon Cash", spread: 1.021, icon: "fa-lemon" },
+                    { name: "AstroPay", spread: 1.035, icon: "fa-star" },
+                    { name: "Mercado Pago", spread: 1.14, icon: "fa-building-columns" }
+                ].map(ex => ({
                     ...ex,
                     price: Math.round(baseReal * ex.spread)
-                }));
+                })).sort((a,b) => a.price - b.price);
 
-                // Ordenamos: La más barata siempre primero
-                exchanges.sort((a,b) => a.price - b.price);
+                cotizacionesCache = exchanges;
+                renderizarListaCotizaciones(exchanges);
 
-                // Actualizamos el ganador en el cuadro destacado
-                document.getElementById('mejor-pix-nombre').innerText = exchanges[0].name;
-                document.getElementById('mejor-pix-precio').innerText = `$ ${exchanges[0].price}`;
-
-                // Renderizamos la lista compacta
-                container.innerHTML = "";
-                exchanges.forEach(ex => {
-                    const div = document.createElement('div');
-                    div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2";
-                    div.innerHTML = `
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center">
-                                <i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i>
-                            </div>
-                            <span class="font-bold text-slate-700 text-[11px] uppercase">${ex.name}</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-black text-slate-900 text-sm">$ ${ex.price}</span>
-                            <p class="text-[8px] text-slate-400 -mt-1 uppercase font-bold tracking-tighter">pesos x 1 brl</p>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                });
             } catch (e) { 
-                console.error(e);
-                container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10 font-bold'>Error al obtener precios en tiempo real.</p>"; 
+                console.warn("CORS o error de red: Probablemente funcione al subirlo a GitHub.");
+                if(!cotizacionesCache) container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10 font-bold'>Error de conexión local.<br>Funcionará en praiaideal.com</p>"; 
             }
         }
-        function renderizarTrilhas() {
+
+        function renderizarListaCotizaciones(lista) {
+            const container = document.getElementById('lista-cotizaciones');
+            if (!lista || lista.length === 0) return;
+
+            document.getElementById('mejor-pix-nombre').innerText = lista[0].name;
+            document.getElementById('mejor-pix-precio').innerText = `$ ${lista[0].price}`;
+            
+            container.innerHTML = "";
+            lista.forEach(ex => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2 active:scale-95 transition-all";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center">
+                            <i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 text-[11px] uppercase tracking-tight">${ex.name}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-black text-slate-900 text-sm">$ ${ex.price}</span>
+                        <p class="text-[8px] text-slate-400 -mt-1 uppercase font-black tracking-tighter">pesos x 1 brl</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+      function renderizarTrilhas() {
             const container = document.getElementById('lista-trilhas-content');
             container.innerHTML = "";
             trilhasData.forEach(t => {
