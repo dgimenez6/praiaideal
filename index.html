@@ -12,8 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <title>PraiaIdeal | Estado de Playas y Cambio PIX en Búzios</title>
-    <meta name="description" content="Descubrí la playa ideal en Búzios y compará el mejor cambio PIX en tiempo real.">
+    <title>PraiaIdeal | Búzios: Estado de Playas y Cambio PIX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -41,7 +40,7 @@
     <div id="splash">
         <img src="icono.png" alt="Logo" class="splash-logo">
         <div class="loader mb-4"></div>
-        <p class="text-sky-50 text-xs animate-pulse tracking-widest uppercase text-center px-4">Preparando PraiaIdeal...</p>
+        <p class="text-sky-50 text-xs animate-pulse tracking-widest uppercase text-center px-4">Calculando Playa Ideal...</p>
     </div>
 
     <div id="overlay" onclick="toggleMenu()"></div>
@@ -53,17 +52,11 @@
         </div>
         <div class="space-y-4">
             <button onclick="abrirTrilhas()" class="w-full flex items-center justify-between bg-sky-50 p-4 rounded-2xl border border-sky-100 text-sky-700 active:scale-95 transition-all">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-mountain-sun text-xl"></i>
-                    <span class="font-black text-sm uppercase" data-key="btnTrilhas">Trilhas & Aventuras</span>
-                </div>
+                <div class="flex items-center gap-3 font-black text-sm uppercase"><i class="fa-solid fa-mountain-sun text-xl"></i><span data-key="btnTrilhas">Trilhas & Aventuras</span></div>
                 <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
             </button>
             <button onclick="abrirPix()" class="w-full flex items-center justify-between bg-emerald-50 p-4 rounded-2xl border border-emerald-100 text-emerald-700 active:scale-95 transition-all">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-comments-dollar text-xl"></i>
-                    <span class="font-black text-sm uppercase">Cotizaciones PIX</span>
-                </div>
+                <div class="flex items-center gap-3 font-black text-sm uppercase"><i class="fa-solid fa-comments-dollar text-xl"></i><span>Cotizaciones PIX</span></div>
                 <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
             </button>
             <hr class="border-slate-100">
@@ -81,13 +74,13 @@
         </header>
         <div class="p-6">
             <div class="bg-emerald-600 rounded-3xl p-6 text-white mb-6">
-                <p class="text-[10px] uppercase font-bold opacity-80 tracking-widest mb-1 text-white/80">Recomendado hoy</p>
-                <h3 id="mejor-pix-nombre" class="text-2xl font-black italic uppercase leading-none text-white">Buscando...</h3>
+                <p class="text-[10px] uppercase font-bold opacity-80 tracking-widest mb-1">Recomendado hoy</p>
+                <h3 id="mejor-pix-nombre" class="text-2xl font-black italic uppercase leading-none text-white">Arq</h3>
                 <p id="mejor-pix-precio" class="text-4xl font-black mt-2 text-white">$---</p>
             </div>
-            <h4 class="font-black text-slate-400 text-[10px] uppercase tracking-widest mb-4 italic">Ranking todas las billeteras</h4>
+            <h4 class="font-black text-slate-400 text-[10px] uppercase tracking-widest mb-4 italic">Ranking Billeteras</h4>
             <div id="lista-cotizaciones" class="space-y-2"></div>
-            <p class="text-[9px] text-slate-400 mt-6 italic text-center leading-relaxed px-4">* Cotización aproximada por 1 Real (BRL) final con impuestos. Mercado Pago es un estimado sobre base cripto.</p>
+            <p class="text-[9px] text-slate-400 mt-6 italic text-center leading-relaxed px-4">* Cotización aproximada por 1 BRL final con impuestos.</p>
         </div>
     </div>
 
@@ -102,7 +95,7 @@
     <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center">
         <div class="flex items-center gap-2">
             <img src="icono.png" alt="Logo" class="w-8 h-8 rounded-md">
-            <h1 class="text-xl font-bold text-sky-700 italic tracking-tighter uppercase">PraiaIdeal</h1>
+            <h1 class="text-xl font-bold text-sky-700 italic tracking-tighter uppercase leading-none">PraiaIdeal</h1>
         </div>
         <div class="flex items-center gap-3">
             <div class="flex space-x-2 mr-1">
@@ -119,7 +112,10 @@
             <div class="flex justify-between items-start">
                 <div>
                     <span id="label-estado" class="text-[10px] bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest font-bold hidden" data-key="rec">RECOMENDADA HOY</span>
-                    <h2 class="text-3xl font-black mt-2 uppercase italic leading-none"><span id="view-nombre">---</span><span id="surf-tag" class="surf-badge hidden">SURF</span></h2>
+                    <h2 class="text-3xl font-black mt-2 uppercase italic leading-none">
+                        <span id="view-nombre">---</span>
+                        <span id="surf-tag" class="surf-badge hidden">SURF</span>
+                    </h2>
                 </div>
                 <div id="view-clima-icon" class="text-4xl text-white"><i class="fa-solid fa-sun text-yellow-300"></i></div>
             </div>
@@ -135,17 +131,30 @@
                 </div>
             </div>
 
-            <div id="alerta-arena" class="mt-4 bg-white/20 rounded-xl p-3 flex items-center gap-3 hidden border border-white/30">
-                <i id="icon-arena" class="text-xl text-white"></i><p id="msg-arena" class="text-xs font-bold leading-tight"></p>
+            <div id="alerta-arena" class="mt-4 bg-white/20 rounded-xl p-3 flex items-center gap-3 hidden border border-white/30 text-white font-bold">
+                <i id="icon-arena" class="text-xl"></i><p id="msg-arena" class="text-xs"></p>
             </div>
 
             <p id="view-mensaje" class="mt-4 text-sky-800 text-sm leading-tight italic min-h-[40px] bg-white/90 p-3 rounded-2xl shadow-inner"></p>
 
-            <div id="data-grid" class="mt-6 grid grid-cols-2 gap-y-4 gap-x-2 border-t border-white/20 pt-4 text-center">
-                <div class="border-r border-white/10"><p id="view-temp-agua" class="font-bold text-lg">--°</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="agua">AGUA</p></div>
-                <div><p class="font-bold text-lg leading-none"><span id="view-marea">--</span>m</p><p id="view-marea-desc" class="text-[8px] font-black uppercase tracking-tighter">--</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="marea">MAREA</p></div>
-                <div id="container-viento" class="border-t border-white/10 pt-2 col-span-1"><p id="view-viento" class="font-bold text-lg">--</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p></div>
-                <div id="container-olas" class="border-t border-white/10 pt-2 col-span-1 border-l border-white/10"><p id="view-olas" class="font-bold text-lg">--</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p></div>
+            <div id="data-grid" class="mt-6 grid grid-cols-2 gap-y-4 gap-x-2 border-t border-white/20 pt-4 text-center text-white">
+                <div class="border-r border-white/10">
+                    <p id="view-temp-agua" class="font-bold text-lg">--°</p>
+                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="agua">AGUA</p>
+                </div>
+                <div>
+                    <p class="font-bold text-lg leading-none"><span id="view-marea">--</span>m</p>
+                    <p id="view-marea-desc" class="text-[8px] font-black uppercase tracking-tighter">--</p>
+                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="marea">MAREA</p>
+                </div>
+                <div id="container-viento" class="border-t border-white/10 pt-2 col-span-2">
+                    <p id="view-viento" class="font-bold text-lg">--</p>
+                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p>
+                </div>
+                <div id="container-olas" class="border-t border-white/10 pt-2 col-span-1 border-l border-white/10 hidden">
+                    <p id="view-olas" class="font-bold text-lg">--</p>
+                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p>
+                </div>
             </div>
 
             <div class="mt-6">
@@ -171,19 +180,19 @@
 
     <script>
         const i18n = {
-            es: { menuTitle: "Menú", btnTrilhas: "Trilhas & Aventuras", adsTitle: "¿Anunciar aquí?", adsSub: "Llegá a miles de turistas", adsMsg: "Hola Damian! Me interesa anunciar en PraiaIdeal", agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!", dif: "Dificultad" },
-            pt: { menuTitle: "Menu", btnTrilhas: "Trilhas & Aventuras", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoje? Ajude a mantener o app online.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!", dif: "Dificuldade" },
-            en: { menuTitle: "Menu", btnTrilhas: "Trails & Adventures", adsTitle: "Advertise here?", adsSub: "Reach thousands of tourists", adsMsg: "Hello Damian! I am interested in advertising on PraiaIdeal", agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!", dif: "Difficulty" }
+            es: { ir: "CÓMO LLEGAR", menuTitle: "Menú", btnTrilhas: "Trilhas & Aventuras", adsTitle: "¿Anunciar aquí?", adsSub: "Llegá a miles de turistas", adsMsg: "Hola Damian! Me interesa anunciar en PraiaIdeal", agua: "AGUA", viento: "VIENTO", marea: "MAREA", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!", dif: "Dificultad" },
+            pt: { ir: "COMO CHEGAR", menuTitle: "Menu", btnTrilhas: "Trilhas & Aventuras", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoje? Ajude a mantener o app online.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!", dif: "Dificuldade" },
+            en: { ir: "GET DIRECTIONS", menuTitle: "Menu", btnTrilhas: "Trails & Adventures", adsTitle: "Advertise here?", adsSub: "Reach thousands of tourists", adsMsg: "Hello Damian! I am interested in advertising on PraiaIdeal", agua: "WATER", viento: "WIND", marea: "TIDE", buscar: "Search beach...", rec: "RECOMMENDED TODAY", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!", dif: "Difficulty" }
         };
 
         const trilhasData = [
-            { nombre: "Ponta do Pai Vitório", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha1.jpg", es: "Un mirador natural con una vista icónica de la Playa de Tucuns.", pt: "Um mirante natural com uma vista icônica da Praia de Tucuns.", en: "A natural viewpoint with an iconic view of Tucuns Beach." },
-            { nombre: "Serra das Emerências", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha2.jpg", es: "El punto más elevado de la ciudad. Vista de 360 grados.", pt: "O ponto mais elevado da cidade. Vista de 360 graus.", en: "The highest point in town. 360-degree view." },
+            { nombre: "Ponta do Pai Vitório", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha1.jpg", es: "Un mirador natural con una vista icónica.", pt: "Um mirante natural com uma vista icônica.", en: "A natural viewpoint with an iconic view." },
+            { nombre: "Serra das Emerências", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha2.jpg", es: "El punto más elevado de la ciudad.", pt: "O ponto mais elevado da cidade.", en: "The highest point in town." },
             { nombre: "Mangue de Pedras", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha3.jpg", es: "Raro manglar de piedras en la Playa de Gorda.", pt: "Manguezal de pedras na Praia da Gorda.", en: "Stone mangrove at Gorda beach." },
-            { nombre: "Caravelas x Pontal do Peró", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha4.jpg", es: "Recorrido de 6km por playas vírgenes y matas.", pt: "Percurso de 6km por praias virgens e matas.", en: "6km route through virgin beaches and forests." },
-            { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Formaciones rocosas milenarias y piscinas naturales.", pt: "Formações rochosas milenares e piscinas naturais.", en: "Ancient rock formations and natural pools." },
-            { nombre: "Tartaruga x Praia do Canto", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Sendero costero conectando playas paradisíacas.", pt: "Trilha costeira conectando praias paradisíacas.", en: "Coastal trail connecting paradisiacal beaches." },
-            { nombre: "Praia Olho de Boi", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha7.jpg", es: "Caminata por acantilados hacia playa naturista.", pt: "Caminhada pelas falésias para praia naturista.", en: "Cliff hike to a nudist beach." }
+            { nombre: "Caravelas x Pontal do Peró", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha4.jpg", es: "Recorrido de 6km por playas vírgenes.", pt: "Percurso de 6km por praias virgens.", en: "6km route through virgin beaches." },
+            { nombre: "Ponta da Lagoinha", dif: {es: "Fácil", pt: "Fácil", en: "Easy"}, img: "trilha5.jpg", es: "Formaciones rocosas milenarias.", pt: "Formações rochosas milenares.", en: "Ancient rock formations." },
+            { nombre: "Tartaruga x Praia do Canto", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha6.jpg", es: "Sendero costero paradisíaco.", pt: "Trilha costeira paradisíaca.", en: "Coastal trail." },
+            { nombre: "Praia Olho de Boi", dif: {es: "Media", pt: "Média", en: "Medium"}, img: "trilha7.jpg", es: "Caminata hacia playa naturista.", pt: "Caminhada para praia naturista.", en: "Hike to a nudist beach." }
         ];
 
         const playas = [
@@ -208,6 +217,7 @@
         let datosGlobales = { dir: 0, vel: 0, lang: 'es' };
         let playaActual = null;
         let playaGanadora = null;
+        let cotizacionesCache = null;
         const CHAVE_PIX = "19431fa4-da2e-4709-97fd-ffdcf09cf664";
 
         let startY = 0;
@@ -235,85 +245,43 @@
         function abrirPix() { document.getElementById('modal-pix').style.display = 'block'; toggleMenu(); obtenerCotizaciones(); }
         function cerrarPix() { document.getElementById('modal-pix').style.display = 'none'; }
 
-// 1. Agregamos esta variable al principio de tus scripts para guardar los precios
-let cotizacionesCache = null;
-
         async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
-            
-            if (cotizacionesCache) {
-                renderizarListaCotizaciones(cotizacionesCache);
-            } else {
-                container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs uppercase font-bold tracking-widest">Sincronizando mercados...</p>';
-            }
-
+            if (cotizacionesCache) { renderizarCotizaciones(cotizacionesCache); return; }
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Comparando...</p>';
             try {
-                // LLAMADO DIRECTO A LAS FUENTES
-                const [resArg, resBrl] = await Promise.all([
-                    fetch(`https://criptoya.com/api/usdt/ars/1`),
-                    fetch(`https://economia.awesomeapi.com.br/last/USD-BRL`)
-                ]);
-
-                const dataArg = await resArg.json();
-                const dataBrl = await resBrl.json();
-
-                // Referencia USDT en Argentina y Dólar en Brasil
-                const usdtArs = dataArg.belo ? dataArg.belo.total : (dataArg.lemoncash ? dataArg.lemoncash.total : 0);
-                const usdBrl = dataBrl.USDBRL ? parseFloat(dataBrl.USDBRL.bid) : 0;
-
-                if (usdtArs === 0 || usdBrl === 0) throw new Error("Datos incompletos");
-
-                const baseReal = usdtArs / usdBrl;
-
-                const exchanges = [
-                    { name: "Arq (DolarApp)", spread: 1.002, icon: "fa-mobile-screen" }, 
-                    { name: "GrabFi", spread: 1.004, icon: "fa-wallet" },
-                    { name: "Belo (PIX)", spread: 1.012, icon: "fa-bolt" },
+                const res = await fetch('https://dolarapi.com/v1/cotizaciones/usdt');
+                const data = await res.json();
+                const usdtArg = data.compra;
+                const baseReal = usdtArg / 5.08;
+                let ranking = [
+                    { name: "Arq (DolarApp)", spread: 1.002, icon: "fa-mobile-screen" },
+                    { name: "GrabFi", spread: 1.005, icon: "fa-wallet" },
+                    { name: "Belo", spread: 1.012, icon: "fa-bolt" },
                     { name: "Takenos", spread: 1.015, icon: "fa-globe" },
-                    { name: "Lemon Cash", spread: 1.021, icon: "fa-lemon" },
-                    { name: "AstroPay", spread: 1.035, icon: "fa-star" },
-                    { name: "Mercado Pago", spread: 1.14, icon: "fa-building-columns" }
-                ].map(ex => ({
-                    ...ex,
-                    price: Math.round(baseReal * ex.spread)
-                })).sort((a,b) => a.price - b.price);
-
-                cotizacionesCache = exchanges;
-                renderizarListaCotizaciones(exchanges);
-
-            } catch (e) { 
-                console.warn("CORS o error de red: Probablemente funcione al subirlo a GitHub.");
-                if(!cotizacionesCache) container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10 font-bold'>Error de conexión local.<br>Funcionará en praiaideal.com</p>"; 
-            }
+                    { name: "Lemon", spread: 1.021, icon: "fa-lemon" },
+                    { name: "AstroPay", spread: 1.03, icon: "fa-star" },
+                    { name: "Mercado Pago", spread: 1.10, icon: "fa-building-columns" }
+                ].map(ex => ({ ...ex, price: Math.round(baseReal * ex.spread) })).sort((a,b) => a.price - b.price);
+                cotizacionesCache = ranking;
+                renderizarCotizaciones(ranking);
+            } catch (e) { container.innerHTML = "Error al conectar."; }
         }
 
-        function renderizarListaCotizaciones(lista) {
+        function renderizarCotizaciones(lista) {
             const container = document.getElementById('lista-cotizaciones');
-            if (!lista || lista.length === 0) return;
-
             document.getElementById('mejor-pix-nombre').innerText = lista[0].name;
             document.getElementById('mejor-pix-precio').innerText = `$ ${lista[0].price}`;
-            
             container.innerHTML = "";
             lista.forEach(ex => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2 active:scale-95 transition-all";
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center">
-                            <i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i>
-                        </div>
-                        <span class="font-bold text-slate-700 text-[11px] uppercase tracking-tight">${ex.name}</span>
-                    </div>
-                    <div class="text-right">
-                        <span class="font-black text-slate-900 text-sm">$ ${ex.price}</span>
-                        <p class="text-[8px] text-slate-400 -mt-1 uppercase font-black tracking-tighter">pesos x 1 brl</p>
-                    </div>
-                `;
+                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm";
+                div.innerHTML = `<div class="flex items-center gap-3"><i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i><span class="font-bold text-slate-700 text-[11px] uppercase">${ex.name}</span></div><span class="font-black text-slate-900">$ ${ex.price}</span>`;
                 container.appendChild(div);
             });
         }
-      function renderizarTrilhas() {
+
+        function renderizarTrilhas() {
             const container = document.getElementById('lista-trilhas-content');
             container.innerHTML = "";
             trilhasData.forEach(t => {
@@ -325,6 +293,7 @@ let cotizacionesCache = null;
         }
 
         async function cargarApp() {
+            obtenerCotizaciones();
             try {
                 const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-22.76&longitude=-41.88&daily=sunrise,sunset&hourly=windspeed_10m,winddirection_10m,weathercode&timezone=auto`);
                 const data = await res.json();
@@ -334,27 +303,25 @@ let cotizacionesCache = null;
                 document.getElementById('view-sunrise').innerText = data.daily.sunrise[0].split('T')[1];
                 document.getElementById('view-sunset').innerText = data.daily.sunset[0].split('T')[1];
                 
-                const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
                 let ranking = playas.map(p => {
                     let score = 0;
                     const vientoProtegido = datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1];
                     score += vientoProtegido ? 50 : -30;
+                    const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
                     if (p.critica && valMarea > 0.9) score -= 40;
                     if (!p.surf && datosGlobales.vel > 15) score -= 20;
                     return { ...p, score: score };
-                });
-                ranking.sort((a, b) => b.score - a.score);
+                }).sort((a, b) => b.score - a.score);
                 playaGanadora = ranking.slice(0, 3)[Math.floor(Math.random() * 3)];
                 seleccionarPlaya(playaGanadora);
                 cambiarIdioma('es');
-                setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 800);
+                setTimeout(() => document.getElementById('splash').style.display = 'none', 800);
             } catch (e) { console.error(e); }
         }
 
         async function seleccionarPlaya(playa) {
             playaActual = playa;
-            const labelRec = document.getElementById('label-estado');
-            labelRec.classList.toggle('hidden', !(playaGanadora && playa.id === playaGanadora.id));
+            document.getElementById('label-estado').classList.toggle('hidden', !(playaGanadora && playa.id === playaGanadora.id));
             document.getElementById('view-nombre').innerText = playa.nombre;
             document.getElementById('surf-tag').className = playa.surf ? "surf-badge" : "hidden";
             document.getElementById('view-mensaje').innerText = playa[datosGlobales.lang];
@@ -365,24 +332,21 @@ let cotizacionesCache = null;
                     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${playa.lat}&longitude=${playa.lon}&hourly=temperature_2m,apparent_temperature,windspeed_10m,weathercode&forecast_days=1&timezone=auto`)
                 ]);
                 const dM = await rM.json(); const dW = await rW.json();
-                const ahora = new Date();
-                const h = ahora.getHours();
+                const h = new Date().getHours();
                 
-                // MICROCLIMA
                 const vari = (playa.id % 3 === 0) ? 0.6 : (playa.id % 2 === 0) ? -0.5 : 0.2; 
                 document.getElementById('view-temp-aire').innerText = `${Math.round(dW.hourly.temperature_2m[h] + vari)}°`;
                 document.getElementById('view-st').innerText = `${Math.round(dW.hourly.apparent_temperature[h] + vari)}°`;
                 document.getElementById('view-temp-agua').innerText = `${(dM.hourly.sea_surface_temperature[h] + vari).toFixed(1)}°`;
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
 
-                // ICONOS
+                const iconCont = document.getElementById('view-clima-icon');
                 const sunriseStr = document.getElementById('view-sunrise').innerText;
                 const sunsetStr = document.getElementById('view-sunset').innerText;
-                const hActualMins = h * 60 + ahora.getMinutes();
+                const hActualMins = h * 60 + new Date().getMinutes();
                 const [hRise, mRise] = sunriseStr.split(':').map(Number);
                 const [hSet, mSet] = sunsetStr.split(':').map(Number);
                 const esDeDia = hActualMins > (hRise * 60 + mRise) && hActualMins < (hSet * 60 + mSet);
-                const iconCont = document.getElementById('view-clima-icon');
                 if (!esDeDia) iconCont.innerHTML = '<i class="fa-solid fa-moon text-sky-200"></i>';
                 else {
                     const code = dW.hourly.weathercode[h];
@@ -391,37 +355,34 @@ let cotizacionesCache = null;
                     else iconCont.innerHTML = '<i class="fa-solid fa-cloud text-slate-300"></i>';
                 }
 
-                // OLAS
                 const olasCont = document.getElementById('container-olas');
                 const vientoCont = document.getElementById('container-viento');
                 if (playa.surf) {
                     olasCont.classList.remove('hidden');
                     document.getElementById('view-olas').innerText = `${dM.hourly.wave_height[h]} m`;
                     vientoCont.classList.replace('col-span-2', 'col-span-1');
-                    vientoCont.classList.add('border-r');
+                    vientoCont.classList.add('border-r', 'border-white/10');
                 } else {
                     olasCont.classList.add('hidden');
                     vientoCont.classList.replace('col-span-1', 'col-span-2');
-                    vientoCont.classList.remove('border-r');
+                    vientoCont.classList.remove('border-r', 'border-white/10');
                 }
 
-                const valMarea = (Math.sin((ahora.getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
+                const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
                 document.getElementById('view-marea').innerText = valMarea;
                 document.getElementById('view-marea-desc').innerText = valMarea > 0.9 ? "ALTA" : "BAJA";
 
                 const card = document.getElementById('main-card');
                 const alerta = document.getElementById('alerta-arena');
                 const mareaMala = playa.critica && valMarea > 0.9;
-                const vientoMalo = dW.hourly.windspeed_10m[h] >= 12 && !(datosGlobales.dir >= playa.prot[0] && datosGlobales.dir <= playa.prot[1]);
-
-                if (mareaMala || vientoMalo) {
+                if (mareaMala) {
                     card.className = "bg-gradient-warning rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]";
-                    alerta.classList.toggle('hidden', !mareaMala);
-                    if (mareaMala) document.getElementById('msg-arena').innerText = i18n[datosGlobales.lang].arenaNo;
+                    alerta.classList.remove('hidden');
+                    document.getElementById('msg-arena').innerText = i18n[datosGlobales.lang].arenaNo;
+                    document.getElementById('icon-arena').className = "fa-solid fa-person-swimming";
                 } else {
                     card.className = "bg-gradient-ok rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]";
-                    alerta.classList.toggle('hidden', !playa.critica);
-                    if (playa.critica) document.getElementById('msg-arena').innerText = i18n[datosGlobales.lang].arenaOk;
+                    alerta.classList.add('hidden');
                 }
                 renderizarLista();
             } catch (e) { console.error(e); }
@@ -435,7 +396,6 @@ let cotizacionesCache = null;
             document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
             document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
             document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
-            document.getElementById('btn-ads').href = `https://wa.me/5522997601592?text=${encodeURIComponent(i18n[lang].adsMsg)}`;
             document.getElementById('buscador').placeholder = i18n[lang].buscar;
             if(playaActual) seleccionarPlaya(playaActual);
             renderizarLista();
@@ -450,8 +410,7 @@ let cotizacionesCache = null;
             const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
             playas.filter(p => p.nombre.toLowerCase().includes(filtro)).forEach(p => {
                 const mareaMala = p.critica && valMarea > 0.9;
-                const vientoMalo = datosGlobales.vel >= 12 && !(datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1]);
-                let borderColor = (mareaMala || vientoMalo) ? "border-orange-400" : "border-emerald-400";
+                let borderColor = mareaMala ? "border-orange-400" : "border-emerald-400";
                 const div = document.createElement('div');
                 div.className = `beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 ${borderColor} cursor-pointer`;
                 div.onclick = () => { seleccionarPlaya(p); window.scrollTo({top:0, behavior:'smooth'}); };
@@ -463,9 +422,8 @@ let cotizacionesCache = null;
         function copiarPix() { 
             navigator.clipboard.writeText(CHAVE_PIX); 
             const btn = document.getElementById('btn-pix-text');
-            const original = btn.innerText;
             btn.innerText = i18n[datosGlobales.lang].copiado;
-            setTimeout(() => btn.innerText = original, 2000);
+            setTimeout(() => btn.innerText = i18n[datosGlobales.lang].colabBtn, 2000);
         }
         
         cargarApp();
