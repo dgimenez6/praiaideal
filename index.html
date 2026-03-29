@@ -12,8 +12,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <title>PraiaIdeal | Estado de Playas y Temperatura del Agua en Búzios</title>
-    <meta name="description" content="Descubrí la playa ideal en Búzios según el viento y la marea. Consultá la temperatura del agua, clima en tiempo real y las mejores trilhas de la península.">
+    <title>PraiaIdeal | Estado de Playas y Cambio PIX en Búzios</title>
+    <meta name="description" content="Descubrí la playa ideal en Búzios y compará el mejor cambio PIX en tiempo real.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -36,14 +36,12 @@
 </head>
 <body class="bg-slate-50 min-h-screen pb-10 font-sans text-slate-900 overflow-x-hidden">
 
-    <div id="ptr-indicator">
-        <i class="fa-solid fa-arrows-rotate fa-spin text-xl"></i>
-    </div>
+    <div id="ptr-indicator"><i class="fa-solid fa-arrows-rotate fa-spin text-xl"></i></div>
 
     <div id="splash">
         <img src="icono.png" alt="Logo" class="splash-logo">
         <div class="loader mb-4"></div>
-        <p class="text-sky-50 text-xs animate-pulse tracking-widest uppercase text-center px-4">Calculando Playa Ideal...</p>
+        <p class="text-sky-50 text-xs animate-pulse tracking-widest uppercase text-center px-4">Preparando PraiaIdeal...</p>
     </div>
 
     <div id="overlay" onclick="toggleMenu()"></div>
@@ -61,7 +59,6 @@
                 </div>
                 <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
             </button>
-
             <button onclick="abrirPix()" class="w-full flex items-center justify-between bg-emerald-50 p-4 rounded-2xl border border-emerald-100 text-emerald-700 active:scale-95 transition-all">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-comments-dollar text-xl"></i>
@@ -69,27 +66,13 @@
                 </div>
                 <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
             </button>
-
             <hr class="border-slate-100">
             <a id="btn-ads" href="#" target="_blank" class="block bg-gradient-to-r from-emerald-500 to-teal-600 p-5 rounded-2xl text-white shadow-md active:scale-95 transition-all text-center">
                 <i class="fa-solid fa-rectangle-ad mb-2 text-2xl"></i>
                 <p class="font-black text-sm uppercase" data-key="adsTitle">¿Anunciar aquí?</p>
-                <p class="text-[10px] opacity-80" data-key="adsSub">Llegá a miles de turistas en Búzios</p>
             </a>
         </div>
     </aside>
-
-    <div id="modal-trilhas">
-        <header class="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10 shadow-sm">
-            <h2 class="font-black text-sky-700 uppercase tracking-tight italic" data-key="btnTrilhas">Trilhas & Aventuras</h2>
-            <button onclick="cerrarTrilhas()" class="text-slate-400 text-3xl px-2"><i class="fa-solid fa-xmark"></i></button>
-        </header>
-        <div class="bg-sky-700 p-6 text-white">
-            <h3 class="text-xl font-black uppercase italic mb-2" data-key="trilhaWelcome">Búzios Salvaje</h3>
-            <p class="text-xs opacity-90 leading-relaxed" data-key="trilhaDesc">Descubrí paisajes que pocos turistas conocen.</p>
-        </div>
-        <div id="lista-trilhas-content" class="p-4 space-y-6"></div>
-    </div>
 
     <div id="modal-pix">
         <header class="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10 shadow-sm">
@@ -98,20 +81,28 @@
         </header>
         <div class="p-6">
             <div class="bg-emerald-600 rounded-3xl p-6 text-white mb-6">
-                <p class="text-[10px] uppercase font-bold opacity-80 tracking-widest mb-1 text-white/80">Mejor opción hoy</p>
-                <h3 id="mejor-pix-nombre" class="text-2xl font-black italic uppercase leading-none text-white">Cargando...</h3>
+                <p class="text-[10px] uppercase font-bold opacity-80 tracking-widest mb-1 text-white/80">Recomendado hoy</p>
+                <h3 id="mejor-pix-nombre" class="text-2xl font-black italic uppercase leading-none text-white">Buscando...</h3>
                 <p id="mejor-pix-precio" class="text-4xl font-black mt-2 text-white">$---</p>
             </div>
-            <h4 class="font-black text-slate-400 text-[10px] uppercase tracking-widest mb-4">Referencia BRL / ARS</h4>
-            <div id="lista-cotizaciones" class="space-y-3"></div>
-            <p class="text-[9px] text-slate-400 mt-6 italic text-center leading-relaxed">* Los valores incluyen impuestos. Mercado Pago estimado sobre valor Cripto + carga impositiva.</p>
+            <h4 class="font-black text-slate-400 text-[10px] uppercase tracking-widest mb-4 italic">Ranking todas las billeteras</h4>
+            <div id="lista-cotizaciones" class="space-y-2"></div>
+            <p class="text-[9px] text-slate-400 mt-6 italic text-center leading-relaxed px-4">* Cotización aproximada por 1 Real (BRL) final con impuestos. Mercado Pago es un estimado sobre base cripto.</p>
         </div>
     </div>
 
-    <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center text-slate-900">
+    <div id="modal-trilhas">
+        <header class="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10 shadow-sm">
+            <h2 class="font-black text-sky-700 uppercase tracking-tight italic" data-key="btnTrilhas">Trilhas & Aventuras</h2>
+            <button onclick="cerrarTrilhas()" class="text-slate-400 text-3xl px-2"><i class="fa-solid fa-xmark"></i></button>
+        </header>
+        <div id="lista-trilhas-content" class="p-4 space-y-6"></div>
+    </div>
+
+    <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center">
         <div class="flex items-center gap-2">
-            <img src="icono.png" alt="Logo" class="w-8 h-8 rounded-md" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <h1 class="text-xl font-bold text-sky-700 italic tracking-tighter uppercase leading-none">PraiaIdeal</h1>
+            <img src="icono.png" alt="Logo" class="w-8 h-8 rounded-md">
+            <h1 class="text-xl font-bold text-sky-700 italic tracking-tighter uppercase">PraiaIdeal</h1>
         </div>
         <div class="flex items-center gap-3">
             <div class="flex space-x-2 mr-1">
@@ -128,55 +119,33 @@
             <div class="flex justify-between items-start">
                 <div>
                     <span id="label-estado" class="text-[10px] bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest font-bold hidden" data-key="rec">RECOMENDADA HOY</span>
-                    <h2 class="text-3xl font-black mt-2 uppercase italic leading-none">
-                        <span id="view-nombre">---</span>
-                        <span id="surf-tag" class="surf-badge hidden">SURF</span>
-                    </h2>
+                    <h2 class="text-3xl font-black mt-2 uppercase italic leading-none"><span id="view-nombre">---</span><span id="surf-tag" class="surf-badge hidden">SURF</span></h2>
                 </div>
-                <div id="view-clima-icon" class="text-4xl text-white">
-                    <i class="fa-solid fa-sun text-yellow-300"></i>
-                </div>
+                <div id="view-clima-icon" class="text-4xl text-white"><i class="fa-solid fa-sun text-yellow-300"></i></div>
             </div>
 
             <div class="mt-4 flex justify-between items-end">
                 <div class="flex items-baseline gap-2">
                     <span id="view-temp-aire" class="text-5xl font-black">--°</span>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] opacity-70 uppercase font-bold" data-key="st">SENSACIÓN</span>
-                        <span id="view-st" class="font-bold text-sm">--°</span>
-                    </div>
+                    <div class="flex flex-col"><span class="text-[10px] opacity-70 uppercase font-bold" data-key="st">SENSACIÓN</span><span id="view-st" class="font-bold text-sm">--°</span></div>
                 </div>
-                <div class="text-right text-[11px] font-bold bg-black/10 p-2 rounded-xl space-y-1 text-white">
+                <div class="text-right text-[11px] font-bold bg-black/10 p-2 rounded-xl space-y-1">
                     <p class="flex items-center justify-end gap-2"><span id="view-sunrise">--:--</span> <i class="fa-solid fa-sun text-yellow-300"></i></p>
                     <p class="flex items-center justify-end gap-2"><span id="view-sunset">--:--</span> <i class="fa-solid fa-moon text-sky-200"></i></p>
                 </div>
             </div>
 
             <div id="alerta-arena" class="mt-4 bg-white/20 rounded-xl p-3 flex items-center gap-3 hidden border border-white/30">
-                <i id="icon-arena" class="text-xl text-white"></i>
-                <p id="msg-arena" class="text-xs font-bold leading-tight"></p>
+                <i id="icon-arena" class="text-xl text-white"></i><p id="msg-arena" class="text-xs font-bold leading-tight"></p>
             </div>
 
             <p id="view-mensaje" class="mt-4 text-sky-800 text-sm leading-tight italic min-h-[40px] bg-white/90 p-3 rounded-2xl shadow-inner"></p>
 
-            <div id="data-grid" class="mt-6 grid grid-cols-2 gap-y-4 gap-x-2 border-t border-white/20 pt-4 text-white text-center">
-                <div class="border-r border-white/10">
-                    <p id="view-temp-agua" class="font-bold text-lg">--°</p>
-                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="agua">AGUA</p>
-                </div>
-                <div>
-                    <p class="font-bold text-lg leading-none"><span id="view-marea">--</span>m</p>
-                    <p id="view-marea-desc" class="text-[8px] font-black uppercase tracking-tighter">--</p>
-                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="marea">MAREA</p>
-                </div>
-                <div id="container-viento" class="border-t border-white/10 pt-2 col-span-1">
-                    <p id="view-viento" class="font-bold text-lg">--</p>
-                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p>
-                </div>
-                <div id="container-olas" class="border-t border-white/10 pt-2 col-span-1 border-l border-white/10">
-                    <p id="view-olas" class="font-bold text-lg">--</p>
-                    <p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p>
-                </div>
+            <div id="data-grid" class="mt-6 grid grid-cols-2 gap-y-4 gap-x-2 border-t border-white/20 pt-4 text-center">
+                <div class="border-r border-white/10"><p id="view-temp-agua" class="font-bold text-lg">--°</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="agua">AGUA</p></div>
+                <div><p class="font-bold text-lg leading-none"><span id="view-marea">--</span>m</p><p id="view-marea-desc" class="text-[8px] font-black uppercase tracking-tighter">--</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="marea">MAREA</p></div>
+                <div id="container-viento" class="border-t border-white/10 pt-2 col-span-1"><p id="view-viento" class="font-bold text-lg">--</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="viento">VIENTO</p></div>
+                <div id="container-olas" class="border-t border-white/10 pt-2 col-span-1 border-l border-white/10"><p id="view-olas" class="font-bold text-lg">--</p><p class="text-[9px] uppercase opacity-70 font-bold" data-key="olas">OLAS</p></div>
             </div>
 
             <div class="mt-6">
@@ -186,17 +155,11 @@
             </div>
         </section>
 
-        <div class="relative text-slate-900">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
-            <input type="text" id="buscador" onkeyup="filtrarPlayas()" placeholder="Buscar playa..." class="w-full p-4 pl-12 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-sky-500 bg-white">
-        </div>
-
+        <div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i><input type="text" id="buscador" onkeyup="filtrarPlayas()" placeholder="Buscar playa..." class="w-full p-4 pl-12 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-sky-500 bg-white"></div>
         <section id="lista-playas" class="grid grid-cols-1 gap-3"></section>
 
         <div class="mt-10 p-8 bg-white rounded-[2.5rem] shadow-sm text-center border border-slate-100">
-            <div class="w-12 h-12 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fa-solid fa-coffee text-xl"></i>
-            </div>
+            <div class="w-12 h-12 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-coffee text-xl"></i></div>
             <p id="colab-txt-main" class="text-sm font-bold text-slate-800 px-4 leading-tight"></p>
             <p id="colab-txt-sub" class="text-[11px] text-slate-400 mt-2 mb-6"></p>
             <button onclick="copiarPix()" id="btn-pix" class="w-full bg-sky-500 text-white py-4 rounded-2xl font-black text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-3">
@@ -208,9 +171,9 @@
 
     <script>
         const i18n = {
-            es: { menuTitle: "Menú", btnTrilhas: "Trilhas & Aventuras", adsTitle: "¿Anunciar aquí?", adsSub: "Llegá a miles de turistas", adsMsg: "Hola Damian! Me interesa anunciar en PraiaIdeal", agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!", dif: "Dificultad", trilhaWelcome: "Búzios Salvaje", trilhaDesc: "Descubrí paisajes que pocos turistas conocen." },
-            pt: { menuTitle: "Menu", btnTrilhas: "Trilhas & Aventuras", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoje? Ajude a mantener o app online.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!", dif: "Dificuldade", trilhaWelcome: "Búzios Selvagem", trilhaDesc: "Descubra paisagens que poucos turistas conhecem." },
-            en: { menuTitle: "Menu", btnTrilhas: "Trails & Adventures", adsTitle: "Advertise here?", adsSub: "Reach thousands of tourists", adsMsg: "Hello Damian! I am interested in advertising on PraiaIdeal", agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!", dif: "Difficulty", trilhaWelcome: "Wild Buzios", trilhaDesc: "Discover landscapes that few tourists know." }
+            es: { menuTitle: "Menú", btnTrilhas: "Trilhas & Aventuras", adsTitle: "¿Anunciar aquí?", adsSub: "Llegá a miles de turistas", adsMsg: "Hola Damian! Me interesa anunciar en PraiaIdeal", agua: "AGUA", viento: "VIENTO", marea: "MAREA", ir: "CÓMO LLEGAR", buscar: "Buscar playa...", rec: "RECOMENDADA HOY", olas: "OLAS", st: "SENSACIÓN", arenaOk: "¡Hay playa! Marea baja.", arenaNo: "⚠️ Poca arena por marea alta.", colabMain: "¿Te serví hoy? Invitame un café para que la app siga online.", colabSub: "Copiá la llave PIX y pegala en tu App de Banco o Mercado Pago.", colabBtn: "COPIAR LLAVE PIX", copiado: "¡LLAVE COPIADA!", dif: "Dificultad" },
+            pt: { menuTitle: "Menu", btnTrilhas: "Trilhas & Aventuras", adsTitle: "Anunciar aqui?", adsSub: "Alcance milhares de turistas", adsMsg: "Olá Damian! Estou interessado em anunciar no PraiaIdeal", agua: "ÁGUA", viento: "VENTO", marea: "MARÉ", ir: "COMO CHEGAR", buscar: "Buscar praia...", rec: "RECOMENDADA HOJE", olas: "ONDAS", st: "SENSACAO", arenaOk: "Tem praia! Maré baixa.", arenaNo: "⚠️ Pouca areia por maré alta.", colabMain: "Gostou da dica de hoje? Ajude a mantener o app online.", colabSub: "Copie a chave PIX e cole no app do seu banco.", colabBtn: "COPIAR CHAVE PIX", copiado: "CHAVE COPIADA!", dif: "Dificuldade" },
+            en: { menuTitle: "Menu", btnTrilhas: "Trails & Adventures", adsTitle: "Advertise here?", adsSub: "Reach thousands of tourists", adsMsg: "Hello Damian! I am interested in advertising on PraiaIdeal", agua: "WATER", viento: "WIND", marea: "TIDE", ir: "GET DIRECTIONS", buscar: "Search beach...", rec: "RECOMMENDED TODAY", olas: "WAVES", st: "FEELS LIKE", arenaOk: "Enjoy! Low tide.", arenaNo: "⚠️ Limited beach area.", colabMain: "Did I help you today? Support the app by buying me a coffee.", colabSub: "Copy the PIX key and paste it into your banking app.", colabBtn: "COPY PIX KEY", copiado: "KEY COPIED!", dif: "Difficulty" }
         };
 
         const trilhasData = [
@@ -252,9 +215,7 @@
         document.addEventListener('touchmove', e => {
             const y = e.touches[0].pageY;
             const dist = y - startY;
-            if (window.scrollY === 0 && dist > 0) {
-                document.getElementById('ptr-indicator').style.transform = `translateY(${Math.min(dist, 100)}px)`;
-            }
+            if (window.scrollY === 0 && dist > 0) document.getElementById('ptr-indicator').style.transform = `translateY(${Math.min(dist, 100)}px)`;
         }, {passive: true});
         document.addEventListener('touchend', () => {
             const ind = document.getElementById('ptr-indicator');
@@ -276,20 +237,21 @@
 
         async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse">Obteniendo tipos de cambio...</p>';
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs">Conectando con mercados...</p>';
             try {
-                const proxy = "https://api.allorigins.win/get?url=";
-                const target = encodeURIComponent('https://criptoya.com/api/brl/ars/1');
-                const res = await fetch(proxy + target);
-                const rawData = await res.json();
-                const data = JSON.parse(rawData.contents);
+                // AllOrigins Win es más estable para evitar CORS en local y producción
+                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://criptoya.com/api/brl/ars/1')}`);
+                const raw = await res.json();
+                const data = JSON.parse(raw.contents);
                 
-                const exchanges = [
-                    { name: "Belo / Lemon (PIX)", price: data.belo.total, icon: "fa-bolt" },
-                    { name: "Mercado Pago (PIX)", price: data.belo.total * 1.06, icon: "fa-wallet" },
-                    { name: "Western Union", price: data.fiwind.total * 0.98, icon: "fa-earth-americas" },
+                let exchanges = [
+                    { name: "Lemon Cash (PIX)", price: data.lemoncash.total, icon: "fa-bolt" },
+                    { name: "Belo (PIX)", price: data.belo.total, icon: "fa-bolt" },
+                    { name: "Mercado Pago (PIX)", price: data.belo.total * 1.07, icon: "fa-wallet" },
+                    { name: "Western Union", price: data.fiwind.total * 0.97, icon: "fa-earth-americas" },
                     { name: "Bitso", price: data.bitso.total, icon: "fa-coins" },
-                    { name: "Buenbit", price: data.buenbit.total, icon: "fa-circle-check" }
+                    { name: "Buenbit", price: data.buenbit.total, icon: "fa-circle-check" },
+                    { name: "Fiwind", price: data.fiwind.total, icon: "fa-wind" }
                 ];
                 exchanges.sort((a,b) => a.price - b.price);
                 document.getElementById('mejor-pix-nombre').innerText = exchanges[0].name;
@@ -298,10 +260,10 @@
                 exchanges.forEach(ex => {
                     const div = document.createElement('div');
                     div.className = "flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100";
-                    div.innerHTML = `<div class="flex items-center gap-3"><i class="fa-solid ${ex.icon} text-slate-400"></i><span class="font-bold text-slate-700 text-sm">${ex.name}</span></div><span class="font-black text-slate-900">$ ${Math.round(ex.price)}</span>`;
+                    div.innerHTML = `<div class="flex items-center gap-3"><i class="fa-solid ${ex.icon} text-slate-400"></i><span class="font-bold text-slate-700 text-xs">${ex.name}</span></div><span class="font-black text-slate-900">$ ${Math.round(ex.price)}</span>`;
                     container.appendChild(div);
                 });
-            } catch (e) { container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Error de conexión local. Funciona en praiaideal.com</p>"; }
+            } catch (e) { container.innerHTML = "<p class='text-center text-red-400 text-[10px] py-10'>Mercado saturado. Reintentá en un momento.</p>"; }
         }
 
         function renderizarTrilhas() {
@@ -310,7 +272,7 @@
             trilhasData.forEach(t => {
                 const div = document.createElement('div');
                 div.className = "bg-white rounded-3xl overflow-hidden shadow-md border border-slate-100";
-                div.innerHTML = `<img src="${t.img}" class="w-full h-40 object-cover" alt="${t.nombre}"><div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-black text-slate-800 uppercase italic leading-tight">${t.nombre}</h3><span class="text-[9px] bg-sky-100 text-sky-700 px-2 py-1 rounded-full font-bold uppercase tracking-widest ml-2 whitespace-nowrap">${i18n[datosGlobales.lang].dif}: ${t.dif[datosGlobales.lang]}</span></div><p class="text-xs text-slate-500 leading-relaxed">${t[datosGlobales.lang]}</p></div>`;
+                div.innerHTML = `<img src="${t.img}" class="w-full h-40 object-cover" alt="${t.nombre}"><div class="p-5"><div class="flex justify-between items-start mb-2"><h3 class="font-black text-slate-800 uppercase italic leading-tight">${t.nombre}</h3><span class="text-[9px] bg-sky-100 text-sky-700 px-2 py-1 rounded-full font-bold uppercase tracking-widest ml-2">${i18n[datosGlobales.lang].dif}: ${t.dif[datosGlobales.lang]}</span></div><p class="text-xs text-slate-500 leading-relaxed">${t[datosGlobales.lang]}</p></div>`;
                 container.appendChild(div);
             });
         }
@@ -335,9 +297,7 @@
                     return { ...p, score: score };
                 });
                 ranking.sort((a, b) => b.score - a.score);
-                const mejoresTres = ranking.slice(0, 3);
-                playaGanadora = mejoresTres[Math.floor(Math.random() * mejoresTres.length)];
-
+                playaGanadora = ranking.slice(0, 3)[Math.floor(Math.random() * 3)];
                 seleccionarPlaya(playaGanadora);
                 cambiarIdioma('es');
                 setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 800);
@@ -348,7 +308,6 @@
             playaActual = playa;
             const labelRec = document.getElementById('label-estado');
             labelRec.classList.toggle('hidden', !(playaGanadora && playa.id === playaGanadora.id));
-
             document.getElementById('view-nombre').innerText = playa.nombre;
             document.getElementById('surf-tag').className = playa.surf ? "surf-badge" : "hidden";
             document.getElementById('view-mensaje').innerText = playa[datosGlobales.lang];
@@ -362,19 +321,20 @@
                 const ahora = new Date();
                 const h = ahora.getHours();
                 
-                const variacion = (playa.id % 3 === 0) ? 0.5 : (playa.id % 2 === 0) ? -0.4 : 0.2; 
-                document.getElementById('view-temp-aire').innerText = `${Math.round(dW.hourly.temperature_2m[h] + variacion)}°`;
-                document.getElementById('view-st').innerText = `${Math.round(dW.hourly.apparent_temperature[h] + variacion)}°`;
-                document.getElementById('view-temp-agua').innerText = `${(dM.hourly.sea_surface_temperature[h] + variacion).toFixed(1)}°`;
+                // MICROCLIMA
+                const vari = (playa.id % 3 === 0) ? 0.6 : (playa.id % 2 === 0) ? -0.5 : 0.2; 
+                document.getElementById('view-temp-aire').innerText = `${Math.round(dW.hourly.temperature_2m[h] + vari)}°`;
+                document.getElementById('view-st').innerText = `${Math.round(dW.hourly.apparent_temperature[h] + vari)}°`;
+                document.getElementById('view-temp-agua').innerText = `${(dM.hourly.sea_surface_temperature[h] + vari).toFixed(1)}°`;
                 document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
 
+                // ICONOS
                 const sunriseStr = document.getElementById('view-sunrise').innerText;
                 const sunsetStr = document.getElementById('view-sunset').innerText;
                 const hActualMins = h * 60 + ahora.getMinutes();
                 const [hRise, mRise] = sunriseStr.split(':').map(Number);
                 const [hSet, mSet] = sunsetStr.split(':').map(Number);
                 const esDeDia = hActualMins > (hRise * 60 + mRise) && hActualMins < (hSet * 60 + mSet);
-
                 const iconCont = document.getElementById('view-clima-icon');
                 if (!esDeDia) iconCont.innerHTML = '<i class="fa-solid fa-moon text-sky-200"></i>';
                 else {
@@ -384,6 +344,7 @@
                     else iconCont.innerHTML = '<i class="fa-solid fa-cloud text-slate-300"></i>';
                 }
 
+                // OLAS
                 const olasCont = document.getElementById('container-olas');
                 const vientoCont = document.getElementById('container-viento');
                 if (playa.surf) {
@@ -401,11 +362,11 @@
                 document.getElementById('view-marea').innerText = valMarea;
                 document.getElementById('view-marea-desc').innerText = valMarea > 0.9 ? "ALTA" : "BAJA";
 
+                const card = document.getElementById('main-card');
+                const alerta = document.getElementById('alerta-arena');
                 const mareaMala = playa.critica && valMarea > 0.9;
                 const vientoMalo = dW.hourly.windspeed_10m[h] >= 12 && !(datosGlobales.dir >= playa.prot[0] && datosGlobales.dir <= playa.prot[1]);
 
-                const card = document.getElementById('main-card');
-                const alerta = document.getElementById('alerta-arena');
                 if (mareaMala || vientoMalo) {
                     card.className = "bg-gradient-warning rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]";
                     alerta.classList.toggle('hidden', !mareaMala);
@@ -424,10 +385,10 @@
             document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${lang}`).classList.add('active');
             document.querySelectorAll('[data-key]').forEach(el => el.innerText = i18n[lang][el.getAttribute('data-key')]);
-            document.getElementById('btn-ads').href = `https://wa.me/5522997601592?text=${encodeURIComponent(i18n[lang].adsMsg)}`;
             document.getElementById('colab-txt-main').innerText = i18n[lang].colabMain;
             document.getElementById('colab-txt-sub').innerText = i18n[lang].colabSub;
             document.getElementById('btn-pix-text').innerText = i18n[lang].colabBtn;
+            document.getElementById('btn-ads').href = `https://wa.me/5522997601592?text=${encodeURIComponent(i18n[lang].adsMsg)}`;
             document.getElementById('buscador').placeholder = i18n[lang].buscar;
             if(playaActual) seleccionarPlaya(playaActual);
             renderizarLista();
@@ -440,7 +401,6 @@
             container.innerHTML = "";
             const filtro = document.getElementById('buscador').value.toLowerCase();
             const valMarea = (Math.sin((new Date().getTime() / 22350000) * 2 * Math.PI) + 0.7).toFixed(1);
-
             playas.filter(p => p.nombre.toLowerCase().includes(filtro)).forEach(p => {
                 const mareaMala = p.critica && valMarea > 0.9;
                 const vientoMalo = datosGlobales.vel >= 12 && !(datosGlobales.dir >= p.prot[0] && datosGlobales.dir <= p.prot[1]);
