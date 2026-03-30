@@ -246,32 +246,36 @@
         function abrirPix() { document.getElementById('modal-pix').style.display = 'block'; toggleMenu(); obtenerCotizaciones(); }
         function cerrarPix() { document.getElementById('modal-pix').style.display = 'none'; }
 
-        async function obtenerCotizaciones() {
+async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
             if (cotizacionesCache) { renderizarCotizaciones(cotizacionesCache); return; }
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs font-bold uppercase tracking-widest">Calculando arbitraje real...</p>';
+            
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs font-bold uppercase tracking-widest">Sincronizando con Arq...</p>';
             
             try {
-                // 1. Dólar Cripto en Argentina (DolarApi es libre y rápida)
+                // 1. Buscamos el valor de VENTA (ask) del Dólar Cripto
                 const resArg = await fetch('https://dolarapi.com/v1/dolares/cripto');
                 const dataArg = await resArg.json();
-                const usdtArg = dataArg.compra; 
+                
+                // Usamos 'venta' porque es lo que pagamos para enviar PIX
+                const usdtVenta = dataArg.venta; 
 
-                // 2. Dólar en Brasil (API abierta internacional, funciona en Localhost)
+                // 2. Cotización internacional USD/BRL
                 const resBrl = await fetch('https://open.er-api.com/v6/latest/USD');
                 const dataBrl = await resBrl.json();
                 const usdBrl = dataBrl.rates.BRL; 
 
-                const baseReal = usdtArg / usdBrl;
+                // 3. Base Real PIX (Sin comisiones)
+                const baseReal = usdtVenta / usdBrl;
 
                 let ranking = [
-                    { name: "Arq (DolarApp)", spread: 1.001, icon: "fa-mobile-screen" },
+                    { name: "Arq (DolarApp)", spread: 1.00, icon: "fa-mobile-screen" }, // Arq es casi 1:1 con el interbancario
                     { name: "GrabFi", spread: 1.003, icon: "fa-wallet" },
-                    { name: "Belo", spread: 1.010, icon: "fa-bolt" },
-                    { name: "Takenos", spread: 1.012, icon: "fa-globe" },
-                    { name: "Lemon Cash", spread: 1.018, icon: "fa-lemon" },
-                    { name: "AstroPay", spread: 1.025, icon: "fa-star" },
-                    { name: "Mercado Pago", spread: 1.08, icon: "fa-building-columns" }
+                    { name: "Belo", spread: 1.008, icon: "fa-bolt" },
+                    { name: "Takenos", spread: 1.011, icon: "fa-globe" },
+                    { name: "Lemon", spread: 1.015, icon: "fa-lemon" },
+                    { name: "AstroPay", spread: 1.02, icon: "fa-star" },
+                    { name: "Mercado Pago", spread: 1.075, icon: "fa-building-columns" }
                 ].map(ex => ({ 
                     ...ex, 
                     price: Math.floor(baseReal * ex.spread) 
@@ -279,8 +283,10 @@
 
                 cotizacionesCache = ranking;
                 renderizarCotizaciones(ranking);
+
             } catch (e) {
-                container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Error de conexión local. Funciona en GitHub.</p>";
+                console.error("Error:", e);
+                container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Reintentando conexión...</p>";
             }
         }
 
