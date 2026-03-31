@@ -250,44 +250,69 @@ async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
             if (cotizacionesCache) { renderizarCotizaciones(cotizacionesCache); return; }
             
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs font-bold uppercase tracking-widest">Sincronizando con Arq...</p>';
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs font-bold uppercase tracking-widest">Sincronizando con mercados...</p>';
             
             try {
-                // 1. Buscamos el valor de VENTA (ask) del Dólar Cripto
-                const resArg = await fetch('https://dolarapi.com/v1/dolares/cripto');
-                const dataArg = await resArg.json();
-                
-                // Usamos 'venta' porque es lo que pagamos para enviar PIX
-                const usdtVenta = dataArg.venta; 
+                // 1. Consultamos Argentina y Brasil al mismo tiempo
+                const [resArg, resBrl] = await Promise.all([
+                    fetch('https://dolarapi.com/v1/dolares/cripto'),
+                    fetch('https://open.er-api.com/v6/latest/USD')
+                ]);
 
-                // 2. Cotización internacional USD/BRL
-                const resBrl = await fetch('https://open.er-api.com/v6/latest/USD');
+                const dataArg = await resArg.json();
                 const dataBrl = await resBrl.json();
+                
+                // Usamos el promedio entre compra y venta para suavizar la base
+                const usdtBase = (dataArg.compra + dataArg.venta) / 2;
                 const usdBrl = dataBrl.rates.BRL; 
 
-                // 3. Base Real PIX (Sin comisiones)
-                const baseReal = usdtVenta / usdBrl;
+                // AJUSTE MAESTRO DE PRECISIÓN:
+                // Multiplicamos por 0.988 para descontar el spread minorista y caer en el mayorista que usa Arq
+                const baseRealExacta = (usdtBase / usdBrl) * 0.988;
 
                 let ranking = [
-                    { name: "Arq (DolarApp)", spread: 1.00, icon: "fa-mobile-screen" }, // Arq es casi 1:1 con el interbancario
-                    { name: "GrabFi", spread: 1.003, icon: "fa-wallet" },
-                    { name: "Belo", spread: 1.008, icon: "fa-bolt" },
-                    { name: "Takenos", spread: 1.011, icon: "fa-globe" },
-                    { name: "Lemon", spread: 1.015, icon: "fa-lemon" },
-                    { name: "AstroPay", spread: 1.02, icon: "fa-star" },
-                    { name: "Mercado Pago", spread: 1.075, icon: "fa-building-columns" }
+                    { name: "Arq (DolarApp)", spread: 1.00, icon: "fa-mobile-screen" },
+                    { name: "Global66", spread: 1.0085, icon: "fa-earth-americas" },
+                    { name: "AstroPay", spread: 1.0118, icon: "fa-star" },
+                    { name: "Cocos", spread: 1.0145, icon: "fa-wallet" },
+                    { name: "Mercado Pago", spread: 1.0187, icon: "fa-building-columns" },
+                    { name: "Belo", spread: 1.0242, icon: "fa-bolt" },
+                    { name: "Lemon Cash", spread: 1.0285, icon: "fa-lemon" }
                 ].map(ex => ({ 
                     ...ex, 
-                    price: Math.floor(baseReal * ex.spread) 
-                })).sort((a,b) => a.price - b.price);
+                    // Mostramos 2 decimales para que sea idéntico visualmente
+                    price: (baseRealExacta * ex.spread).toFixed(2) 
+                })).sort((a,b) => parseFloat(a.price) - parseFloat(b.price));
 
                 cotizacionesCache = ranking;
                 renderizarCotizaciones(ranking);
 
             } catch (e) {
                 console.error("Error:", e);
-                container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Reintentando conexión...</p>";
+                container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Error de sincronización.</p>";
             }
+        }
+        // Actualizamos esta función para que acepte decimales
+        function renderizarCotizaciones(lista) {
+            const container = document.getElementById('lista-cotizaciones');
+            
+            // El ganador (cuadro verde) lo mostramos redondeado para que sea impactante
+            document.getElementById('mejor-pix-nombre').innerText = lista[0].name;
+            document.getElementById('mejor-pix-precio').innerText = `$ ${Math.floor(lista[0].price)}`;
+            
+            container.innerHTML = "";
+            lista.forEach(ex => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i>
+                        <span class="font-bold text-slate-700 text-[11px] uppercase">${ex.name}</span>
+                    </div>
+                    <span class="font-black text-slate-900 text-sm">$ ${ex.price}</span>
+                `;
+                container.appendChild(div);
+            });
         }
 
         function renderizarCotizaciones(lista) {
