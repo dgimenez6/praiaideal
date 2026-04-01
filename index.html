@@ -198,7 +198,7 @@
 
         const playas = [
             { id: 0, nombre: "Geribá", lat: -22.7753, lon: -41.9056, prot: [250, 320], surf: true, es: "La meca del surf. Amplias playas.", pt: "A meca do surf. Praias amplas.", en: "The surf mecca. Wide beaches." },
-            { id: 1, nombre: "João Fernandes", lat: -22.7422, lon: -41.8764, prot: [110, 250], surf: false, critica: true, es: "Ideal con viento Sur. Aguas cristalinas.", pt: "Ideal com vento Sul. Águas cristalinas.", en: "Perfect with South wind." },
+            { id: 1, nombre: "João Fernandes", lat: -22.7422, lon: -41.8764, prot: [110, 250], surf: false, critica: true, es: "Aguas cristalinas. Ideal con viento Sur.", pt: "Aguas cristalinas.", en: "Crystal clear waters." },
             { id: 2, nombre: "Ferradura", lat: -22.7678, lon: -41.8881, prot: [0, 110], surf: false, es: "Piscina natural. Ideal con viento Norte.", pt: "Piscina natural.", en: "Natural pool." },
             { id: 3, nombre: "Tartaruga", lat: -22.7561, lon: -41.8972, prot: [110, 250], surf: false, critica: true, es: "Agua cálida y atardeceres únicos.", pt: "Água quente.", en: "Warm water." },
             { id: 4, nombre: "Brava", lat: -22.7610, lon: -41.8720, prot: [220, 310], surf: false, critica: true, es: "Paisaje salvaje y sofisticado.", pt: "Paisagem selvagem.", en: "Wild landscape." },
@@ -246,28 +246,19 @@
         function abrirPix() { document.getElementById('modal-pix').style.display = 'block'; toggleMenu(); obtenerCotizaciones(); }
         function cerrarPix() { document.getElementById('modal-pix').style.display = 'none'; }
 
-async function obtenerCotizaciones() {
+        async function obtenerCotizaciones() {
             const container = document.getElementById('lista-cotizaciones');
             if (cotizacionesCache) { renderizarCotizaciones(cotizacionesCache); return; }
-            
-            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs font-bold uppercase tracking-widest">Sincronizando con mercados...</p>';
-            
+            container.innerHTML = '<p class="text-center text-slate-400 py-10 animate-pulse text-xs font-bold uppercase tracking-widest">Sincronizando mercados...</p>';
             try {
-                // 1. Consultamos Argentina y Brasil al mismo tiempo
                 const [resArg, resBrl] = await Promise.all([
                     fetch('https://dolarapi.com/v1/dolares/cripto'),
                     fetch('https://open.er-api.com/v6/latest/USD')
                 ]);
-
                 const dataArg = await resArg.json();
                 const dataBrl = await resBrl.json();
-                
-                // Usamos el promedio entre compra y venta para suavizar la base
                 const usdtBase = (dataArg.compra + dataArg.venta) / 2;
                 const usdBrl = dataBrl.rates.BRL; 
-
-                // AJUSTE MAESTRO DE PRECISIÓN:
-                // Multiplicamos por 0.988 para descontar el spread minorista y caer en el mayorista que usa Arq
                 const baseRealExacta = (usdtBase / usdBrl) * 0.988;
 
                 let ranking = [
@@ -278,47 +269,19 @@ async function obtenerCotizaciones() {
                     { name: "Mercado Pago", spread: 1.0187, icon: "fa-building-columns" },
                     { name: "Belo", spread: 1.0242, icon: "fa-bolt" },
                     { name: "Lemon Cash", spread: 1.0285, icon: "fa-lemon" }
-                ].map(ex => ({ 
-                    ...ex, 
-                    // Mostramos 2 decimales para que sea idéntico visualmente
-                    price: (baseRealExacta * ex.spread).toFixed(2) 
-                })).sort((a,b) => parseFloat(a.price) - parseFloat(b.price));
+                ].map(ex => ({ ...ex, price: (baseRealExacta * ex.spread).toFixed(2) })).sort((a,b) => parseFloat(a.price) - parseFloat(b.price));
 
                 cotizacionesCache = ranking;
                 renderizarCotizaciones(ranking);
-
             } catch (e) {
-                console.error("Error:", e);
-                container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Error de sincronización.</p>";
+                container.innerHTML = "<p class='text-center text-red-400 text-xs py-10'>Error de conexión.</p>";
             }
         }
-        // Actualizamos esta función para que acepte decimales
-        function renderizarCotizaciones(lista) {
-            const container = document.getElementById('lista-cotizaciones');
-            
-            // El ganador (cuadro verde) lo mostramos redondeado para que sea impactante
-            document.getElementById('mejor-pix-nombre').innerText = lista[0].name;
-            document.getElementById('mejor-pix-precio').innerText = `$ ${Math.floor(lista[0].price)}`;
-            
-            container.innerHTML = "";
-            lista.forEach(ex => {
-                const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2";
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid ${ex.icon} text-slate-400 text-xs"></i>
-                        <span class="font-bold text-slate-700 text-[11px] uppercase">${ex.name}</span>
-                    </div>
-                    <span class="font-black text-slate-900 text-sm">$ ${ex.price}</span>
-                `;
-                container.appendChild(div);
-            });
-        }
 
         function renderizarCotizaciones(lista) {
             const container = document.getElementById('lista-cotizaciones');
             document.getElementById('mejor-pix-nombre').innerText = lista[0].name;
-            document.getElementById('mejor-pix-precio').innerText = `$ ${lista[0].price}`;
+            document.getElementById('mejor-pix-precio').innerText = `$ ${Math.floor(lista[0].price)}`;
             container.innerHTML = "";
             lista.forEach(ex => {
                 const div = document.createElement('div');
@@ -367,9 +330,7 @@ async function obtenerCotizaciones() {
                 
                 clearTimeout(fallbackTimeout);
                 setTimeout(() => document.getElementById('splash').style.display = 'none', 800);
-            } catch (e) { 
-                document.getElementById('splash').style.display = 'none';
-            }
+            } catch (e) { document.getElementById('splash').style.display = 'none'; }
         }
 
         async function seleccionarPlaya(playa) {
@@ -387,18 +348,24 @@ async function obtenerCotizaciones() {
                 const dM = await rM.json(); const dW = await rW.json();
                 const h = new Date().getHours();
                 
-                const vari = (playa.id % 3 === 0) ? 0.6 : (playa.id % 2 === 0) ? -0.5 : 0.2; 
-                document.getElementById('view-temp-aire').innerText = `${Math.round(dW.hourly.temperature_2m[h] + vari)}°`;
-                document.getElementById('view-st').innerText = `${Math.round(dW.hourly.apparent_temperature[h] + vari)}°`;
-                document.getElementById('view-temp-agua').innerText = `${(dM.hourly.sea_surface_temperature[h] + vari).toFixed(1)}°`;
-                document.getElementById('view-viento').innerText = `${dW.hourly.windspeed_10m[h]} km/h`;
+                // MICROCLIMA CALIBRADO
+                const tempAireReal = Math.round(dW.hourly.temperature_2m[h]);
+                let stReal = Math.round(dW.hourly.apparent_temperature[h]);
+
+                // Regla lógica: Si la Sensación Térmica (ST) se dispara absurdamente (>2 grados de diferencia)
+                // sin que haga calor extremo, la corregimos a un valor realista (Temp + 1).
+                if (tempAireReal < 28 && stReal > (tempAireReal + 2)) {
+                    stReal = tempAireReal + 1;
+                }
+
+                document.getElementById('view-temp-aire').innerText = `${tempAireReal}°`;
+                document.getElementById('view-st').innerText = `${stReal}°`;
+                document.getElementById('view-temp-agua').innerText = `${dM.hourly.sea_surface_temperature[h].toFixed(1)}°`;
+                document.getElementById('view-viento').innerText = `${Math.round(dW.hourly.windspeed_10m[h])} km/h`;
 
                 const sunriseStr = document.getElementById('view-sunrise').innerText;
                 const sunsetStr = document.getElementById('view-sunset').innerText;
-                const hActualMins = h * 60 + new Date().getMinutes();
-                const [hRise, mRise] = sunriseStr.split(':').map(Number);
-                const [hSet, mSet] = sunsetStr.split(':').map(Number);
-                const esDeDia = hActualMins > (hRise * 60 + mRise) && hActualMins < (hSet * 60 + mSet);
+                const esDeDia = (h * 60 + new Date().getMinutes()) > (parseInt(sunriseStr.split(':')[0])*60 + parseInt(sunriseStr.split(':')[1])) && (h * 60 + new Date().getMinutes()) < (parseInt(sunsetStr.split(':')[0])*60 + parseInt(sunsetStr.split(':')[1]));
                 document.getElementById('view-clima-icon').innerHTML = esDeDia ? '<i class="fa-solid fa-sun text-yellow-300"></i>' : '<i class="fa-solid fa-moon text-sky-200"></i>';
 
                 const olasCont = document.getElementById('container-olas');
@@ -418,10 +385,9 @@ async function obtenerCotizaciones() {
                 document.getElementById('view-marea').innerText = valMarea;
                 document.getElementById('view-marea-desc').innerText = valMarea > 0.9 ? "ALTA" : "BAJA";
 
-                const mareaMala = playa.critica && valMarea > 0.9;
                 const card = document.getElementById('main-card');
                 const alerta = document.getElementById('alerta-arena');
-                if (mareaMala) {
+                if (playa.critica && valMarea > 0.9) {
                     card.className = "bg-gradient-warning rounded-[2.5rem] p-6 text-white shadow-xl relative min-h-[400px]";
                     alerta.classList.remove('hidden');
                     document.getElementById('msg-arena').innerText = i18n[datosGlobales.lang].arenaNo;
