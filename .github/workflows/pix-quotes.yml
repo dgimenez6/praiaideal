@@ -1,5 +1,10 @@
 name: Update PIX quotes
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pix-quotes.yml'
+      - 'scripts/update_pix.py'
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
