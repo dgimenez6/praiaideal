@@ -1,7 +1,8 @@
-const CACHE_NAME = "praiaideal-shell-v7";
+const CACHE_NAME = "praiaideal-shell-v8";
 const SHELL = [
   "./",
   "./index.html",
+  "./enhancements.js",
   "./privacidade.html",
   "./manifest.json",
   "./icono.svg",
