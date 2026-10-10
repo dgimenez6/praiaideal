@@ -38,3 +38,13 @@ Check the Spanish, Portuguese, and English views; the displayed Búzios local ti
 `enhancements.js` adds relax/family/swimming/snorkeling/surf preferences without changing manual beach geography. Surf mode considers only owner-marked surf beaches. Other plans penalize exposed surf profiles; family and snorkeling preferences are transparent editorial choices, not safety or visibility measurements. Upcoming 09:00 and 15:00 slots use MET wind/air forecasts and interpolated tide tables, with each slot's date shown. Selecting a suggested beach displays its current conditions, not the future slot's conditions.
 
 Seven trail cards include terrain, source links, preparation, reference map searches and published distance/time ranges where supported. Map searches are not verified trailheads or GPX routes. Current access, facilities and closures remain unconfirmed. Images are inherited site assets. No visitor reports or live parking/service availability are invented. Access notes cite Central Búzios; trail sources include the municipality, Cactus, RL Trips, Visit Búzios and the dated firsthand account linked on the Emerências card. Review date is 2026-10-10.
+
+
+## Visitor guides and discovery
+
+- `portal.js`: top three current options, shareable beach/plan/language links, local-device favorites, weather alternatives, FAQs and guide directory. No trackers or geolocation.
+- Sand guidance is independent of wind shelter. All beaches show estimated tide effects; Manguinhos also receives the existing high-tide ranking penalty using a separate local sensitivity rule. No beach-specific height threshold or measured beach width is claimed. Brava/Manguinhos local experience is labeled as a report, not live data.
+- `scripts/build_guides.py` generates 81 static pages (16 beaches, 7 trails and 4 directory/planning/partnership pages in ES/PT/EN), sitemap and robots.txt from reviewed `scripts/guide-data.json`. Run after editing editorial data.
+- Contributions link to GitHub issues (account required), reviewed manually. There is no live visitor feed or automatic moderation backend.
+- No affiliate relationship, exclusive coupon or sponsor is active. Partnerships page explains direct provider bookings and contains only an incoming partnership contact. Sponsored placements must be labeled and must not alter rankings.
+- Search Console ownership verification and commercial agreements remain external setup tasks; publishing a sitemap does not guarantee indexing or traffic.

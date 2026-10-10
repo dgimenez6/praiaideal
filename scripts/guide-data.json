@@ -1,0 +1,420 @@
+{
+  "beaches": [
+    {
+      "id": 0,
+      "nombre": "Geribá",
+      "lat": -22.7753,
+      "lon": -41.9056,
+      "prot": [
+        250,
+        320
+      ],
+      "surf": true,
+      "es": "La meca del surf. Amplias playas.",
+      "pt": "A meca do surf. Praias amplas.",
+      "en": "The surf mecca. Wide beaches."
+    },
+    {
+      "id": 1,
+      "nombre": "João Fernandes",
+      "lat": -22.7422,
+      "lon": -41.8764,
+      "prot": [
+        110,
+        250
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Aguas cristalinas. Ideal con viento Sur.",
+      "pt": "Aguas cristalinas.",
+      "en": "Crystal clear waters."
+    },
+    {
+      "id": 2,
+      "nombre": "Ferradura",
+      "lat": -22.7678,
+      "lon": -41.8881,
+      "prot": [
+        0,
+        110
+      ],
+      "surf": false,
+      "es": "Piscina natural. Ideal con viento Norte.",
+      "pt": "Piscina natural.",
+      "en": "Natural pool."
+    },
+    {
+      "id": 3,
+      "nombre": "Tartaruga",
+      "lat": -22.7561,
+      "lon": -41.8972,
+      "prot": [
+        110,
+        250
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Agua cálida y atardeceres únicos.",
+      "pt": "Água quente.",
+      "en": "Warm water."
+    },
+    {
+      "id": 4,
+      "nombre": "Brava",
+      "lat": -22.761,
+      "lon": -41.872,
+      "prot": [
+        220,
+        310
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Paisaje salvaje y sofisticado.",
+      "pt": "Paisagem selvagem.",
+      "en": "Wild landscape."
+    },
+    {
+      "id": 5,
+      "nombre": "Azeda",
+      "lat": -22.7461,
+      "lon": -41.8805,
+      "prot": [
+        130,
+        260
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Pequeñas y paradisíacas.",
+      "pt": "Pequenas e paradisíacas.",
+      "en": "Small and paradisiacal."
+    },
+    {
+      "id": 6,
+      "nombre": "Azedinha",
+      "lat": -22.7455,
+      "lon": -41.8795,
+      "prot": [
+        130,
+        260
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Vecina de Azeda, más íntima.",
+      "pt": "Vizinha da Azeda.",
+      "en": "Neighbor to Azeda."
+    },
+    {
+      "id": 7,
+      "nombre": "Forno",
+      "lat": -22.757,
+      "lon": -41.874,
+      "prot": [
+        0,
+        90
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Arena roja y agua mansa.",
+      "pt": "Areia vermelha.",
+      "en": "Red sand."
+    },
+    {
+      "id": 8,
+      "nombre": "Tucuns",
+      "lat": -22.795,
+      "lon": -41.933,
+      "prot": [
+        180,
+        270
+      ],
+      "surf": true,
+      "es": "Extensa y virgen. Surf.",
+      "pt": "Extensa e virgem.",
+      "en": "Extensive and virgin."
+    },
+    {
+      "id": 9,
+      "nombre": "Manguinhos",
+      "lat": -22.765,
+      "lon": -41.918,
+      "prot": [
+        0,
+        120
+      ],
+      "surf": false,
+      "es": "Ideal para caminar y atardecer.",
+      "pt": "Ideal para caminhar.",
+      "en": "Great for walking."
+    },
+    {
+      "id": 10,
+      "nombre": "Ossos",
+      "lat": -22.748,
+      "lon": -41.883,
+      "prot": [
+        110,
+        250
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Histórica y pintoresca.",
+      "pt": "Histórica e pitoresca.",
+      "en": "Historic and picturesque."
+    },
+    {
+      "id": 11,
+      "nombre": "Praia do Canto",
+      "lat": -22.7535,
+      "lon": -41.8875,
+      "prot": [
+        110,
+        250
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "En el centro, mar calmo.",
+      "pt": "No centro, mar calmo.",
+      "en": "In the center, calm sea."
+    },
+    {
+      "id": 12,
+      "nombre": "João Fernandinho",
+      "lat": -22.741,
+      "lon": -41.875,
+      "prot": [
+        110,
+        250
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Pequeña y exclusiva.",
+      "pt": "Pequena e exclusiva.",
+      "en": "Small and exclusive."
+    },
+    {
+      "id": 13,
+      "nombre": "Ferradurinha",
+      "lat": -22.7777,
+      "lon": -41.8988,
+      "prot": [
+        0,
+        110
+      ],
+      "surf": false,
+      "critica": true,
+      "es": "Escondida y mansa.",
+      "pt": "Escondida e mansa.",
+      "en": "Hidden and calm."
+    },
+    {
+      "id": 14,
+      "nombre": "Caravelas",
+      "lat": -22.813,
+      "lon": -41.946,
+      "prot": [
+        180,
+        270
+      ],
+      "surf": true,
+      "es": "Mar abierto, excelente surf.",
+      "pt": "Mar aberto, surf.",
+      "en": "Open sea, surf."
+    },
+    {
+      "id": 15,
+      "nombre": "José Gonçalves",
+      "lat": -22.788,
+      "lon": -41.942,
+      "prot": [
+        180,
+        270
+      ],
+      "surf": true,
+      "critica": true,
+      "es": "Reserva natural. Salvaje.",
+      "pt": "Reserva natural.",
+      "en": "Nature reserve."
+    }
+  ],
+  "trails": [
+    {
+      "nombre": "Ponta do Pai Vitório",
+      "dif": {
+        "es": "Fácil",
+        "pt": "Fácil",
+        "en": "Easy"
+      },
+      "img": "trilha1.jpg",
+      "es": "Un mirador natural con una vista icónica.",
+      "pt": "Um mirante natural com uma vista icônica.",
+      "en": "A natural viewpoint with an iconic view."
+    },
+    {
+      "nombre": "Serra das Emerências",
+      "dif": {
+        "es": "Media",
+        "pt": "Média",
+        "en": "Medium"
+      },
+      "img": "trilha2.jpg",
+      "es": "El punto más elevado de la ciudad.",
+      "pt": "O ponto mais elevado da cidade.",
+      "en": "The highest point in town."
+    },
+    {
+      "nombre": "Mangue de Pedras",
+      "dif": {
+        "es": "Fácil",
+        "pt": "Fácil",
+        "en": "Easy"
+      },
+      "img": "trilha3.jpg",
+      "es": "Raro manglar de piedras.",
+      "pt": "Manguezal de pedras.",
+      "en": "Stone mangrove."
+    },
+    {
+      "nombre": "Caravelas x Pontal do Peró",
+      "dif": {
+        "es": "Fácil",
+        "pt": "Fácil",
+        "en": "Easy"
+      },
+      "img": "trilha4.jpg",
+      "es": "Recorrido de 6km por playas vírgenes.",
+      "pt": "Percurso de 6km por praias virgens.",
+      "en": "6km route through virgin beaches."
+    },
+    {
+      "nombre": "Ponta da Lagoinha",
+      "dif": {
+        "es": "Fácil",
+        "pt": "Fácil",
+        "en": "Easy"
+      },
+      "img": "trilha5.jpg",
+      "es": "Formaciones rocosas milenarias.",
+      "pt": "Formações rochosas milenares.",
+      "en": "Ancient rock formations."
+    },
+    {
+      "nombre": "Tartaruga x Praia do Canto",
+      "dif": {
+        "es": "Media",
+        "pt": "Média",
+        "en": "Medium"
+      },
+      "img": "trilha6.jpg",
+      "es": "Sendero costero paradisíaco.",
+      "pt": "Trilha costeira paradisíaca.",
+      "en": "Coastal trail."
+    },
+    {
+      "nombre": "Praia Olho de Boi",
+      "dif": {
+        "es": "Media",
+        "pt": "Média",
+        "en": "Medium"
+      },
+      "img": "trilha7.jpg",
+      "es": "Caminata hacia playa naturista.",
+      "pt": "Caminhada para praia naturista.",
+      "en": "Hike to a nudist beach."
+    }
+  ],
+  "details": [
+    {
+      "kind": "short",
+      "start": "Ponta do Pai Vitório, Búzios",
+      "source": "https://buzios.rj.gov.br/obras-de-revitalizacao-da-ponta-do-pai-vitorio-avancam-e-ultrapassam-80-de-conclusao/",
+      "es": "Mirador en la zona de Rasa. El paseo al mirador y la bajada a la playa son recorridos distintos. Hay desnivel; no asumir accesibilidad sin escalones.",
+      "pt": "Mirante na região da Rasa. O acesso ao mirante e a descida à praia são percursos distintos. Há desnível; não presuma acesso sem degraus.",
+      "en": "Viewpoint in Rasa. The viewpoint walk and beach descent are different routes. Slopes are present; do not assume step-free access."
+    },
+    {
+      "kind": "hike",
+      "start": "Serra das Emerências, Búzios",
+      "source": "https://buzios.rj.gov.br/serra-das-emerencias-em-buzios/",
+      "distance": {
+        "es": "Desde Tucuns: aprox. 1–1 h 45 ida y vuelta. Desde José Gonçalves: aprox. 2–2 h 45. Referencia publicada en 2023.",
+        "pt": "Por Tucuns: cerca de 1–1h45 ida e volta. Por José Gonçalves: cerca de 2–2h45. Referência publicada em 2023.",
+        "en": "Via Tucuns: about 1–1h45 return. Via José Gonçalves: about 2–2h45. Published reference from 2023."
+      },
+      "extraSource": "https://www.viciadaemviajar.com/trilhas-em-buzios/",
+      "es": "Uno de los puntos más altos de Búzios, entre Tucuns y José Gonçalves. La subida por Tucuns es más empinada; el otro acceso es más largo. Planificá el regreso con luz.",
+      "pt": "Um dos pontos mais altos de Búzios, entre Tucuns e José Gonçalves. A subida por Tucuns é mais íngreme; o outro acesso é mais longo. Planeje voltar com luz.",
+      "en": "One of Búzios’ highest viewpoints, between Tucuns and José Gonçalves. The Tucuns ascent is steeper; the alternative is longer. Plan to return in daylight."
+    },
+    {
+      "kind": "short",
+      "start": "Mangue de Pedras, Búzios",
+      "source": "https://buzios.rj.gov.br/meio-ambiente-faz-visita-tecnica-no-brejo-da-rasa/",
+      "es": "Manglar en la zona de Rasa. Se puede visitar por separado o combinar con Pai Vitório; el circuito combinado es más largo. Respetá raíces, fauna y vegetación.",
+      "pt": "Manguezal na região da Rasa. Pode ser visitado sozinho ou combinado com Pai Vitório; o circuito combinado é mais longo. Respeite raízes, fauna e vegetação.",
+      "en": "Mangrove in Rasa. Visit separately or combine with Pai Vitório; the combined circuit is longer. Protect roots, wildlife and vegetation."
+    },
+    {
+      "kind": "hike",
+      "start": "Praia de Caravelas, Búzios",
+      "source": "https://cactusexperiencias.com.br/es/experiencia/sendero-caravelas-pontal-do-pero/",
+      "distance": {
+        "es": "Recorrido publicado: aprox. 6 km. Confirmá con el operador si tu itinerario incluye retorno y traslado.",
+        "pt": "Percurso publicado: cerca de 6 km. Confirme com o operador se o itinerário inclui retorno e transporte.",
+        "en": "Published route: about 6 km. Confirm whether your itinerary includes return travel and transfers."
+      },
+      "es": "Travesía desde Caravelas hacia Amendoeira y Pontal do Peró, en Cabo Frio. Incluye bosque y sectores costeros. Prepará transporte de regreso y considerá guía local.",
+      "pt": "Travessia de Caravelas por Amendoeira até o Pontal do Peró, em Cabo Frio. Inclui mata e trechos costeiros. Planeje transporte de retorno e considere guia local.",
+      "en": "Crossing from Caravelas via Amendoeira towards Pontal do Peró in Cabo Frio, through woodland and coastal sections. Arrange return transport and consider a local guide."
+    },
+    {
+      "kind": "short",
+      "start": "Ponta da Lagoinha, Búzios",
+      "source": "https://visitbuzios.com.br/ponta-da-lagoinha/",
+      "es": "Paseo a un atractivo geológico sobre rocas costeras. La duración depende de las paradas. Las piedras mojadas pueden resbalar; evitá acercarte al oleaje.",
+      "pt": "Passeio a um atrativo geológico em rochas costeiras. A duração depende das paradas. Rochas molhadas podem escorregar; evite se aproximar das ondas.",
+      "en": "Walk to a geological coastal attraction. Duration depends on stops. Wet rocks can be slippery; keep clear of waves."
+    },
+    {
+      "kind": "hike",
+      "start": "Praia da Tartaruga, Búzios",
+      "source": "https://rltrips.com/praia-da-tartaruga-praia-do-canto?lang=pt-BR",
+      "es": "Travesía costera entre Tartaruga y Canto, con variantes por Virgens y Amores. Confirmá la variante y el retorno. Sectores de roca pueden cambiar con el mar; considerá guía.",
+      "pt": "Travessia costeira entre Tartaruga e Canto, com variantes por Virgens e Amores. Confirme o percurso e o retorno. Trechos de rocha variam com o mar; considere guia.",
+      "en": "Coastal crossing between Tartaruga and Canto, with variants via Virgens and Amores. Confirm the route and return plan. Rocky sections depend on sea conditions; consider a guide."
+    },
+    {
+      "kind": "hike",
+      "start": "Praia Brava, Búzios",
+      "source": "https://buzios.rj.gov.br/praia-brava-a-mais-requintada-de-buzios/",
+      "es": "Acceso desde el canto derecho de Brava, con subida y bajada por el morro. Destino naturista: consultá y respetá las reglas locales. No fotografíes a otras personas sin permiso.",
+      "pt": "Acesso pelo canto direito da Brava, com subida e descida pelo morro. Destino naturista: consulte e respeite as regras locais. Não fotografe outras pessoas sem permissão.",
+      "en": "Access from the right-hand end of Brava, up and over the hill. A naturist destination: check and respect local rules. Do not photograph others without permission."
+    }
+  ],
+  "access": {
+    "5": {
+      "es": "Acceso a pie desde Ossos, con escaleras. No es un acceso sin escalones.",
+      "pt": "Acesso a pé pelos Ossos, com escadas. Não é um acesso sem degraus.",
+      "en": "Walking access from Ossos with stairs; not step-free.",
+      "source": "https://www.centralbuzios.com/pt/praia/azeda"
+    },
+    "6": {
+      "es": "Vecina de Azeda; planificá el acceso por esa zona y confirmá el tramo final.",
+      "pt": "Vizinha da Azeda; planeje o acesso por essa região e confirme o trecho final.",
+      "en": "Adjacent to Azeda; plan access via that area and confirm the final section.",
+      "source": "https://www.centralbuzios.com/pt/praia/azeda"
+    },
+    "12": {
+      "es": "Hay acceso con escalones desde las calles cercanas. Confirmá el punto de entrada.",
+      "pt": "Há acesso por degraus nas ruas próximas. Confirme o ponto de entrada.",
+      "en": "Access includes steps from nearby streets; confirm the entrance.",
+      "source": "https://www.centralbuzios.com/pt/praia/joao-fernandinho"
+    },
+    "13": {
+      "es": "Acceso a pie desde el canto izquierdo de Geribá.",
+      "pt": "Acesso a pé pelo canto esquerdo de Geribá.",
+      "en": "Walking access from the left-hand end of Geribá.",
+      "source": "https://www.centralbuzios.com/pt/praia/ferradurinha"
+    }
+  }
+}

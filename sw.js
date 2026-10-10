@@ -1,8 +1,9 @@
-const CACHE_NAME = "praiaideal-shell-v9";
+const CACHE_NAME = "praiaideal-shell-v10";
 const SHELL = [
   "./",
   "./index.html",
   "./enhancements.js",
+  "./portal.js",
   "./privacidade.html",
   "./manifest.json",
   "./icono.svg",
@@ -33,7 +34,7 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
 
-  if (request.mode === "navigate" || url.pathname.endsWith("/enhancements.js")) {
+  if (request.mode === "navigate" || url.pathname.endsWith("/enhancements.js") || url.pathname.endsWith("/portal.js")) {
     event.respondWith(fetch(request, {cache: "no-store"}).then(response => {
       if (response.ok) {
         const copy = response.clone();

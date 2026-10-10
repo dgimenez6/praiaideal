@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
-    <title>PraiaIdeal | Condiciones de playa en Búzios</title>
+    <title>PraiaIdeal | Qué playa elegir hoy en Búzios</title>
+    <meta name="description" content="Elegí playa en Búzios según viento, marea y tu plan. Orientación sobre arena, guías de playas y trilhas, paseos y consejos para organizar el día.">
+    <link rel="canonical" href="https://praiaideal.com/">
+    <meta property="og:title" content="PraiaIdeal | Qué playa elegir hoy en Búzios">
+    <meta property="og:description" content="Viento, marea, arena y guías para planear tu día en Búzios.">
+    <meta property="og:url" content="https://praiaideal.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://praiaideal.com/trilha1.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -179,6 +186,8 @@
             <p><a href="https://api.met.no/" target="_blank" rel="noopener noreferrer">MET Norway</a> · <a href="https://tabuamare.api.br/" target="_blank" rel="noopener noreferrer">Tábua de Maré</a> · <a href="https://upwell.pfeg.noaa.gov/erddap/griddap/ww3_global.html" target="_blank" rel="noopener noreferrer">NOAA / PacIOOS WaveWatch III</a></p>
             <a id="privacy-link" href="privacidade.html" class="mt-2 inline-block underline">Privacidad</a>
         </footer>
+    <nav aria-label="Guías de Búzios" class="bg-white rounded-2xl p-4 border text-sm flex flex-wrap gap-4"><a href="/playas/">Guías de playas</a><a href="/trilhas/">Trilhas y paseos</a><a href="/guia/">Planear tu día</a><a href="/alianzas/">Paseos, autos y alianzas</a><a href="/pt/playas/">Guias em português</a><a href="/en/playas/">Guides in English</a></nav>
+    <noscript><p>El pronóstico requiere JavaScript. Las guías de playas y trilhas están disponibles en los enlaces anteriores.</p></noscript>
     </main>
 
     <script>
@@ -730,9 +739,10 @@
             const filtro = document.getElementById("buscador").value.trim().toLocaleLowerCase(locale);
             const lista = rankingPlayas.length ? rankingPlayas : playas;
             lista.filter(p => p.nombre.toLocaleLowerCase(locale).includes(filtro)).forEach((p, index) => {
-                const div = document.createElement("div");
+                const div = document.createElement("button");
+                div.type = "button";
                 const esGanadora = playaGanadora && p.id === playaGanadora.id;
-                div.className = `beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 ${esGanadora ? "border-sky-500" : "border-emerald-400"} cursor-pointer`;
+                div.className = `w-full text-left beach-item bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border-l-4 ${esGanadora ? "border-sky-500" : "border-emerald-400"} cursor-pointer`;
                 div.onclick = () => { seleccionarPlaya(playas.find(x => x.id === p.id)); window.scrollTo({top:0, behavior:"smooth"}); };
                 const badge = esGanadora ? `<span class="ml-2 rounded-full bg-sky-100 px-2 py-1 text-[9px] font-black text-sky-700">${i18n[datosGlobales.lang].rec}</span>` : "";
                 div.innerHTML = `<div class="flex flex-col"><span class="font-bold text-slate-700">${p.nombre}${badge}</span><p class="text-[10px] text-slate-400 mt-1">${p[datosGlobales.lang] || ""}</p></div><span class="text-[10px] text-slate-300">${index + 1}</span>`;
@@ -759,6 +769,7 @@
             window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(e => console.warn("PraiaIdeal: offline indisponible", e)));
         }
     </script>
-    <script src="enhancements.js?v=4"></script>
+    <script src="enhancements.js?v=5"></script>
+    <script src="portal.js?v=1"></script>
 </body>
 </html>
