@@ -1,4 +1,4 @@
-const CACHE_NAME = "praiaideal-shell-v5";
+const CACHE_NAME = "praiaideal-shell-v6";
 const SHELL = [
   "./",
   "./index.html",
