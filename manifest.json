@@ -1,24 +1,19 @@
 {
   "name": "PraiaIdeal Búzios",
   "short_name": "PraiaIdeal",
-  "description": "La mejor playa de Búzios según el viento y el mar",
-  "start_url": "index.html",
+  "description": "Sugerencias de playas de Búzios según el viento y las condiciones estimadas del mar.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0ea5e9",
   "theme_color": "#0ea5e9",
   "icons": [
     {
-      "src": "icono.png",
-      "sizes": "192x192",
-      "type": "image/png",
+      "src": "icono.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
-    },
-    {
-      "src": "icono.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
     }
   ]
 }
