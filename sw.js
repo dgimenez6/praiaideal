@@ -1,4 +1,4 @@
-const CACHE_NAME = "praiaideal-shell-v8";
+const CACHE_NAME = "praiaideal-shell-v9";
 const SHELL = [
   "./",
   "./index.html",
@@ -33,7 +33,7 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
 
-  if (request.mode === "navigate") {
+  if (request.mode === "navigate" || url.pathname.endsWith("/enhancements.js")) {
     event.respondWith(fetch(request, {cache: "no-store"}).then(response => {
       if (response.ok) {
         const copy = response.clone();
