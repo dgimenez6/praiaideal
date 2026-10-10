@@ -39,7 +39,7 @@ calcularRanking = function(){return playas.filter(p=>beachPlan!=='surf'||p.surf)
  if(p.critica&&datosGlobales.porcentajeMarea>=0.7&&datosGlobales.porcentajeMarea!==null)razones.push(i18n[datosGlobales.lang].reasonTideHigh);
  return {...p,score:scoreForPlan(p,datosGlobales.dir,datosGlobales.vel,datosGlobales.porcentajeMarea),razones};
  }).sort((a,b)=>b.score-a.score||a.nombre.localeCompare(b.nombre,'pt-BR'));};
-function changeBeachPlan(plan){beachPlan=plan;rankingPlayas=datosGlobales.actualizado?calcularRanking():[];playaGanadora=rankingPlayas[0]||null;if(playaGanadora)seleccionarPlaya(playaGanadora);renderGuide();}
+function changeBeachPlan(plan){beachPlan=plan;rankingPlayas=datosGlobales.actualizado?calcularRanking():[];playaGanadora=rankingPlayas[0]||null;renderizarLista();if(playaGanadora)seleccionarPlaya(playaGanadora);renderGuide();}
 function renderGuide(){
  const t=guideText[datosGlobales.lang];const controls=document.getElementById('plan-controls');controls.replaceChildren(guideElement('h2',t.plan,'font-bold text-slate-800 mb-3'));
  const buttons=guideElement('div','','flex flex-wrap gap-2');['relax','family','swim','snorkel','surf'].forEach(plan=>{const b=guideElement('button',t[plan],'rounded-xl px-3 py-2 text-sm '+(plan===beachPlan?'bg-sky-700 text-white':'bg-slate-100 text-slate-700'));b.type='button';b.setAttribute('aria-pressed',String(plan===beachPlan));b.onclick=()=>changeBeachPlan(plan);buttons.append(b)});controls.append(buttons);
