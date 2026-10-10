@@ -33,3 +33,8 @@ The browser requests weather and wave data from the listed providers and PIX/tid
 No build step is required. GitHub Pages must publish the intended branch, with DNS/TLS active for `praiaideal.com`.
 
 Check the Spanish, Portuguese, and English views; the displayed Búzios local time; tide-table and provider outage states; stable recommendations for unchanged inputs; the named reference port; and the offline shell.
+## Activity planning and trail guide
+
+`enhancements.js` adds relax/family/swimming/snorkeling/surf preferences without changing manual beach geography. Surf mode considers only owner-marked surf beaches. Other plans penalize exposed surf profiles; family and snorkeling preferences are transparent editorial choices, not safety or visibility measurements. Upcoming 09:00 and 15:00 slots use MET wind/air forecasts and interpolated tide tables, with each slot's date shown. Selecting a suggested beach displays its current conditions, not the future slot's conditions.
+
+Seven trail cards include terrain, source links, preparation, reference map searches and published distance/time ranges where supported. Map searches are not verified trailheads or GPX routes. Current access, facilities and closures remain unconfirmed. Images are inherited site assets. No visitor reports or live parking/service availability are invented. Access notes cite Central Búzios; trail sources include the municipality, Cactus, RL Trips, Visit Búzios and the dated firsthand account linked on the Emerências card. Review date is 2026-10-10.
