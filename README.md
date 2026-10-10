@@ -26,7 +26,7 @@ GitHub Actions schedules can be delayed. The UI displays each source timestamp a
 
 ## Privacy and offline behavior
 
-The browser requests weather, tide, and wave data directly from the listed providers. Their servers may receive technical request data such as IP address and browser headers. No Google Analytics is loaded. The service worker caches only the static app shell; live conditions require a network connection.
+The browser requests weather and wave data from the listed providers and PIX/tide snapshots from public GitHub files. Tide tables are refreshed at most once per day by the scheduled updater; snapshots older than 72 hours are rejected. Weather remains visible if tide data fail. Their servers may receive technical request data such as IP address and browser headers. No Google Analytics is loaded. The service worker caches only the static app shell; live conditions require a network connection.
 
 ## Deploy and smoke-check
 
