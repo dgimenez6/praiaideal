@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/pix-quotes.yml'
       - 'scripts/update_pix.py'
+      - 'scripts/update_tides.py'
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
@@ -24,11 +25,13 @@ jobs:
           python-version: '3.12'
       - name: Fetch documented public API
         run: python scripts/update_pix.py
+      - name: Refresh tide tables daily
+        run: python scripts/update_tides.py
       - name: Commit snapshot
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add pix-quotes.json
+          git add pix-quotes.json tide-data.json
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'Update PIX quote snapshot'
           git pull --rebase origin main
