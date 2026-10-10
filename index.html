@@ -567,6 +567,7 @@
                 const [climaResult, mareaResult] = await Promise.allSettled([obtenerClimaBuzios(), obtenerPronosticoMarea()]);
                 if (climaResult.status !== 'fulfilled') throw climaResult.reason;
                 const clima = climaResult.value;
+                if (mareaResult.status === "rejected") console.warn("PraiaIdeal: tide unavailable", mareaResult.reason);
                 const mar = mareaResult.status === 'fulfilled' ? mareaResult.value : null;
                 const h = indiceHora(clima);
                 const indiceMarea = indiceHora(mar);
@@ -716,7 +717,7 @@
                 document.getElementById("view-reasons").textContent = prefijo + (item?.razones || []).join(" ");
             }
             const estado = document.getElementById("estado-datos");
-            if (!estado.classList.contains("hidden")) estado.textContent = i18n[lang].dataError;
+            if (!estado.classList.contains("hidden")) estado.textContent = datosGlobales.actualizado && !Number.isFinite(datosGlobales.marea) ? i18n[lang].tideUnavailable : i18n[lang].dataError;
             actualizarTextoDatos();
             renderizarLista();
         }
