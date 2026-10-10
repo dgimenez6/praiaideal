@@ -186,7 +186,7 @@
             <p><a href="https://api.met.no/" target="_blank" rel="noopener noreferrer">MET Norway</a> · <a href="https://tabuamare.api.br/" target="_blank" rel="noopener noreferrer">Tábua de Maré</a> · <a href="https://upwell.pfeg.noaa.gov/erddap/griddap/ww3_global.html" target="_blank" rel="noopener noreferrer">NOAA / PacIOOS WaveWatch III</a></p>
             <a id="privacy-link" href="privacidade.html" class="mt-2 inline-block underline">Privacidad</a>
         </footer>
-    <nav aria-label="Guías de Búzios" class="bg-white rounded-2xl p-4 border text-sm flex flex-wrap gap-4"><a href="/playas/">Guías de playas</a><a href="/trilhas/">Trilhas y paseos</a><a href="/guia/">Planear tu día</a><a href="/alianzas/">Paseos, autos y alianzas</a><a href="/pt/playas/">Guias em português</a><a href="/en/playas/">Guides in English</a></nav>
+    <nav aria-label="Guías de Búzios" class="bg-white rounded-2xl p-4 border text-sm flex flex-wrap gap-4"><a href="/playas/">Guías de playas</a><a href="/trilhas/">Trilhas y paseos</a><a href="/guia/">Planear tu día</a><a href="/pt/playas/">Guias em português</a><a href="/en/playas/">Guides in English</a></nav>
     <noscript><p>El pronóstico requiere JavaScript. Las guías de playas y trilhas están disponibles en los enlaces anteriores.</p></noscript>
     </main>
 
@@ -493,7 +493,11 @@
             pixRequest = (async () => {
                 try {
                     // Raw GitHub serves bot-updated snapshots without waiting for a Pages rebuild.
-                    const data = await obtenerJson("https://raw.githubusercontent.com/dgimenez6/praiaideal/main/pix-quotes.json?t=" + (force ? Date.now() : Math.floor(Date.now()/60000)));
+                    const stamp = force ? Date.now() : Math.floor(Date.now()/60000);
+                    let data;
+                    for (const url of ["https://raw.githubusercontent.com/dgimenez6/praiaideal/main/pix-quotes.json?t="+stamp, "./pix-quotes.json?t="+stamp]) {
+                        try { data = await obtenerJson(url); break; } catch (error) { console.warn("PraiaIdeal: PIX source unavailable", error); }
+                    }
                     if (!Array.isArray(data.providers) || !Number.isFinite(Date.parse(data.fetchedAt))) throw new Error("Invalid PIX snapshot");
                     pixSnapshot = data;
                 } catch (error) {
@@ -506,14 +510,14 @@
             return pixRequest;
         }
         function filasPix(snapshot, symbol, now = Date.now()) {
-            if (!snapshot || now - Date.parse(snapshot.fetchedAt) > 60*60000 || Date.parse(snapshot.fetchedAt) > now+5*60000) return [];
+            if (!snapshot || now - Date.parse(snapshot.fetchedAt) > 24*60*60000 || Date.parse(snapshot.fetchedAt) > now+5*60000) return [];
             return snapshot.providers.flatMap(p => {
                 const quote = p.quotes?.find(q => q.symbol === symbol);
                 const price = quote?.buy;
                 const time = Date.parse(p.updatedAt);
-                if (p.stale || !Number.isFinite(time) || now-time > 60*60000 || time > now+5*60000 || typeof price !== "number" || !Number.isFinite(price) || price <= 0 || !/^https:\/\//.test(p.url)) return [];
-                return [{...p, price}];
-            }).sort((a,b) => a.price-b.price || a.id.localeCompare(b.id));
+                if (!Number.isFinite(time) || now-time > 24*60*60000 || time > now+5*60000 || typeof price !== "number" || !Number.isFinite(price) || price <= 0 || !/^https:\/\//.test(p.url)) return [];
+                return [{...p, price, outdated: p.stale || now-time > 60*60000 || now-Date.parse(snapshot.fetchedAt)>60*60000}];
+            }).sort((a,b) => Number(a.outdated)-Number(b.outdated) || a.price-b.price || a.id.localeCompare(b.id));
         }
         function renderizarCotizaciones() {
             const t = i18n[datosGlobales.lang];
@@ -528,11 +532,12 @@
             const money = value => currency + " " + value.toLocaleString(locale,{minimumFractionDigits:2, maximumFractionDigits:currency === "ARS" ? 2 : 4});
             const time = value => new Intl.DateTimeFormat(locale,{timeZone:ZONA_HORARIA,day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).format(new Date(value));
             const rows = filasPix(pixSnapshot, symbol);
-            document.getElementById("pix-status").textContent = rows.length ? t.pixSnapshot + ": " + time(pixSnapshot.fetchedAt) + " (Búzios)" : t.pixUnavailable;
+            const oldNotice = {es:"Última referencia disponible; puede haber cambiado. Confirmá en la billetera.",pt:"Última referência disponível; pode ter mudado. Confirme na carteira.",en:"Latest available reference; rates may have changed. Check your wallet."};
+            document.getElementById("pix-status").textContent = rows.length ? t.pixSnapshot + ": " + time(pixSnapshot.fetchedAt) + " (Búzios)" + (rows.some(r=>r.outdated) ? " · "+oldNotice[datosGlobales.lang] : "") : t.pixUnavailable;
             const names = {"mercado-pago":"Mercado Pago","p2pme":"P2P.me","yodl-pay":"Yodl Pay","personal-pay":"Personal Pay","arq":"ARQ","global66":"Global66"};
             rows.forEach((row,index) => {
                 const card = document.createElement("div");
-                card.className = "border rounded-2xl p-4 " + (index === 0 ? "border-emerald-300 bg-emerald-50" : "border-slate-200");
+                card.className = "border rounded-2xl p-4 " + (!row.outdated && index === 0 ? "border-emerald-300 bg-emerald-50" : "border-slate-200");
                 const title = document.createElement("h3");
                 title.className = "font-bold text-slate-800";
                 title.textContent = (index+1) + ". " + (names[row.id] || row.id.charAt(0).toUpperCase()+row.id.slice(1));
@@ -544,7 +549,7 @@
                 total.textContent = t.pixTotal + ": " + (amount === null ? "—" : money(amount*row.price));
                 const timestamp = document.createElement("p");
                 timestamp.className = "text-xs text-slate-500 mt-1";
-                timestamp.textContent = time(row.updatedAt) + " (Búzios)" + (row.hasFees ? " · " + t.pixFees : "");
+                timestamp.textContent = time(row.updatedAt) + " (Búzios)" + (row.outdated ? " · "+oldNotice[datosGlobales.lang] : "") + (row.hasFees ? " · " + t.pixFees : "");
                 const link = document.createElement("a");
                 link.href = row.url; link.target = "_blank"; link.rel = "noopener noreferrer sponsored";
                 link.className = "text-xs text-emerald-700 underline mt-2 inline-block";
@@ -769,7 +774,7 @@
             window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(e => console.warn("PraiaIdeal: offline indisponible", e)));
         }
     </script>
-    <script src="enhancements.js?v=5"></script>
-    <script src="portal.js?v=1"></script>
+    <script src="enhancements.js?v=6"></script>
+    <script src="portal.js?v=2"></script>
 </body>
 </html>

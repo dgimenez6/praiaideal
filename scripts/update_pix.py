@@ -3,6 +3,7 @@ import json
 import math
 import pathlib
 import urllib.request
+import time
 from datetime import datetime, timezone
 
 
@@ -34,8 +35,15 @@ def normalize(payload):
 
 if __name__ == '__main__':
     request = urllib.request.Request('https://api.comparapix.ar/quotes', headers={'User-Agent': 'PraiaIdeal/1.0 (praiaideal.com)', 'Accept': 'application/json'})
-    with urllib.request.urlopen(request, timeout=30) as response:
-        data = normalize(json.load(response))
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                data = normalize(json.load(response))
+            break
+        except Exception:
+            if attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
     target = pathlib.Path(__file__).resolve().parents[1] / 'pix-quotes.json'
     temporary = target.with_suffix('.tmp')
     temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

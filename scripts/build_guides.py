@@ -27,7 +27,7 @@ def page(lang,path,title,desc,body):
  nav=''.join(link(t[k],('/?lang='+lang) if k=='home' else prefix(lang)+p) for k,p in [('home',''),('beaches','playas/'),('trails','trilhas/'),('guide','guia/')])
  langs=' · '.join(link(l.upper(),prefix(l)+path) for l in T)
  data={'@context':'https://schema.org','@type':'WebPage','name':title,'description':desc,'url':url,'inLanguage':lang}
- content=f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} | PraiaIdeal</title><meta name="description" content="{esc(desc)}"><link rel="canonical" href="{url}">{alternates}<meta property="og:title" content="{esc(title)} | PraiaIdeal"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{url}"><meta property="og:type" content="website"><link rel="icon" href="/icono.svg"><style>{CSS}</style><script type="application/ld+json">{json.dumps(data,ensure_ascii=False)}</script></head><body><header>{link('PraiaIdeal','/?lang='+lang)}<nav aria-label="Navigation">{nav}</nav><div>{langs}</div></header><main><h1>{esc(title)}</h1><p class="muted">{esc(desc)}</p>{body}</main><footer>{link(t['partners'],prefix(lang)+'alianzas/')} · {link(t['privacy'],'/privacidade.html')}<p>{esc(t['review'])}</p></footer></body></html>'''
+ content=f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} | PraiaIdeal</title><meta name="description" content="{esc(desc)}"><link rel="canonical" href="{url}">{alternates}<meta property="og:title" content="{esc(title)} | PraiaIdeal"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{url}"><meta property="og:type" content="website"><link rel="icon" href="/icono.svg"><style>{CSS}</style><script type="application/ld+json">{json.dumps(data,ensure_ascii=False)}</script></head><body><header>{link('PraiaIdeal','/?lang='+lang)}<nav aria-label="Navigation">{nav}</nav><div>{langs}</div></header><main><h1>{esc(title)}</h1><p class="muted">{esc(desc)}</p>{body}</main><footer>{link(t['privacy'],'/privacidade.html')}<p>{esc(t['review'])}</p></footer></body></html>'''
  dest=ROOT/(prefix(lang).strip('/')+'/'+path).lstrip('/')/'index.html';dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(content,encoding='utf-8');urls.append(url)
 
 for lang,t in T.items():
@@ -54,9 +54,7 @@ for lang,t in T.items():
  page(lang,'trilhas/',t['trails'],t['guide']+' · PraiaIdeal','<div class="grid">'+''.join(cards)+'</div>')
  body=section(t['rain'],''.join(paragraph(t[k]) for k in ['r1','r2','r3']))+link(t['home'],'/?lang='+lang,True)+section(t['source'],link('SETUR RJ',OFFICIAL))
  page(lang,'guia/',t['guide'],t['rain'],body)
- body=''.join(section(t['partners'] if k=='p1' else t['source'] if k=='p4' else t['partners'],paragraph(t[k])) for k in ['p1','p2','p3','p4'])
- body+=link(t['contact'],'https://wa.me/5522997601592?text='+quote('Hola Damian, quiero proponer una alianza para PraiaIdeal. Empresa, servicio y beneficio: '),True)
- page(lang,'alianzas/',t['partners'],t['p1'],body)
+
 
 urls.insert(0,DOMAIN+'/');urls.append(DOMAIN+'/privacidade.html')
 (ROOT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join('<url><loc>'+esc(u)+'</loc></url>\n' for u in urls)+'</urlset>\n',encoding='utf-8')

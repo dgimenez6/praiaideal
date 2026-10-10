@@ -6,6 +6,8 @@ on:
       - '.github/workflows/pix-quotes.yml'
       - 'scripts/update_pix.py'
       - 'scripts/update_tides.py'
+      - 'index.html'
+      - 'portal.js'
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
@@ -26,6 +28,7 @@ jobs:
       - name: Fetch documented public API
         run: python scripts/update_pix.py
       - name: Refresh tide tables daily
+        continue-on-error: true
         run: python scripts/update_tides.py
       - name: Commit snapshot
         run: |
