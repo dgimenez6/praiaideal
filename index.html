@@ -311,14 +311,10 @@
         }
         async function obtenerEventosMarea() {
             if (eventosMareaBuzios && Date.now() - mareaConsultada < 6 * 60 * 60 * 1000) return eventosMareaBuzios;
-            const hoje = mesLocal(new Date());
-            const pHoje = partesLocales();
-            const meses = [hoje];
-            if (Number(pHoje.day) === 1) meses.unshift(mesLocal(new Date(), -1));
-            if (Number(pHoje.day) >= hoje.days - 1) meses.push(mesLocal(new Date(), 1));
-            const respostas = await Promise.all(meses.map(m =>
-                obtenerJson(`https://tabuamare.api.br/api/v2/geo-tabua-mare/%5B${CENTRO_BUZIOS.lat}%2C${CENTRO_BUZIOS.lon}%5D/rj/${m.month}/%5B1-${m.days}%5D`)
-            ));
+            const snapshot = await obtenerJson("https://raw.githubusercontent.com/dgimenez6/praiaideal/main/tide-data.json?t=" + Math.floor(Date.now()/3600000));
+            const age = Date.now() - Date.parse(snapshot.fetchedAt);
+            if (!Number.isFinite(age) || age < -5*60000 || age > 72*3600000) throw new Error("Tide table snapshot is outdated");
+            const respostas = [snapshot];
             const eventos = [];
             let harborName = "", harborInstitution = "";
             for (const resposta of respostas) {
