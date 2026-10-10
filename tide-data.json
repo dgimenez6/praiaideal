@@ -1,0 +1,685 @@
+{
+  "fetchedAt": "2026-10-10T16:33:18.104533-03:00",
+  "data": [
+    {
+      "id": "rj05",
+      "year": 2026,
+      "harbor_name": "PORTO DO FORNO (ESTADO DO RIO DE JANEIRO)",
+      "state": "rj",
+      "timezone": "UTC -03.0",
+      "card": "1503",
+      "data_collection_institution": "IEAPM",
+      "mean_level": 0.63,
+      "months": [
+        {
+          "month_name": "Outubro",
+          "month": 10,
+          "days": [
+            {
+              "weekday_name": "quinta",
+              "day": 1,
+              "hours": [
+                {
+                  "hour": "00:06:00",
+                  "level": 0.17
+                },
+                {
+                  "hour": "06:42:00",
+                  "level": 0.93
+                },
+                {
+                  "hour": "13:01:00",
+                  "level": 0.5
+                },
+                {
+                  "hour": "17:53:00",
+                  "level": 0.76
+                }
+              ]
+            },
+            {
+              "weekday_name": "sexta",
+              "day": 2,
+              "hours": [
+                {
+                  "hour": "01:01:00",
+                  "level": 0.22
+                },
+                {
+                  "hour": "08:25:00",
+                  "level": 0.86
+                },
+                {
+                  "hour": "14:16:00",
+                  "level": 0.6
+                },
+                {
+                  "hour": "18:08:00",
+                  "level": 0.69
+                }
+              ]
+            },
+            {
+              "weekday_name": "sábado",
+              "day": 3,
+              "hours": [
+                {
+                  "hour": "02:06:00",
+                  "level": 0.26
+                },
+                {
+                  "hour": "10:59:00",
+                  "level": 0.87
+                },
+                {
+                  "hour": "16:25:00",
+                  "level": 0.62
+                }
+              ]
+            },
+            {
+              "weekday_name": "domingo",
+              "day": 4,
+              "hours": [
+                {
+                  "hour": "03:44:00",
+                  "level": 0.28
+                },
+                {
+                  "hour": "12:02:00",
+                  "level": 0.92
+                },
+                {
+                  "hour": "18:29:00",
+                  "level": 0.56
+                },
+                {
+                  "hour": "23:06:00",
+                  "level": 0.67
+                }
+              ]
+            },
+            {
+              "weekday_name": "segunda",
+              "day": 5,
+              "hours": [
+                {
+                  "hour": "05:16:00",
+                  "level": 0.24
+                },
+                {
+                  "hour": "12:47:00",
+                  "level": 0.96
+                },
+                {
+                  "hour": "18:44:00",
+                  "level": 0.5
+                }
+              ]
+            },
+            {
+              "weekday_name": "terça",
+              "day": 6,
+              "hours": [
+                {
+                  "hour": "00:04:00",
+                  "level": 0.79
+                },
+                {
+                  "hour": "06:25:00",
+                  "level": 0.17
+                },
+                {
+                  "hour": "13:19:00",
+                  "level": 0.97
+                },
+                {
+                  "hour": "19:06:00",
+                  "level": 0.42
+                }
+              ]
+            },
+            {
+              "weekday_name": "quarta",
+              "day": 7,
+              "hours": [
+                {
+                  "hour": "00:49:00",
+                  "level": 0.9
+                },
+                {
+                  "hour": "07:14:00",
+                  "level": 0.1
+                },
+                {
+                  "hour": "13:51:00",
+                  "level": 0.98
+                },
+                {
+                  "hour": "19:38:00",
+                  "level": 0.35
+                }
+              ]
+            },
+            {
+              "weekday_name": "quinta",
+              "day": 8,
+              "hours": [
+                {
+                  "hour": "01:23:00",
+                  "level": 1
+                },
+                {
+                  "hour": "07:59:00",
+                  "level": 0.05
+                },
+                {
+                  "hour": "14:17:00",
+                  "level": 0.97
+                },
+                {
+                  "hour": "20:06:00",
+                  "level": 0.28
+                }
+              ]
+            },
+            {
+              "weekday_name": "sexta",
+              "day": 9,
+              "hours": [
+                {
+                  "hour": "02:01:00",
+                  "level": 1.08
+                },
+                {
+                  "hour": "08:36:00",
+                  "level": 0.05
+                },
+                {
+                  "hour": "14:47:00",
+                  "level": 0.97
+                },
+                {
+                  "hour": "20:44:00",
+                  "level": 0.23
+                }
+              ]
+            },
+            {
+              "weekday_name": "sábado",
+              "day": 10,
+              "hours": [
+                {
+                  "hour": "02:36:00",
+                  "level": 1.11
+                },
+                {
+                  "hour": "09:08:00",
+                  "level": 0.09
+                },
+                {
+                  "hour": "15:10:00",
+                  "level": 0.95
+                },
+                {
+                  "hour": "21:12:00",
+                  "level": 0.2
+                }
+              ]
+            },
+            {
+              "weekday_name": "domingo",
+              "day": 11,
+              "hours": [
+                {
+                  "hour": "03:12:00",
+                  "level": 1.1
+                },
+                {
+                  "hour": "09:44:00",
+                  "level": 0.17
+                },
+                {
+                  "hour": "15:31:00",
+                  "level": 0.94
+                },
+                {
+                  "hour": "21:46:00",
+                  "level": 0.19
+                }
+              ]
+            },
+            {
+              "weekday_name": "segunda",
+              "day": 12,
+              "hours": [
+                {
+                  "hour": "03:47:00",
+                  "level": 1.05
+                },
+                {
+                  "hour": "10:10:00",
+                  "level": 0.27
+                },
+                {
+                  "hour": "15:47:00",
+                  "level": 0.92
+                },
+                {
+                  "hour": "22:10:00",
+                  "level": 0.2
+                }
+              ]
+            },
+            {
+              "weekday_name": "terça",
+              "day": 13,
+              "hours": [
+                {
+                  "hour": "04:19:00",
+                  "level": 0.99
+                },
+                {
+                  "hour": "10:34:00",
+                  "level": 0.38
+                },
+                {
+                  "hour": "16:02:00",
+                  "level": 0.9
+                },
+                {
+                  "hour": "22:34:00",
+                  "level": 0.22
+                }
+              ]
+            },
+            {
+              "weekday_name": "quarta",
+              "day": 14,
+              "hours": [
+                {
+                  "hour": "04:55:00",
+                  "level": 0.92
+                },
+                {
+                  "hour": "10:51:00",
+                  "level": 0.47
+                },
+                {
+                  "hour": "16:19:00",
+                  "level": 0.87
+                },
+                {
+                  "hour": "22:51:00",
+                  "level": 0.26
+                }
+              ]
+            },
+            {
+              "weekday_name": "quinta",
+              "day": 15,
+              "hours": [
+                {
+                  "hour": "05:25:00",
+                  "level": 0.85
+                },
+                {
+                  "hour": "11:02:00",
+                  "level": 0.55
+                },
+                {
+                  "hour": "16:38:00",
+                  "level": 0.83
+                },
+                {
+                  "hour": "23:12:00",
+                  "level": 0.3
+                }
+              ]
+            },
+            {
+              "weekday_name": "sexta",
+              "day": 16,
+              "hours": [
+                {
+                  "hour": "06:04:00",
+                  "level": 0.79
+                },
+                {
+                  "hour": "11:17:00",
+                  "level": 0.6
+                },
+                {
+                  "hour": "16:57:00",
+                  "level": 0.78
+                },
+                {
+                  "hour": "23:40:00",
+                  "level": 0.35
+                }
+              ]
+            },
+            {
+              "weekday_name": "sábado",
+              "day": 17,
+              "hours": [
+                {
+                  "hour": "07:04:00",
+                  "level": 0.75
+                },
+                {
+                  "hour": "12:21:00",
+                  "level": 0.65
+                },
+                {
+                  "hour": "17:23:00",
+                  "level": 0.72
+                }
+              ]
+            },
+            {
+              "weekday_name": "domingo",
+              "day": 18,
+              "hours": [
+                {
+                  "hour": "00:42:00",
+                  "level": 0.4
+                },
+                {
+                  "hour": "09:04:00",
+                  "level": 0.74
+                },
+                {
+                  "hour": "16:02:00",
+                  "level": 0.64
+                },
+                {
+                  "hour": "18:53:00",
+                  "level": 0.66
+                }
+              ]
+            },
+            {
+              "weekday_name": "segunda",
+              "day": 19,
+              "hours": [
+                {
+                  "hour": "02:40:00",
+                  "level": 0.43
+                },
+                {
+                  "hour": "10:46:00",
+                  "level": 0.79
+                },
+                {
+                  "hour": "17:14:00",
+                  "level": 0.57
+                },
+                {
+                  "hour": "22:06:00",
+                  "level": 0.68
+                }
+              ]
+            },
+            {
+              "weekday_name": "terça",
+              "day": 20,
+              "hours": [
+                {
+                  "hour": "04:46:00",
+                  "level": 0.37
+                },
+                {
+                  "hour": "11:40:00",
+                  "level": 0.86
+                },
+                {
+                  "hour": "17:51:00",
+                  "level": 0.5
+                },
+                {
+                  "hour": "23:23:00",
+                  "level": 0.79
+                }
+              ]
+            },
+            {
+              "weekday_name": "quarta",
+              "day": 21,
+              "hours": [
+                {
+                  "hour": "05:46:00",
+                  "level": 0.28
+                },
+                {
+                  "hour": "12:17:00",
+                  "level": 0.93
+                },
+                {
+                  "hour": "18:23:00",
+                  "level": 0.42
+                }
+              ]
+            },
+            {
+              "weekday_name": "quinta",
+              "day": 22,
+              "hours": [
+                {
+                  "hour": "00:06:00",
+                  "level": 0.91
+                },
+                {
+                  "hour": "06:34:00",
+                  "level": 0.18
+                },
+                {
+                  "hour": "12:59:00",
+                  "level": 0.99
+                },
+                {
+                  "hour": "18:55:00",
+                  "level": 0.33
+                }
+              ]
+            },
+            {
+              "weekday_name": "sexta",
+              "day": 23,
+              "hours": [
+                {
+                  "hour": "00:49:00",
+                  "level": 1.03
+                },
+                {
+                  "hour": "07:17:00",
+                  "level": 0.1
+                },
+                {
+                  "hour": "13:32:00",
+                  "level": 1.03
+                },
+                {
+                  "hour": "19:29:00",
+                  "level": 0.25
+                }
+              ]
+            },
+            {
+              "weekday_name": "sábado",
+              "day": 24,
+              "hours": [
+                {
+                  "hour": "01:29:00",
+                  "level": 1.12
+                },
+                {
+                  "hour": "07:59:00",
+                  "level": 0.05
+                },
+                {
+                  "hour": "14:06:00",
+                  "level": 1.05
+                },
+                {
+                  "hour": "20:04:00",
+                  "level": 0.17
+                }
+              ]
+            },
+            {
+              "weekday_name": "domingo",
+              "day": 25,
+              "hours": [
+                {
+                  "hour": "02:10:00",
+                  "level": 1.18
+                },
+                {
+                  "hour": "08:38:00",
+                  "level": 0.06
+                },
+                {
+                  "hour": "14:40:00",
+                  "level": 1.05
+                },
+                {
+                  "hour": "20:42:00",
+                  "level": 0.1
+                }
+              ]
+            },
+            {
+              "weekday_name": "segunda",
+              "day": 26,
+              "hours": [
+                {
+                  "hour": "02:57:00",
+                  "level": 1.2
+                },
+                {
+                  "hour": "09:16:00",
+                  "level": 0.12
+                },
+                {
+                  "hour": "15:10:00",
+                  "level": 1.03
+                },
+                {
+                  "hour": "21:17:00",
+                  "level": 0.05
+                }
+              ]
+            },
+            {
+              "weekday_name": "terça",
+              "day": 27,
+              "hours": [
+                {
+                  "hour": "03:46:00",
+                  "level": 1.19
+                },
+                {
+                  "hour": "09:59:00",
+                  "level": 0.22
+                },
+                {
+                  "hour": "15:44:00",
+                  "level": 0.99
+                },
+                {
+                  "hour": "22:01:00",
+                  "level": 0.03
+                }
+              ]
+            },
+            {
+              "weekday_name": "quarta",
+              "day": 28,
+              "hours": [
+                {
+                  "hour": "04:36:00",
+                  "level": 1.14
+                },
+                {
+                  "hour": "10:44:00",
+                  "level": 0.35
+                },
+                {
+                  "hour": "16:14:00",
+                  "level": 0.93
+                },
+                {
+                  "hour": "22:46:00",
+                  "level": 0.05
+                }
+              ]
+            },
+            {
+              "weekday_name": "quinta",
+              "day": 29,
+              "hours": [
+                {
+                  "hour": "05:31:00",
+                  "level": 1.07
+                },
+                {
+                  "hour": "11:34:00",
+                  "level": 0.47
+                },
+                {
+                  "hour": "16:49:00",
+                  "level": 0.87
+                },
+                {
+                  "hour": "23:38:00",
+                  "level": 0.1
+                }
+              ]
+            },
+            {
+              "weekday_name": "sexta",
+              "day": 30,
+              "hours": [
+                {
+                  "hour": "06:34:00",
+                  "level": 0.99
+                },
+                {
+                  "hour": "12:36:00",
+                  "level": 0.57
+                },
+                {
+                  "hour": "17:25:00",
+                  "level": 0.81
+                }
+              ]
+            },
+            {
+              "weekday_name": "sábado",
+              "day": 31,
+              "hours": [
+                {
+                  "hour": "00:38:00",
+                  "level": 0.16
+                },
+                {
+                  "hour": "08:08:00",
+                  "level": 0.92
+                },
+                {
+                  "hour": "13:51:00",
+                  "level": 0.62
+                },
+                {
+                  "hour": "18:17:00",
+                  "level": 0.76
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
