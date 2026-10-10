@@ -44,7 +44,7 @@ function renderGuide(){
  const t=guideText[datosGlobales.lang];const controls=document.getElementById('plan-controls');controls.replaceChildren(guideElement('h2',t.plan,'font-bold text-slate-800 mb-3'));
  const buttons=guideElement('div','','flex flex-wrap gap-2');['relax','family','swim','snorkel','surf'].forEach(plan=>{const b=guideElement('button',t[plan],'rounded-xl px-3 py-2 text-sm '+(plan===beachPlan?'bg-sky-700 text-white':'bg-slate-100 text-slate-700'));b.type='button';b.setAttribute('aria-pressed',String(plan===beachPlan));b.onclick=()=>changeBeachPlan(plan);buttons.append(b)});controls.append(buttons);
  const practical=document.getElementById('beach-practical');practical.replaceChildren(guideElement('h2',t.practical,'font-bold text-slate-800 mb-2'));
- const p=playaActual;if(p){practical.append(guideElement('h3',p.nombre,'font-bold text-sky-700'),guideElement('p',t.protected+': '+p.prot[0]+'°–'+p.prot[1]+'°','text-xs text-slate-600 mt-2'),guideElement('p',p.critica?t.sand:t.noSand,'text-xs text-slate-600 mt-2'));
+ const p=playaActual;if(p){const maps=document.getElementById('btn-maps');maps.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.lat+','+p.lon);maps.rel='noopener noreferrer';practical.append(guideElement('h3',p.nombre,'font-bold text-sky-700'),guideElement('p',t.protected+': '+p.prot[0]+'°–'+p.prot[1]+'°','text-xs text-slate-600 mt-2'),guideElement('p',p.critica?t.sand:t.noSand,'text-xs text-slate-600 mt-2'));
  const note=accessNotes[p.id];if(note)practical.append(guideElement('p',t.access+': '+note[datosGlobales.lang],'text-sm mt-3'),guideLink(t.source,note.source));
  practical.append(guideElement('p',t.services,'text-xs text-slate-500 mt-3'),guideLink(t.route,'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.nombre+', Búzios, RJ')));
  const report=guideLink(t.report,'https://github.com/dgimenez6/praiaideal/issues/new?title='+encodeURIComponent('Información: '+p.nombre));practical.append(report);
@@ -85,3 +85,5 @@ const planControls=guideElement('section','','bg-white rounded-2xl p-4 border bo
 const practicalSection=guideElement('section','','bg-white rounded-2xl p-4 border border-slate-100');practicalSection.id='beach-practical';document.getElementById('main-card').after(practicalSection);
 const slotsSection=guideElement('section','','bg-white rounded-2xl p-4 border border-slate-100');slotsSection.id='forecast-slots';practicalSection.after(slotsSection);
 renderGuide();
+
+setInterval(actualizarHoraSol, 60000);
