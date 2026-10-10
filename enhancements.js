@@ -32,7 +32,7 @@ function scoreForPlan(p,dir,wind,tide,plan=beachPlan){
  if(p.critica&&tide!==null){if(tide>=0.7)score-=25;else if(tide<=0.3)score+=10;}
  return score;
 }
-calcularRanking = function(){return playas.map(p=>{
+calcularRanking = function(){return playas.filter(p=>beachPlan!=='surf'||p.surf).map(p=>{
  const protectedWind=anguloProtegido(datosGlobales.dir,p.prot),t=guideText[datosGlobales.lang];
  const razones=[i18n[datosGlobales.lang][protectedWind?'reasonWindGood':'reasonWindBad']];
  razones.push(beachPlan==='surf'?t.surfPlan:beachPlan==='family'?t.familyPlan:beachPlan==='snorkel'?t.snorkelPlan:t.windPlan);
@@ -61,7 +61,7 @@ function renderTimeSlots(){
  const sea=eventosMareaBuzios?nivelInterpolado(eventosMareaBuzios.eventos,date):null;
  const range=eventosMareaBuzios?Array.from({length:24},(_,i)=>nivelInterpolado(eventosMareaBuzios.eventos,new Date(date.getTime()+i*3600000))).filter(Number.isFinite):[];
  const tide=sea!==null&&range.length?percentilDe(sea,range):null;
- const beach=[...playas].sort((a,b)=>scoreForPlan(b,dir,wind,tide)-scoreForPlan(a,dir,wind,tide)||a.nombre.localeCompare(b.nombre,'pt-BR'))[0];
+ const beach=playas.filter(p=>beachPlan!=='surf'||p.surf).sort((a,b)=>scoreForPlan(b,dir,wind,tide)-scoreForPlan(a,dir,wind,tide)||a.nombre.localeCompare(b.nombre,'pt-BR'))[0];
  const row=guideElement('div','','rounded-xl bg-sky-50 p-3 mt-3');const label=new Intl.DateTimeFormat(datosGlobales.lang==='pt'?'pt-BR':datosGlobales.lang==='en'?'en-GB':'es-AR',{timeZone:ZONA_HORARIA,day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(date);
  row.append(guideElement('h3',label+' · '+beach.nombre,'font-bold text-sm'),guideElement('p',(Number.isFinite(temp)?Math.round(temp)+' °C · ':'')+t.wind+': '+Math.round(wind)+' km/h · '+Math.round(dir)+'°'+(sea!==null?' · '+t.tide+': '+sea.toFixed(2)+' m':''),'text-xs mt-1'));
  const button=guideElement('button',t.future,'underline text-sky-700 text-xs mt-2');button.onclick=()=>seleccionarPlaya(beach);row.append(button);root.append(row);
