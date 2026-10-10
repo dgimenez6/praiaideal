@@ -628,6 +628,7 @@
                 const hw = indiceHora(dW);
                 let waves = null;
                 try { if (playa.surf) waves = await obtenerAlturaOlas(); } catch (e) { console.warn("PraiaIdeal: NOAA wave data unavailable", e); }
+                if (playaActual?.id !== playa.id) return;
                 const hm = hw;
                 if (hm < 0 || hw < 0) throw new Error("No forecast for current Búzios hour");
                 const air = Number(dW.hourly.temperature_2m?.[hw]);
