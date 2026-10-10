@@ -32,6 +32,23 @@ const accessNotes = {
 };
 function guideElement(tag,text,cls=''){const e=document.createElement(tag);e.textContent=text;e.className=cls;return e;}
 function guideLink(label,url){const a=guideElement('a',label,'text-sky-700 underline text-xs inline-block mr-4 mt-2');a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;}
+
+const sandText = {
+ es:{title:'¿Queda arena para quedarse?',high:'Podría quedar poca arena',normal:'La marea puede cubrir parte de la arena',unknown:'Arena disponible: sin confirmar',low:'Marea relativamente baja: podría haber más arena expuesta',brava:'En Brava puede quedar muy poca o ninguna franja de arena con el mar alto; es una experiencia local reportada, no una confirmación de hoy.',explain:'La altura de la marea mide el nivel del agua, no la cantidad de arena ni la profundidad para nadar. Esta orientación usa la marea del puerto cercano y el perfil manual de la playa. El oleaje y los cambios de arena también influyen; no medimos el ancho de la playa en vivo.',generic:'No tenemos una medición de la arena disponible en esta playa. Marea más alta suele dejar menos arena expuesta.'},
+ pt:{title:'Há areia para ficar?',high:'Pode haver pouca areia',normal:'A maré pode cobrir parte da areia',unknown:'Faixa de areia: não confirmada',low:'Maré relativamente baixa: pode haver mais areia exposta',brava:'Na Brava pode restar pouca ou nenhuma faixa de areia com o mar alto; é uma experiência local relatada, não uma confirmação de hoje.',explain:'A altura da maré indica o nível da água, não a quantidade de areia nem a profundidade para nadar. Esta orientação usa a maré do porto próximo e o perfil manual da praia. Ondas e mudanças na areia também influenciam; não medimos a largura da praia ao vivo.',generic:'Não temos uma medição da faixa de areia nesta praia. Maré mais alta costuma deixar menos areia exposta.'},
+ en:{title:'Is there sand to sit on?',high:'There may be little exposed sand',normal:'The tide may cover some of the sand',unknown:'Available sand: unconfirmed',low:'Relatively low tide: more sand may be exposed',brava:'At Brava, high water can leave little or no exposed sand; this is a reported local experience, not a confirmation of today’s conditions.',explain:'Tide height measures the water level, not the amount of sand or swimming depth. This guidance uses the nearby port tide and the manual beach profile. Waves and changes in sand also matter; beach width is not measured live.',generic:'We have no measurement of available sand at this beach. Higher tides usually leave less sand exposed.'}
+};
+function sandAdvice(p){
+ const t=sandText[datosGlobales.lang], level=datosGlobales.porcentajeMarea;
+ const known=Number.isFinite(level);
+ const status=!known?t.unknown:!p.critica?t.unknown:level>=0.7?t.high:level<=0.3?t.low:t.normal;
+ const box=guideElement('div','','rounded-xl p-3 mt-3 '+(known&&p.critica&&level>=0.7?'bg-amber-100 text-amber-950':'bg-sky-50 text-slate-700'));
+ box.append(guideElement('h3',t.title,'font-bold text-sm'),guideElement('p',status,'font-bold text-sm mt-2'));
+ if(p.nombre==='Brava')box.append(guideElement('p',t.brava,'text-sm mt-2'));
+ else if(!p.critica)box.append(guideElement('p',t.generic,'text-xs mt-2'));
+ box.append(guideElement('p',t.explain,'text-xs mt-2'));return box;
+}
+
 function scoreForPlan(p,dir,wind,tide,plan=beachPlan){
  let score=anguloProtegido(dir,p.prot)?50:-30;
  if(plan==='surf') score+=p.surf?35:-35;
@@ -54,7 +71,7 @@ function renderGuide(){
  const buttons=guideElement('div','','flex flex-wrap gap-2');['relax','family','swim','snorkel','surf'].forEach(plan=>{const b=guideElement('button',t[plan],'rounded-xl px-3 py-2 text-sm '+(plan===beachPlan?'bg-sky-700 text-white':'bg-slate-100 text-slate-700'));b.type='button';b.setAttribute('aria-pressed',String(plan===beachPlan));b.onclick=()=>changeBeachPlan(plan);buttons.append(b)});controls.append(buttons);
  const trailEntry=guideElement('div','','mt-4 border-t border-slate-100 pt-3');trailEntry.append(guideElement('h3',trailUi[datosGlobales.lang].browse,'font-bold text-sm mb-2'));['short','hike'].forEach(kind=>{const b=guideElement('button',trailUi[datosGlobales.lang][kind]+' ↗','bg-emerald-50 text-emerald-800 rounded-xl px-3 py-3 text-sm font-bold mr-2 mb-2');b.type='button';b.onclick=()=>abrirTrilhas(kind);trailEntry.append(b)});controls.append(trailEntry);
  const practical=document.getElementById('beach-practical');practical.replaceChildren(guideElement('h2',t.practical,'font-bold text-slate-800 mb-2'));
- const p=playaActual;if(p){const maps=document.getElementById('btn-maps');maps.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.lat+','+p.lon);maps.rel='noopener noreferrer';practical.append(guideElement('h3',p.nombre,'font-bold text-sky-700'),guideElement('p',t.protected+': '+p.prot[0]+'°–'+p.prot[1]+'°','text-xs text-slate-600 mt-2'),guideElement('p',p.critica?t.sand:t.noSand,'text-xs text-slate-600 mt-2'));
+ const p=playaActual;if(p){const maps=document.getElementById('btn-maps');maps.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.lat+','+p.lon);maps.rel='noopener noreferrer';practical.append(guideElement('h3',p.nombre,'font-bold text-sky-700'),guideElement('p',t.protected+': '+p.prot[0]+'°–'+p.prot[1]+'°','text-xs text-slate-600 mt-2'),sandAdvice(p));
  const note=accessNotes[p.id];if(note)practical.append(guideElement('p',t.access+': '+note[datosGlobales.lang],'text-sm mt-3'),guideLink(t.source,note.source));
  practical.append(guideElement('p',t.services,'text-xs text-slate-500 mt-3'),guideLink(t.route,'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.nombre+', Búzios, RJ')));
  const report=guideLink(t.report,'https://github.com/dgimenez6/praiaideal/issues/new?title='+encodeURIComponent('Información: '+p.nombre));practical.append(report);
