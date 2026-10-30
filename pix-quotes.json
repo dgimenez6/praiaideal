@@ -1,491 +1,491 @@
 {
   "source": "ComparaPix",
-  "fetchedAt": "2026-10-30T20:11:22.236082+00:00",
+  "fetchedAt": "2026-10-30T23:53:10.917638+00:00",
   "providers": [
     {
       "id": "fiwind",
       "quotes": [
         {
           "symbol": "BRLUSDT",
-          "buy": 0.189061
+          "buy": 0.190359
         },
         {
           "symbol": "BRLARS",
-          "buy": 314.786565
+          "buy": 316.947735
         }
       ],
       "url": "https://www.fiwind.io/?utm_source=comparapix&utm_medium=comparapix&utm_campaign=comparapix&ref=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.541Z"
+      "updatedAt": "2026-10-30T23:40:01.069Z"
     },
     {
       "id": "belo",
       "quotes": [
         {
           "symbol": "BRLUSDT",
-          "buy": 0.19089219330855017
+          "buy": 0.19124767225325884
         },
         {
           "symbol": "BRLARS",
-          "buy": 314.97211895910783
+          "buy": 315.5586592178771
         }
       ],
       "url": "https://simple.belo.app/app/referral?referralCode=FERMINR1&useMarket=true",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.502Z"
+      "updatedAt": "2026-10-30T23:40:00.987Z"
     },
     {
       "id": "cocos",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 307.653657144768
+          "buy": 310.137885168552
         },
         {
           "symbol": "BRLUSD",
-          "buy": 0.19783016
+          "buy": 0.19918798999999998
         }
       ],
       "url": "https://cocos-capital.onelink.me/8LJp/eubb0xb8",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.814Z"
+      "updatedAt": "2026-10-30T23:40:01.281Z"
     },
     {
       "id": "takenos",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.19027644370206187
+          "buy": 0.19158171550237862
         }
       ],
       "url": "https://takenos.go.link/?adj_t=1ptq1hru",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.210Z"
+      "updatedAt": "2026-10-30T23:40:01.609Z"
     },
     {
       "id": "satoshitango",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.18656716417910446
+          "buy": 0.18796992481203006
         },
         {
           "symbol": "BRLARS",
-          "buy": 312.01
+          "buy": 312.97
         }
       ],
       "url": "https://www.satoshitango.com/?utm_source=comparapix&utm_medium=comparapix&utm_campaign=comparapix&ref=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.161Z"
+      "updatedAt": "2026-10-30T23:40:01.519Z"
     },
     {
       "id": "prex",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 322.1779
+          "buy": 312.14509999999996
         },
         {
           "symbol": "BRLUSD",
-          "buy": 0.1941747572815534
+          "buy": 0.18761726078799248
         }
       ],
       "url": "https://www.prexcard.com.ar/?utm_source=comparapix&utm_medium=comparapix&utm_campaign=comparapix&ref=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.623Z"
+      "updatedAt": "2026-10-30T23:40:01.106Z"
     },
     {
       "id": "lemon",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.190395
+          "buy": 0.191702
         },
         {
           "symbol": "BRLARS",
-          "buy": 319.17
+          "buy": 322.16
         }
       ],
       "url": "https://lemon.me/?utm_source=comparapix&utm_medium=comparapix&utm_campaign=comparapix&ref=comparapix",
       "hasFees": true,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.662Z"
+      "updatedAt": "2026-10-30T23:40:01.206Z"
     },
     {
       "id": "astropay",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.18776303851200002
+          "buy": 0.188332674936
         },
         {
           "symbol": "BRLARS",
-          "buy": 308.148612425976
+          "buy": 309.34196234894404
         }
       ],
       "url": "https://www.astropay.com/?utm_source=comparapix&utm_medium=comparapix&utm_campaign=comparapix&ref=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.685Z"
+      "updatedAt": "2026-10-30T23:40:01.584Z"
     },
     {
       "id": "decrypto",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.18920970003205023
+          "buy": 0.19050819004615435
         },
         {
           "symbol": "BRLARS",
-          "buy": 323.12097313
+          "buy": 325.33845647
         }
       ],
       "url": "https://decrypto.la/?utm_source=comparapix&utm_medium=comparapix&utm_campaign=comparapix&ref=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.153Z"
+      "updatedAt": "2026-10-30T23:40:01.549Z"
     },
     {
       "id": "wallbit",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1869158878504673
+          "buy": 0.18726591760299627
         }
       ],
       "url": "https://app.wallbit.io/sign-up?referrer=singular_click_id%3Dd44eda12-9dbc-4bc4-882a-6bcbcea3f0a7&utm_campaign=comparapix&utm_medium=comparapix&utm_source=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.750Z"
+      "updatedAt": "2026-10-30T23:40:00.937Z"
     },
     {
       "id": "arq",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1840653723631439
+          "buy": 0.1845055419376115
         },
         {
           "symbol": "BRLARS",
-          "buy": 304.99632200572944
+          "buy": 304.0854287227969
         }
       ],
       "url": "https://www.arqfinance.com/referrals/arr?referralCode=ferminrp_Qwh&pid=referral&c=arr&is_retargeting=true",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.038Z"
+      "updatedAt": "2026-10-30T23:40:01.299Z"
     },
     {
       "id": "mercado-pago",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 314.76
+          "buy": 312.05
         }
       ],
       "url": "https://www.mercadopago.com.ar/landing/argentinos-en-brasil?ref=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.850Z"
+      "updatedAt": "2026-10-30T23:40:01.352Z"
     },
     {
       "id": "p2pme",
       "quotes": [
         {
           "symbol": "BRLUSDT",
-          "buy": 0.18726591760299627
+          "buy": 0.18796992481203006
         },
         {
           "symbol": "BRLARS",
-          "buy": 312.10486891385773
+          "buy": 312.8251879699248
         }
       ],
       "url": "https://app.p2p.me/campaign?id=33&manager=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:01.674Z"
+      "updatedAt": "2026-10-30T23:40:01.189Z"
     },
     {
       "id": "vesseo",
       "quotes": [
         {
           "symbol": "BRLUSDT",
-          "buy": 0.18484288354898337
+          "buy": 0.1853911753800519
         },
         {
           "symbol": "BRLARS",
-          "buy": 308.3475046210721
+          "buy": 309.00444938820914
         }
       ],
       "url": "https://vesseoapp.com/es/?ref=comparapix",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.082Z"
+      "updatedAt": "2026-10-30T23:40:01.282Z"
     },
     {
       "id": "yodl-pay",
       "quotes": [
         {
           "symbol": "BRLUSDT",
-          "buy": 0.185185
+          "buy": 0.185529
         }
       ],
       "url": "https://yodl.me/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.406Z"
+      "updatedAt": "2026-10-30T23:40:02.372Z"
     },
     {
       "id": "wayni",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 313.9
+          "buy": 316.05
         }
       ],
       "url": "https://pix.waynimovil.ar/?ref=comparapix&utm_medium=comparapix&utm_source=landingpix&utm_campaign=traficocomparapix&utm_term=trafico&utm_content=trafico",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:03.108Z"
+      "updatedAt": "2026-10-30T23:40:02.020Z"
     },
     {
       "id": "global66",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 307.6923076923077
+          "buy": 309.88534242330337
         },
         {
           "symbol": "BRLUSD",
-          "buy": 0.18720281553034557
+          "buy": 0.18791835323388695
         }
       ],
       "url": "https://share.global66.com/FERROD989",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.224Z"
+      "updatedAt": "2026-10-30T23:40:01.507Z"
     },
     {
       "id": "caipi",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 316.22
+          "buy": 318.47
         }
       ],
       "url": "https://caipi.app/?utm_source=comparapix&utm_medium=referral&utm_campaign=cotizaciones",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:03.033Z"
+      "updatedAt": "2026-10-30T23:40:01.451Z"
     },
     {
       "id": "ripio",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 311.3615625
+          "buy": 312.0200385
         },
         {
           "symbol": "BRLUSDT",
-          "buy": 0.18703050000000002
+          "buy": 0.18743249999999997
         }
       ],
       "url": "https://join.ripio.com/ref/fermin_r_0",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:03.083Z"
+      "updatedAt": "2026-10-30T23:40:03.173Z"
     },
     {
       "id": "binance",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1866
+          "buy": 0.1869
         }
       ],
       "url": "https://accounts.binance.com/register?ref=Q22RYDAM",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:14.775Z"
+      "updatedAt": "2026-10-30T23:40:05.361Z"
     },
     {
       "id": "peanut",
       "quotes": [
         {
           "symbol": "BRLUSDT",
-          "buy": 0.1859773107680863
+          "buy": 0.18649757553151808
         }
       ],
       "url": "https://peanut.me/invite?code=FERMINRPINVITESYOU967",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:02.533Z"
+      "updatedAt": "2026-10-30T23:40:01.333Z"
     },
     {
       "id": "personal-pay",
       "quotes": [
         {
           "symbol": "BRLARS",
-          "buy": 313.70346318
+          "buy": 314.36686222
         }
       ],
       "url": "https://www.personalpay.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:06.619Z"
+      "updatedAt": "2026-10-30T23:40:14.607Z"
     },
     {
       "id": "banco-credicoop",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         },
         {
           "symbol": "BRLARS",
-          "buy": 299.2941
+          "buy": 302.1
         }
       ],
       "url": "https://www.bancocredicoop.coop/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:03.842Z"
+      "updatedAt": "2026-10-30T23:40:14.313Z"
     },
     {
       "id": "banco-supervielle",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.supervielle.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:12.434Z"
+      "updatedAt": "2026-10-30T23:40:03.738Z"
     },
     {
       "id": "banco-galicia",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.galicia.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:05.785Z"
+      "updatedAt": "2026-10-30T23:40:14.738Z"
     },
     {
       "id": "banco-macro",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.macro.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:12.312Z"
+      "updatedAt": "2026-10-30T23:40:14.624Z"
     },
     {
       "id": "banco-ciudad",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.bancociudad.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:09.918Z"
+      "updatedAt": "2026-10-30T23:40:13.290Z"
     },
     {
       "id": "banco-patagonia",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.bancopatagonia.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:14.320Z"
+      "updatedAt": "2026-10-30T23:40:13.100Z"
     },
     {
       "id": "banco-icbc",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.icbc.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:14.343Z"
+      "updatedAt": "2026-10-30T23:40:03.847Z"
     },
     {
       "id": "banco-nacion",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.bna.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:13.841Z"
+      "updatedAt": "2026-10-30T23:40:04.695Z"
     },
     {
       "id": "banco-santander",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.santander.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:03.840Z"
+      "updatedAt": "2026-10-30T23:40:14.863Z"
     },
     {
       "id": "buepp",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.buepp.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:14.026Z"
+      "updatedAt": "2026-10-30T23:40:13.989Z"
     },
     {
       "id": "banco-hipotecario",
       "quotes": [
         {
           "symbol": "BRLUSD",
-          "buy": 0.1882
+          "buy": 0.19
         }
       ],
       "url": "https://www.hipotecario.com.ar/",
       "hasFees": false,
       "stale": false,
-      "updatedAt": "2026-10-30T19:50:13.152Z"
+      "updatedAt": "2026-10-30T23:40:14.193Z"
     }
   ]
 }
